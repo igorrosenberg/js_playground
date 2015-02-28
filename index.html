@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  textarea { width: 100%; margin: 0; padding: 0; border-width: 2; border-color: grey; height: 200px; }
+  .error {color: red ; }
+  .buttons { text-align: right ; }
+  .codeBlock { display: none; color: grey; }
+</style>
+<script>
+// would be better as Element prototype addition
+function toggle(el) { 
+   console.log ('Last display: ' + el.style.display);
+   el.style.display = (el.style.display === 'none' || el.style.display === '' ? 'block' : 'none' ); 
+}
+
+// would be better as Element prototype addition
+function toggleSibling(sibling, className) {
+  var elements = sibling.parentNode.getElementsByClassName(className);
+  for (var i=0; i < elements.length ; i++) {
+       toggle(elements[i]);
+  }
+}
+
+// would be better as Element prototype addition
+function hasClass(element, cls) {
+  return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+}
+
+// would be better as Element[document] prototype addition
+// ex : addJavascript("function f() { alert(); }") ;
+function addJavascript(scriptString) {
+  var s = document.createElement('script');
+  s.setAttribute('type','text/javascript');
+  s.text = scriptString;
+  document.getElementsByTagName('head')[0].appendChild(s);
+}  
+
+window.onload=function() {
+   
+  var resultList = document.getElementById('here'); 
+  var inputElement = document.getElementById('input'); 
+
+  document.getElementById('clearAll').onclick = function() {
+     // remove all children
+     while (resultList.lastChild) {
+         resultList.removeChild(resultList.lastChild);
+     }
+     lastValue = lastValue + 1 ; 
+     false; 
+  } 
+
+  document.getElementById('clearErrors').onclick = function() {
+     // remove all children that are errors
+     var errorNodes = resultList.getElementsByClassName('error');
+     while (errorNodes[0]) {  // live list => remove first shrinks list size
+          errorNodes[0].parentNode.removeChild(errorNodes[0]);
+     }
+     lastValue = lastValue + 1 ; 
+     false; 
+  } 
+
+  var lastValue = ''; 
+  var lastCount;   
+
+  var noHelp = function() {
+         var helpElmt = document.getElementById('help');
+         helpElmt.parentNode.removeChild(helpElmt);
+         noHelp = function() {};
+  };
+
+  inputElement.onkeyup = function myFunction()  {
+
+     setTimeout(
+          function(){ 
+             var result; 
+             noHelp ();
+             var newdiv = document.createElement("LI");
+             try {
+                 result = eval(inputElement.value); 
+                 var addToScripts = document.getElementById('headInjectInput').checked;
+                 if (addToScripts) {
+                   addJavascript(inputElement.value);
+                 }
+             } catch (e) { 
+                result = e.name + ':' + e.message; 
+                newdiv.className = "error";
+                } 
+             if (result !== lastValue){
+               lastValue = result ;
+               lastCount = 1 ; 
+             } else {
+               lastCount += 1; 
+               result = '(' + lastCount + ') ' + result  ;
+               resultList.removeChild(resultList.firstChild);
+             }
+             newdiv.innerHTML = 
+                  result +  // strings containing HTML tags are  interpreted ! 
+                  " <a href='#' onClick=\"toggleSibling(this, 'codeBlock');return false;\">code</a>" +  
+                  '<div class="codeBlock"><pre>' + inputElement.value + '</pre></div>'
+             resultList.insertBefore(
+                     newdiv, resultList.firstChild);
+             },
+          1);    
+            
+  }
+
+};
+</script>
+</head>
+<body>
+<div width="100%" >
+
+<div id="help">
+<p> 
+The Javascript code below is executed when a key is pressed in the text area. The result is added to the output area. 
+</p>
+<p>
+This is similar to the <a href="http://www.w3schools.com/html/tryit.asp?filename=tryhtml_script">w3schools tryit editor</a> or <a href="http://jsfiddle.net/">jsfiddle</a>. 
+</p>
+</div>
+
+<textarea id="input" width="100%" autofocus>
+function me () {
+  return "hello";
+}
+me();
+</textarea> 
+
+<div class="buttons">
+	<span>Author: <a href="http://igor.rosenberg.free.fr/">Igor Rosenberg</a>
+  <span>
+  Inject to &lt;head&gt;: <input type="checkbox" id="headInjectInput" />
+  </span>
+  <a href="#" id="clearAll">Clear All</a>
+  <a href="#" id="clearErrors">Clear Errors</a>
+</div>
+<hr/>
+<ul id='here'></ul>
+</div>
+
+</body>
+</html>
