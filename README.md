@@ -6,3 +6,5 @@ This is similar to
 * <a href="http://jsfiddle.net/">jsfiddle</a>
 * modern browser's developper "console"   
 
+Find a live version <a href="http://igor.rosenberg.free.fr/public/dev/js_playground.html">here</a>.
+
