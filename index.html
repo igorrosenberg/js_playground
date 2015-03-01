@@ -39,6 +39,10 @@ var js_playground = (function(){
 	  document.getElementsByTagName('head')[0].appendChild(s);
 	}
 
+	function htmlEntities(str) {
+		return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+	}
+
 	var module = {};
 	module.attachTo = function(domReferences) {
 
@@ -52,9 +56,11 @@ var js_playground = (function(){
 
 
 	  resultList.onclick = function(event) {
-		if (hasClass(event.target, 'codeToggle'))
+		if (hasClass(event.target, 'codeToggle')) {
 			toggleSibling(event.target, 'codeBlock');
-		return false;		
+			return false;		
+			}
+		return true;		
 		};
 
 	  clearAll.onclick = function() {
@@ -112,7 +118,7 @@ var js_playground = (function(){
 		         newdiv.innerHTML = 
 		              result +  // strings containing HTML tags are  interpreted ! 
 		              " <a href='#' class='codeToggle'>code</a>" +  
-		              '<div class="codeBlock"><pre>' + inputElement.value + '</pre></div>'
+		              '<div class="codeBlock"><pre>' + htmlEntities(inputElement.value) + '</pre></div>'
 		         resultList.insertBefore(
 		                 newdiv, resultList.firstChild);
 		         },
