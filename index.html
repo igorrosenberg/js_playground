@@ -10,138 +10,14 @@
 /* from http://codepo8.github.io/css-fork-on-github-ribbon/ */
 #forkongithub a{background:black;color:white;text-decoration:none;font-family:arial,sans-serif;text-align:center;font-weight:bold;padding:5px 40px;font-size:1rem;line-height:2rem;position:relative;transition:0.5s;}#forkongithub a:hover{background:#c11;color:white;}#forkongithub a::before,#forkongithub a::after{content:"";width:100%;display:block;position:absolute;top:1px;left:0;height:1px;background:white;}#forkongithub a::after{bottom:1px;top:auto;}@media screen and (min-width:800px){#forkongithub{position:fixed;display:block;top:0;right:0;width:200px;overflow:hidden;height:200px;z-index:9999;}#forkongithub a{width:200px;position:absolute;top:60px;right:-60px;transform:rotate(45deg);-webkit-transform:rotate(45deg);-ms-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);box-shadow:4px 4px 10px rgba(0,0,0,0.8);}}
 </style>
+<script src="element_extensions.js"></script>
+<script src="js_playground.js"></script>
 <script>
 
-var element_extensions = (function(){ 
-    return { 
-		// Adding methods to all DOM Elements
-		init: function() {
-			Element.prototype.toggleDisplay = Element.prototype.toggleDisplay || function () { 
-			   this.style.display = (this.style.display === 'none' || this.style.display === '' ? 'block' : 'none' ); 
-			};
-
-			// Toggle the display of all the {siblings of the considered DOM Element which have the specified class}  
-			Element.prototype.toggleDisplayToSiblingIfClass = Element.prototype.toggleDisplayToSiblingIfClass || function (className) {
-			  var elements = this.parentNode.getElementsByClassName(className);
-			  for (var i=0; i < elements.length ; i++) {
-				   elements[i].toggleDisplay();
-			  }
-			};
-
-			// @returns whether the considered DOM Element has the specified class 
-			Element.prototype.hasClass = Element.prototype.hasClass || function (cls) {
-			  return (' ' + this.className + ' ').indexOf(' ' + cls + ' ') > -1;
-			}
-
-			// ex : document.head.addJavascript("function f() { alert(); }") ;
-			Element.prototype.addJavascript = Element.prototype.addJavascript || function (scriptString) {
-			  var s = document.createElement('script');
-			  s.setAttribute('type','text/javascript');
-			  s.text = scriptString;
-			  this.appendChild(s);
-			}
-    	} 
-	};
-})();
-
-element_extensions.init();
-
-var js_playground = (function(){ 
-
-	function htmlEntities(str) {
-		return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-	}
-
-	var module = {};
-	module.attachTo = function(domReferences) {
-
-	  domReferences = domReferences || {};
-
-	  var inputElement = domReferences.inputElement || document.getElementById('input'); 
-	  var resultList = domReferences.resultList || document.getElementById('here'); 
-	  var helpElmt = domReferences.helpElmt || document.getElementById('help');
-	  var clearAll = domReferences.clearAll || document.getElementById('clearAll');
-	  var clearErrors = domReferences.clearErrors || document.getElementById('clearErrors');
-
-
-	  resultList.addEventListener('click', function(event) {
-		if (event.target.hasClass('codeToggle')) {
-			event.target.toggleDisplayToSiblingIfClass('codeBlock');
-			return false;		
-			}
-		return true;		
-		});
-
-	  clearAll.addEventListener('click', function() {
-		 // remove all children
-		 while (resultList.lastChild) {
-		     resultList.removeChild(resultList.lastChild);
-		 }
-		 lastValue = lastValue + 1 ; 
-		 false; 
-	  });
-
-	  clearErrors.addEventListener('click', function() {
-		 // remove all children that are errors
-		 var errorNodes = resultList.getElementsByClassName('error');
-		 while (errorNodes[0]) {  // live list => remove first shrinks list size
-		      errorNodes[0].parentNode.removeChild(errorNodes[0]);
-		 }
-		 lastValue = lastValue + 1 ; 
-		 false; 
-	  });
-
-	  var lastValue = ''; 
-	  var lastCount;   
-
-	  var noHelp = function() {
-		     helpElmt.parentNode.removeChild(helpElmt);
-		     noHelp = function() {};
-	  };
-
-	  inputElement.addEventListener('keyup', function myFunction()  {
-
-		 setTimeout(
-		      function(){ 
-		         noHelp ();
-		         var result; 
-		         var newdiv = document.createElement("LI");
-		         try {
-		             result = eval(inputElement.value); 
-		             var addToScripts = document.getElementById('headInjectInput').checked;
-		             if (addToScripts) {
-		               document.head.addJavascript(inputElement.value);
-		             }
-		         } catch (e) { 
-		            result = e.name + ': ' + e.message; 
-		            newdiv.className = "error";
-		            } 
-		         if (result !== lastValue){
-		           lastValue = result ;
-		           lastCount = 1 ; 
-		         } else {
-		           lastCount += 1; 
-		           result = '(' + lastCount + ') ' + result  ;
-		           resultList.removeChild(resultList.firstChild);
-		         }
-		         newdiv.innerHTML = 
-		              result +  // strings containing HTML tags are  interpreted ! 
-		              " <a href='#' class='codeToggle'>code</a>" +  
-		              '<div class="codeBlock"><pre>' + htmlEntities(inputElement.value) + '</pre></div>'
-		         resultList.insertBefore(
-		                 newdiv, resultList.firstChild);
-		         },
-		      1);    
-		        
-	  });
-
-	};
-
-	return module;   
-})();
-
-window.addEventListener("load", js_playground.attachTo, false); 
-
+window.addEventListener("load", function() {
+	element_extensions.init();
+	js_playground.attachTo();
+}, false); 
 </script>
 </head>
 <body>
