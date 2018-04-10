@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Dice run</title>
+    <style>
+body {text-align: center;}
+.red {background-color: red;}
+.green {background-color: green;}
+.blue {background-color: blue;}
+.yellow {background-color: yellow;}
+.dice a {text-decoration: none}
+    </style>
+</head>
+<body id='body'>
+
+<div class="dice">
+	<div id='b1'></div>
+	<div id='b2'></div>
+	<div id='b3'></div>
+	<div id='b4'></div>
+</div>
+<div class="counter">
+	<span id='s0'></span>&nbsp;
+	<span id='s1'></span>&nbsp;
+	<span id='s2'></span>&nbsp;
+	<span id='s3'></span>&nbsp;
+	<span id='fill'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+</div>
+<br/>
+<div>
+	<a href='#' onclick="auto();">auto</a>
+	<span id="autocount"></span>
+</div>
+<div>
+	<p>Batch roll time: <span id="time"/></span>ns.</p>
+	<p>Draw time: <span id="dtime"/></span>ns.</p>
+</div>
+
+
+<script>
+var tmp = [null,null,null,null,null,null];
+var max = 0, times = [], dtimes = [], total = 0;
+
+function makeDice(color) {
+  return {x:"<span class='"+color+"'>&nbsp;&nbsp;&nbsp;</span>&nbsp;"};
+}
+
+var J = makeDice('yellow');
+var V = makeDice('green');
+var B = makeDice('blue');
+var R = makeDice('red');
+
+var diceArray = [  
+   [],
+	[J, V, B, V, B, R],
+	[V, V, R, J, B, R],
+	[B, V, R, J, J, J],
+	[R, V, J, R, B, J]
+] ;
+
+var a_shift = [], a_yaw = [];
+
+// tt could be diceNb, but /!\ collisions
+for (var tt=1;tt< diceArray.length; tt++ ) {
+  a_shift[tt] = "&nbsp;<a href='#' onclick='shift("+tt+"); draw();'>&#x21E8;</a>"; 
+  a_yaw[tt] =  "&nbsp;<a href='#' onclick='yaw("+tt+"); draw();'>&#x21E7;</a>";
+}
+
+
+var $autocount = document.getElementById("autocount");
+var $time = document.getElementById("time");
+var $dtime = document.getElementById("dtime");
+var $b = [
+	null,
+	document.getElementById("b1"),
+	document.getElementById("b2"),
+	document.getElementById("b3"),
+	document.getElementById("b4")
+];
+var $s = [
+	document.getElementById("s0"),
+	document.getElementById("s1"),
+	document.getElementById("s2"),
+	document.getElementById("s3")
+];
+
+function draw () {
+   var time = performance.now();
+   for (var diceNb=1; diceNb < diceArray.length; diceNb++) {
+   	var dice = diceArray[diceNb];
+		var html = "<p>";
+		for (var i=0; i<6; i++) {
+		  html += dice[i].x;
+		}  
+		html += a_shift[diceNb]; //"&nbsp;<a href='#' onclick='shift("+diceNb+"); draw();'>&#x21E8;</a>"
+		html += a_yaw[diceNb]; // "&nbsp;<a href='#' onclick='yaw("+diceNb+"); draw();'>&#x21E7;</a>";
+		html += "</p>";
+		$b[diceNb].innerHTML = html;
+	}
+   time = Math.floor(performance.now() - time);
+   count_draw(); // shows count data
+   $autocount.innerHTML = max;
+   $time.innerHTML = Math.round(times.reduce((a, b) => a + b, 0) / times.length * 1000);
+   dtimes.push (time);
+   $dtime.innerHTML = Math.round(dtimes.reduce((a, b) => a + b, 0) / dtimes.length * 1000);
+}
+
+function count_draw() {
+   total = 0;
+   for (var col=0; col < 4; col++) {
+		var a = diceArray[1][col];
+		var b = diceArray[2][col];
+		var c = diceArray[3][col];
+		var d = diceArray[4][col];
+      var score = (a != b && a != c && a != d && b != c && b != d && c != d) ? 1 : 0;
+      total += score;
+		$s[col].innerHTML = score;
+   }
+   return total;
+}
+
+function count() {
+   total = 0;
+   for (var col=0; col < 4; col++) {
+		var a = diceArray[1][col];
+		var b = diceArray[2][col];
+		var c = diceArray[3][col];
+		var d = diceArray[4][col];
+      var score = (a != b && a != c && a != d && b != c && b != d && c != d) ? 1 : 0;
+      total += score;
+   }
+   return total;
+}
+
+function shift(diceNb) {
+  var i, dice = diceArray[diceNb];
+  tmp[0] = dice[3];
+  tmp[1] = dice[0];
+  tmp[2] = dice[1];
+  tmp[3] = dice[2];
+  tmp[4] = dice[4];
+  tmp[5] = dice[5];
+  for (i=0; i<6; i++) {
+    dice[i] = tmp[i];
+  }
+}
+
+function yaw(diceNb){
+  var i, dice = diceArray[diceNb];
+  tmp[0] = dice[4];
+  tmp[1] = dice[1];
+  tmp[2] = dice[5];
+  tmp[3] = dice[3];
+  tmp[4] = dice[2];
+  tmp[5] = dice[0];
+  for (i=0; i<6;i++ ) {
+    dice[i] = tmp[i];
+  }
+}
+
+function auto(){
+  var time, i, STEP = 100; 
+  time = performance.now();
+  for (i=0; i<STEP; i++) {
+	  shift(Math.floor((Math.random() * 4) + 1));
+     if (count() == 4){
+		 break;
+	  } 
+	  yaw(Math.floor((Math.random() * 4) + 1));
+     if (count() == 4){
+		 break;
+	  } 
+  }
+  time = Math.floor(performance.now() - time);
+  times.push (time);
+  max += i;
+  draw();
+  if (total != 4)
+    setTimeout(auto);
+}
+
+draw(); 
+
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,8 @@
+From https://stackoverflow.com/questions/16333790
+
+    8  cat > node-server.js
+    9  npm install finalhandler serve-static
+   10  ls
+   11  node node-server.js 
+   12  firefox http://localhost:8000/
+
