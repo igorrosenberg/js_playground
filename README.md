@@ -16,7 +16,7 @@ node node-server.js
 firefox http://localhost:8000/
 ``` 
 
-<a href="https://igorrosenberg.github.io/js_playground/node-server.html">Javascript source</a>.
+<a href="https://igorrosenberg.github.io/js_playground/node-server.js">Javascript source</a>.
 
 
 #### js_playground
@@ -82,7 +82,7 @@ Test via GET requests an HTTP service
 
 
 Find a live version here
-<a href="https://igorrosenberg.github.io/js_playground/ajax-scroll.html">ajax-scroll</a>.
+<a href="https://igorrosenberg.github.io/js_playground/ajax_scroll.html">ajax_scroll</a>.
 
 #### element_extensions.js
 
