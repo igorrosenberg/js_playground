@@ -41,6 +41,13 @@
 <div id="data_zone">
 </div> 
 
+<h4>Status zone</h4>
+<div id="status_zone">
+<canvas id="canvas" width="500" height="100">
+    <p>An HTML5 Canvas is displayed here, showing the chronological trend. </p>
+</canvas>
+</div> 
+
 
     <!-- ================================================== -->
     <!-- JavaScript libs placed at the end of the document so the pages load faster -->
@@ -55,6 +62,7 @@ $( document ).ready(function() {
   var counter = 1; 
 
   var my_log = function(s){
+    return;
     $("#data_zone").append('<p>['+(	counter++)+'] ' + s+'</p>');
   }
 
@@ -83,6 +91,88 @@ $( document ).ready(function() {
   $('#corsButton').on('click', check);
   $('#url').on('input', check);
 });  
+
+///////////
+
+var canvas = document.getElementById('canvas'),
+    context = canvas.getContext('2d');
+
+
+context.translate(20, 0);
+
+context.font = '10px serif';
+
+var scale = 5;
+var black = "rgba(0,0,0,1)";
+var red   = "rgba(255,0,0,1)";
+var green = "rgba(0,255,0,1)";
+
+var pixel = function(color, x, y){
+  context.fillStyle = color;
+  context.fillRect( x*scale, y*scale,
+                      scale,scale );
+}
+
+var poxel = function(timet, color)
+  {
+  var time = timet / 10; 
+  var mod = time % 10;
+  var x = (time - mod) / 10;
+  var y = 10 - mod;
+    
+  var delta = Math.floor(time / 60); // add an x-space every 60 hits
+  x += delta;
+  context.fillRect( x*scale, y*scale,
+                      scale, scale );
+}
+
+var oblique = function(text, xPos, yPos){
+  context.save();
+  context.translate((xPos-1) *scale, yPos*scale);
+  context.rotate(-Math.PI / 4);
+  context.fillStyle = black;
+  context.textAlign = 'right';
+  context.fillText(text, 0, 10);
+  context.restore();
+}
+
+function dateToString(d){
+return ( 
+    ("0" + d.getHours()).slice(-2) + ":" + 
+    ("0" + d.getMinutes()).slice(-2) 
+    // + ":" + ("0" + d.getSeconds()).slice(-2) 
+   );
+}
+
+function point(fakeNow){
+  var now = fakeNow;
+
+  if (now > start + 3600)
+    return;
+
+  setTimeout(function(){point (now + 10);}, 10); // allow g-refresh in-between
+
+  var delay = (now - start); 
+  if (delay % 600 === 0) {
+		 var text = dateToString(new Date(now * 1000));
+		 oblique(text, (delay / 600)*7, 12);	// 7 = 6 cols + 1 blank
+  }
+  poxel(delay, color(delay));
+}
+
+function color(time){
+  if (time %17 == 0)
+    context.fillStyle = red;
+  else if (time % 13 ==1)
+    context.fillStyle = black;
+  else
+    context.fillStyle = green;
+}
+
+var start = Math.floor(new Date().getTime() / 1000); // everything in round seconds
+
+point(start);
+
     </script>
 
   </body>
