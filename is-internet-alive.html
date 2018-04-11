@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="Igor Rosenberg">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>cors</title>
+
+<style>  
+  div { border: 1px solid grey; margin:10px; padding:5px;}
+  #data_zone p, #insert_zone p { display: inline; padding:5px;}
+  input[type=text] { width: 80%; }
+  div.icon {width: 100px; height: 100px;}
+  .spinner {background-image: url("images/spinner.gif"); background-position: center; background-size:auto; background-repeat: no-repeat;}
+  .icon.ok {background-image: url("images/green-tick.svg");}
+  .icon.ko {background-image: url("images/red-cross.svg");}
+</style>  
+</head>
+
+<body role="document">
+
+<h1>CORS</h1>
+
+<h4>Control zone</h4>
+<div id="control">
+   <input id="url" type=text value="http://html5rocks-cors.s3-website-us-east-1.amazonaws.com/index.html">
+   <br/>
+   Auto: 
+   <input type="radio" value="Y" name="auto" autocomplete="off">On
+   <input type="radio" value="N" name="auto" checked="checked" autocomplete="off">Off
+	<button id="corsButton">Is internet alive?</button>
+</div>
+
+<h4>Data zone</h4>
+<div class='icon spinner'></div> 
+<div id="data_zone">
+</div> 
+
+
+    <!-- ================================================== -->
+    <!-- JavaScript libs placed at the end of the document so the pages load faster -->
+    <script src="jquery-3.3.1.min.js"></script>
+    <script>window.jQuery || document.write('<div>No Jquery<\/div>')</script>
+    <!-- ================================================== -->
+    <!-- specific JavaScript  -->
+    <script>
+
+$( document ).ready(function() {
+
+  var counter = 1; 
+
+  var my_log = function(s){
+    $("#data_zone").append('<p>['+(	counter++)+'] ' + s+'</p>');
+  }
+
+  var done = function (data, textStatus, jqXHR){
+    my_log('done: ' + data.length);
+    $('div.icon').removeClass('ko').addClass('ok');
+  };
+  var fail = function(jqXHR, textStatus, errorThrown){
+    my_log('fail: ' + textStatus + '/' + errorThrown);
+    $('div.icon').removeClass('ok').addClass('ko');
+  };
+  var check = function(){
+    var url = $('#url').val();
+    my_log("url: " + url);
+    $.get({url:url, cache:false, timeout: 1000}).done(done).fail(fail);
+    };
+  var autoCheck = function(){
+   if ($('input[name=auto]:checked').val() === 'Y')
+      check();
+   else 
+      my_log('disabled');   
+   setTimeout(autoCheck, 2000);
+  };
+
+  autoCheck();
+  $('#corsButton').on('click', check);
+  $('#url').on('input', check);
+});  
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Disabled test</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="theme.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<style>  
+  div { border: 1px solid grey; margin-bottom:10px;}
+</style>  
+</head>
+
+<body role="document">
+
+<div id="test">
+	<button id="b" disabled="disabled">Click 1</button>
+	<button id="c" disabled="disabled" onclick="my_log();">Click 2</button>
+</div>
+
+<div id="control">
+	<button id="enableButton">Enable</button>
+	<button id="disableButton">Disable</button>
+</div>
+
+<div id="output">
+	<p id="data_zone"></p>
+</div> 
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="https://code.jquery.com/jquery-1.11.3.min.js"><\/script>')</script>
+    <script>window.jQuery || document.write('<script src="file:///home/rosenberg/Documentos/igor/dev/judo/web/bootstrap-3.3.6/docs/assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script>window.jQuery || document.write('<div>No Jquery<\/div>')</script>
+
+    <script>
+function my_log() {
+  var f = new Date();
+  $("#data_zone").text( $("#data_zone").text() + "\n clicked again ("+f.getMinutes() + ":" + f.getSeconds()+")");
+   return false;
+}
+
+function attach() {
+   var  enable = function(event) { $("#test button").removeAttr("disabled");}
+   var disable = function(event) { $("#test button").attr("disabled","disabled");}
+   $("#enableButton").on("click", enable);
+   $("#disableButton").on("click", disable);
+   disable();
+   return false;
+}
+
+attach();
+    </script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/docs.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
