@@ -19,12 +19,24 @@
   .spinner {background-image: url("images/spinner.gif"); background-position: center; background-size:auto; background-repeat: no-repeat;}
   .icon.ok {background-image: url("images/green-tick.svg");}
   .icon.ko {background-image: url("images/red-cross.svg");}
+
+canvas {
+  margin: 5px;
+  border: 1px solid orange;
+}
+#log {font-size:70%; background-color:#C0C0C0;}
+table { width:100%; }
+td { vertical-align: top; }
+#td1 {width: 45%;}
+#td2 {width: 25%;}
+#td3 {width: 25%;}
+
 </style>  
 </head>
 
 <body role="document">
 
-<h1>CORS</h1>
+<h1>Is internet alive?</h1>
 
 <h4>Control zone</h4>
 <div id="control">
@@ -34,19 +46,23 @@
    <input type="radio" value="Y" name="auto" autocomplete="off">On
    <input type="radio" value="N" name="auto" checked="checked" autocomplete="off">Off
 	<button id="corsButton">Is internet alive?</button>
+	<button id="demoPast">Past demo</button>
 </div>
 
-<h4>Data zone</h4>
-<div class='icon spinner'></div> 
-<div id="data_zone">
-</div> 
-
-<h4>Status zone</h4>
-<div id="status_zone">
-<canvas id="canvas" width="500" height="100">
-    <p>An HTML5 Canvas is displayed here, showing the chronological trend. </p>
-</canvas>
-</div> 
+<h4>Date zone</h4>
+<table>
+  <tr>
+  <td id='td1'></td>
+  <td id='td2'>
+    <div id='log'>
+       <p><b>Log</b></p>
+    </div> 
+  </td>
+  <td id='td3'>
+    <div class='icon spinner'></div> 
+  </td>
+  </tr>
+</table></div> 
 
 
     <!-- ================================================== -->
@@ -63,7 +79,7 @@ $( document ).ready(function() {
 
   var my_log = function(s){
     return;
-    $("#data_zone").append('<p>['+(	counter++)+'] ' + s+'</p>');
+    $("#log").append('<p>['+(	counter++)+'] ' + s+'</p>');
   }
 
   var done = function (data, textStatus, jqXHR){
@@ -91,89 +107,138 @@ $( document ).ready(function() {
   $('#corsButton').on('click', check);
   $('#url').on('input', check);
 });  
-
-///////////
-
-var canvas = document.getElementById('canvas'),
-    context = canvas.getContext('2d');
+</script>
 
 
-context.translate(20, 0);
+<script>
+var log = function(s) {
+  var zone = document.getElementById("log");
+  zone.append(s);
+};
 
-context.font = '10px serif';
+var progress = (function() {
+  var scale = 5;
 
-var scale = 5;
-var black = "rgba(0,0,0,1)";
-var red   = "rgba(255,0,0,1)";
-var green = "rgba(0,255,0,1)";
+  var black = "rgba(0,0,0,1)";
+  var red = "rgba(255,0,0,1)";
+  var green = "rgba(0,255,0,1)";
+  var blue = "rgba(0,0,255,1)";
+  var colors = [black, red, green, blue];
 
-var pixel = function(color, x, y){
-  context.fillStyle = color;
-  context.fillRect( x*scale, y*scale,
-                      scale,scale );
-}
+  var getContext = function(id) {
+    log("get " );
+    var canvas = document.createElement("canvas"); 
+    canvas.setAttribute("width", "500");
+    canvas.setAttribute("height", "80");  
+    var td = document.getElementById("td1");
+    td.insertBefore(canvas, td.firstChild);    
+    var context = canvas.getContext("2d");
+    context.font = "10px serif";
+    context.translate(20, 0);
+    return context;  
+  };
 
-var poxel = function(timet, color)
-  {
-  var time = timet / 10; 
-  var mod = time % 10;
-  var x = (time - mod) / 10;
-  var y = 10 - mod;
-    
-  var delta = Math.floor(time / 60); // add an x-space every 60 hits
-  x += delta;
-  context.fillRect( x*scale, y*scale,
-                      scale, scale );
-}
+  var context;
 
-var oblique = function(text, xPos, yPos){
-  context.save();
-  context.translate((xPos-1) *scale, yPos*scale);
-  context.rotate(-Math.PI / 4);
-  context.fillStyle = black;
-  context.textAlign = 'right';
-  context.fillText(text, 0, 10);
-  context.restore();
-}
+  var pixel = function(color, x, y) {
+    // log("px. ");
+    context.fillStyle = color;
+    context.fillRect(x * scale, y * scale, scale - 1, scale - 1);
+  };
 
-function dateToString(d){
-return ( 
-    ("0" + d.getHours()).slice(-2) + ":" + 
-    ("0" + d.getMinutes()).slice(-2) 
-    // + ":" + ("0" + d.getSeconds()).slice(-2) 
-   );
-}
-
-function point(fakeNow){
-  var now = fakeNow;
-
-  if (now > start + 3600)
-    return;
-
-  setTimeout(function(){point (now + 10);}, 10); // allow g-refresh in-between
-
-  var delay = (now - start); 
-  if (delay % 600 === 0) {
-		 var text = dateToString(new Date(now * 1000));
-		 oblique(text, (delay / 600)*7, 12);	// 7 = 6 cols + 1 blank
-  }
-  poxel(delay, color(delay));
-}
-
-function color(time){
-  if (time %17 == 0)
-    context.fillStyle = red;
-  else if (time % 13 ==1)
+  var oblique = function(text, xPos, yPos) {
+    log("oblique. ");
+    context.save();
+    context.translate((xPos - 1) * scale, yPos * scale);
+    context.rotate(-Math.PI / 4);
     context.fillStyle = black;
-  else
-    context.fillStyle = green;
-}
+    context.textAlign = "right";
+    context.fillText(text, 0, 3 * scale);
+    context.restore();
+  };
 
-var start = Math.floor(new Date().getTime() / 1000); // everything in round seconds
+  var toX = function(time) {
+    var mod = time % 10;
+    var x = (time - mod) / 10;
+    return x + Math.floor(time / 60); // add an x-space every 60 hits
+  };
 
-point(start);
+  var toY = function(time) {
+    var mod = time % 10;
+    return 10 - mod;
+  };
 
-    </script>
+  function dateToString(d) {
+    d = d || new Date();
+    return (
+      // + ("0" + d.getHours()).slice(-2) + ":"
+      +("0" + d.getMinutes()).slice(-2) +
+      ":" +
+      ("0" + d.getSeconds()).slice(-2) +
+      ":" +
+      ("00" + d.getMilliseconds()).slice(-3)
+    );
+  }
 
+  var getStarter = function() {
+    return Math.floor(new Date().getTime() / 1000) * 1000;
+  };
+  var start;
+
+  //var start =Math.floor(new Date().getTime()/1000) * 1000;
+
+  var last = 0;
+  return {
+    plotty: function(delay) {
+      // var imgData=context.getImageData(0,0,50,100);
+      // context.putImageData(imgData,0,0);
+      // context.translate(-20, 0);
+      if (delay === 65 * 11) {
+        this.reset(); 
+      } else {
+        var x = toX(delay);
+        if (delay > last + 60) {
+          last = delay;
+          var date = dateToString();
+          oblique(date, x, 10);
+        }
+        var y = toY(delay);
+        this.withResult(function(colorInt) {
+          pixel(colors[colorInt], x, y);
+        });
+      }
+    },
+    plot: function() {
+      var delay = Math.round((new Date().getTime() - start) / 10);
+      this.plotty(delay);
+    },
+    reset: function(){
+        last = 0;
+        start = getStarter();
+        context = getContext();
+    }
+
+  };
+})(); // end progress
+
+// sole extension point: what is the current integer result ?
+progress.withResult = function(callback) {
+  // here, do asyncronous CORS
+  var delay = new Date().getTime();
+  var color = delay % 37 == 0 ? 0 : delay % 13 == 0 ? 1 : 2;
+  callback(color);
+};
+
+$('#demoPast').on('click', function(){
+progress.reset();
+for (var delay1 = 0; delay1 < 5000; delay1++)
+  (function(delay) {
+    setTimeout(function() {
+      var t = delay;
+      progress.plot(delay);
+    }, delay * 1000 / 10 / 4 / 5);
+  })(delay1);
+});
+</script>
   </body>
 </html>
