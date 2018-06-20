@@ -11,9 +11,10 @@ body {text-align: center;}
 .yellow {background-color: yellow;}
 .black {background-color: black;}
 .hex a {text-decoration: none}
-.header {background-image: 'images/hex.jpg'}
-.col {float:left; width: 40%}
-.col img{width: 100%}
+div.header {}
+.col {float:left; width: 45%}
+.col img {width: 100%;}
+div.footer {clear:both}
     </style>
 </head>
 <body id='body'>
@@ -24,13 +25,15 @@ body {text-align: center;}
 
 
 <div class="col">
-<a href="images/hex.jpg">
-<img src="images/hex.jpg" alt="The physical game: 10 hexagonal pieces" title="The physical game: 10 hexagonal pieces">
-</a>
+	<a href="images/hex.jpg">
+	<img src="images/hex.jpg" alt="The physical game: 10 hexagonal pieces" title="The physical game: 10 hexagonal pieces">
+	</a>
 </div>
 <div class="col">
 
-COL2
+<p class="instructions">
+Translate and rotate the pieces. Colored paths form as the pieces touch each other. Can you make 3 continuous paths: red, blue, yellow ?
+</p>
 <div class="dice">
 	<div id='b1'></div>
 	<div id='b2'></div>
@@ -56,6 +59,12 @@ COL2
 </div>
 
 
+<div class="footer">
+	<div>
+	<a href="http://validator.w3.org/check?uri=referer">Valid HTML 5</a>
+	<a href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS</a>
+	</div>
+</div>
 <script>
 
 var YELLOW = 0, BLUE=1, RED = 2;
