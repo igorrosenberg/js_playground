@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Claude's hex game</title>
+    <style>
+body {text-align: center;}
+.red {background-color: red;}
+.green {background-color: green;}
+.blue {background-color: blue;}
+.yellow {background-color: yellow;}
+.black {background-color: black;}
+.hex a {text-decoration: none}
+.header {background-image: 'images/hex.jpg'}
+.col {float:left; width: 40%}
+.col img{width: 100%}
+    </style>
+</head>
+<body id='body'>
+
+<div class="header">
+    <h1>Claude's hex game</h1>
+</div>
+
+
+<div class="col">
+<a href="images/hex.jpg">
+<img src="images/hex.jpg" alt="The physical game: 10 hexagonal pieces" title="The physical game: 10 hexagonal pieces">
+</a>
+</div>
+<div class="col">
+
+COL2
+<div class="dice">
+	<div id='b1'></div>
+	<div id='b2'></div>
+	<div id='b3'></div>
+	<div id='b4'></div>
+</div>
+<div class="counter">
+	<span id='s0'></span>&nbsp;
+	<span id='s1'></span>&nbsp;
+	<span id='s2'></span>&nbsp;
+	<span id='s3'></span>&nbsp;
+	<span id='fill'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+</div>
+<br/>
+<div>
+	<a href='#' onclick="auto();">auto</a>
+	<span id="autocount"></span>
+</div>
+<div>
+	<p>Batch roll time: <span id="time"/></span>ns.</p>
+	<p>Draw time: <span id="dtime"/></span>ns.</p>
+</div>
+</div>
+
+
+<script>
+
+var YELLOW = 0, BLUE=1, RED = 2;
+var pieces = [];
+
+arr.push( [YELLOW, BLUE, BLUE, RED, YELLOW, RED] );
+arr.push( [RED, BLUE, YELLOW, RED, YELLOW, BLUE] );
+
+arr.push( [BLUE, YELLOW, RED, YELLOW, RED, BLUE] );
+arr.push( [YELLOW, RED, RED, BLUE, BLUE, YELLOW] );
+arr.push( [BLUE, YELLOW, YELLOW, RED, BLUE, RED] );
+
+arr.push( [BLUE, BLUE, RED, YELLOW, YELLOW, RED] );
+arr.push( [YELLOW, BLUE, RED, BLUE, RED, YELLOW] );
+arr.push( [BLUE, RED, YELLOW, BLUE, YELLOW, RED] );
+
+arr.push( [BLUE, RED, YELLOW, RED, BLUE, YELLOW] );
+arr.push( [BLUE, YELLOW, YELLOW, BLUE, RED, RED] );
+
+
+var target = [];
+
+var currentArr = 0;
+var currentTarget = 0;
+var currentAngle = 0;
+
+target[currentTarget] = [arr[currentArr], currentAngle];
+if (check(target)){
+// combines, add new piece !
+currentArr++;
+currentTarget++;
+currentAngle = 0;
+} else {
+if (currentAngle < 5) {
+// broke sequence, rotate
+currentAngle ++;
+} else {
+// broke sequence, can't rotate, so remove
+currentArr--;
+currentTarget++;
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
+
