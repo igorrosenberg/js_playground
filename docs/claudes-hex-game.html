@@ -3,18 +3,33 @@
   <head>
     <meta charset="utf-8">
     <title>Claude's hex game</title>
+    <script src="https://cdn.rawgit.com/konvajs/konva/2.1.6/konva.min.js"></script>
     <style>
-body {text-align: center;}
+body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #F0F0F0;
+	text-align: center;        
+}
+
 .red {background-color: red;}
 .green {background-color: green;}
 .blue {background-color: blue;}
 .yellow {background-color: yellow;}
 .black {background-color: black;}
-.hex a {text-decoration: none}
+
 div.header {}
-.col {float:left; width: 45%}
+.col {float:left; width: 49%; margin:0;}
 .col img {width: 100%;}
 div.footer {clear:both}
+
+#container {border: 1px solid green; margin: 5px;}
+
+div.solver { margin: 10px; }
+div.solver p { float: left;}
+div.solver p span { float: left; width: 40px;}
+
     </style>
 </head>
 <body id='body'>
@@ -23,10 +38,9 @@ div.footer {clear:both}
     <h1>Claude's hex game</h1>
 </div>
 
-
 <div class="col">
 	<a href="images/hex.jpg">
-	<img src="images/hex.jpg" alt="The physical game: 10 hexagonal pieces" title="The physical game: 10 hexagonal pieces">
+     <img src="images/hex.jpg" alt="The physical game: 10 hexagonal pieces" title="The physical game: 10 hexagonal pieces">
 	</a>
 </div>
 <div class="col">
@@ -34,28 +48,15 @@ div.footer {clear:both}
 <p class="instructions">
 Translate and rotate the pieces. Colored paths form as the pieces touch each other. Can you make 3 continuous paths: red, blue, yellow ?
 </p>
-<div class="dice">
-	<div id='b1'></div>
-	<div id='b2'></div>
-	<div id='b3'></div>
-	<div id='b4'></div>
-</div>
-<div class="counter">
-	<span id='s0'></span>&nbsp;
-	<span id='s1'></span>&nbsp;
-	<span id='s2'></span>&nbsp;
-	<span id='s3'></span>&nbsp;
-	<span id='fill'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-</div>
-<br/>
-<div>
-	<a href='#' onclick="auto();">auto</a>
-	<span id="autocount"></span>
-</div>
-<div>
-	<p>Batch roll time: <span id="time"/></span>ns.</p>
+
+
+<div id="container"></div>
+
+<div class="solver">
+	<p><button onclick="auto();">Auto-solve</button></p>
+	<p>Iterations: <span id="iterations"/></span></p>
+	<p>Compute time: <span id="ctime"/></span>ns.</p>
 	<p>Draw time: <span id="dtime"/></span>ns.</p>
-</div>
 </div>
 
 
@@ -65,11 +66,83 @@ Translate and rotate the pieces. Colored paths form as the pieces touch each oth
 	<a href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS</a>
 	</div>
 </div>
+
+</div>
+
 <script>
 
-var YELLOW = 0, BLUE=1, RED = 2;
-var pieces = [];
+// ============= DRAW PIECES ============= //
 
+function createHexagon (x,y,radius){
+   var hexagon = new Konva.RegularPolygon({
+      x: x, 
+      y: y, 
+      sides: 6,
+      radius: radius,
+      fill: 'black'
+    });
+  return hexagon;
+}
+
+function createLine (x, y, radius, sides, color_value, color_name) {
+
+    var pos1=0; while(sides[pos1] != color_value) pos1++;
+    var pos2=5; while(sides[pos2] != color_value) pos2--;
+
+  var radius5 = radius *5/6;
+  var a = Math.cos(pos1 * Math.PI/3) * radius5 , 
+      b = Math.sin(pos1 * Math.PI/3) * radius5, 
+      c = Math.cos(pos2 * Math.PI/3) * radius5, 
+      d = Math.sin(pos2 * Math.PI/3) * radius5; 
+
+  var line = new Konva.Line({
+      points: [x+a,y+b,x+c,y+d],
+      stroke: color_name,
+      strokeWidth: 5,
+      lineCap: 'round',
+      lineJoin: 'round'
+    });
+  return line;
+}
+
+function createPiece (hexData){
+    var group = new Konva.Group({
+        draggable: true
+    });
+
+    var x = PIECE_RADIUS * (Math.floor(hexData.i / 2)* 2 + 1.1 ),
+        y = PIECE_RADIUS * ((hexData.i % 2)*3 + 1.5);
+   
+    var hexagon = createHexagon(x,y,PIECE_RADIUS);
+    group.add(hexagon);
+
+    var line;
+
+    line = createLine(x,y, PIECE_RADIUS, hexData.sides, YELLOW, colors[YELLOW]);
+    group.add(line);
+
+    line = createLine(x,y, PIECE_RADIUS, hexData.sides, BLUE, colors[BLUE]);
+    group.add(line);
+
+    line = createLine(x,y, PIECE_RADIUS, hexData.sides, RED, colors[RED]);
+    group.add(line);
+
+    group.on('mouseover', function() {
+        document.body.style.cursor = 'pointer';
+    });
+    group.on('mouseout', function() {
+        document.body.style.cursor = 'default';
+    });
+return group;
+}
+
+// ============= GAME CONSTANTS ============= //
+
+var PIECE_RADIUS = 65;
+var colors = ['yellow', 'blue', 'red'];
+var YELLOW = 0, BLUE=1, RED = 2;
+
+var arr = [];
 arr.push( [YELLOW, BLUE, BLUE, RED, YELLOW, RED] );
 arr.push( [RED, BLUE, YELLOW, RED, YELLOW, BLUE] );
 
@@ -85,6 +158,31 @@ arr.push( [BLUE, RED, YELLOW, RED, BLUE, YELLOW] );
 arr.push( [BLUE, YELLOW, YELLOW, BLUE, RED, RED] );
 
 
+// ============= CANVAS AND ADD PIECES ============= //
+
+    var width = window.innerWidth / 2;
+    var height = window.innerHeight * 3/5;
+
+    var stage = new Konva.Stage({
+        container: 'container',
+        width: width,
+        height: height
+    });
+
+    var shapesLayer = new Konva.Layer();
+    
+    for(var i = 0; i < 10; i++) {
+        var piece = createPiece({i:i, sides: arr[i]});
+        shapesLayer.add(piece);
+    }
+
+    stage.add(shapesLayer);
+
+
+// ================ solver ================ 
+
+function check(){ return true; }
+
 var target = [];
 
 var currentArr = 0;
@@ -93,21 +191,19 @@ var currentAngle = 0;
 
 target[currentTarget] = [arr[currentArr], currentAngle];
 if (check(target)){
-// combines, add new piece !
-currentArr++;
-currentTarget++;
-currentAngle = 0;
+	// combines, add new piece !
+	currentArr++;
+	currentTarget++;
+	currentAngle = 0;
 } else {
-if (currentAngle < 5) {
-// broke sequence, rotate
-currentAngle ++;
-} else {
-// broke sequence, can't rotate, so remove
-currentArr--;
-currentTarget++;
-
-}
-
+	if (currentAngle < 5) {
+		// broke sequence, can rotate
+		currentAngle ++;
+	} else {
+		// broke sequence, can't rotate, so remove
+		currentArr--;
+		currentTarget++;
+	}
 }
 
 </script>
