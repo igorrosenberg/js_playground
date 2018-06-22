@@ -96,13 +96,16 @@ function createLine (x, y, radius, sides, color_value, color_name) {
       c = Math.cos(pos2 * Math.PI/3) * radius5,
       d = Math.sin(pos2 * Math.PI/3) * radius5;
 
-  var line = new Konva.Line({
-      points: [x+a,y+b,x+c,y+d],
-      stroke: color_name,
-      strokeWidth: 5,
-      lineCap: 'round',
-      lineJoin: 'round'
+    var xM = x + 3*(a+c)/8 , yM = y + 3*(b+d)/8;
+    var line = new Konva.Line({
+        points: [x+a,y+b, xM,yM, x+c,y+d],
+        stroke: color_name,
+        strokeWidth: 10,
+//        lineCap: 'round',
+//        lineJoin: 'round',
+        tension : 0.5
     });
+
   return line;
 }
 
