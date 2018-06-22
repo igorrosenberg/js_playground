@@ -10,7 +10,7 @@ body {
 	padding: 0;
 	overflow: hidden;
 	background-color: #F0F0F0;
-	text-align: center;        
+	text-align: center;
 }
 
 .red {background-color: red;}
@@ -27,7 +27,7 @@ div.footer {clear:both}
 #container {border: 1px solid green; margin: 5px;}
 
 div.solver { margin: 10px; }
-div.solver p { float: left;}
+div.solver p { display: inline;}
 div.solver p span { float: left; width: 40px;}
 
     </style>
@@ -50,15 +50,16 @@ Translate and rotate the pieces. Colored paths form as the pieces touch each oth
 </p>
 
 
-<div id="container"></div>
-
 <div class="solver">
-	<p><button onclick="auto();">Auto-solve</button></p>
-	<p>Iterations: <span id="iterations"/></span></p>
-	<p>Compute time: <span id="ctime"/></span>ns.</p>
-	<p>Draw time: <span id="dtime"/></span>ns.</p>
+    <p>Iterations: <span id="iterations"/></span></p>
+    <p>Compute time: <span id="ctime"/></span>ns.</p>
+    <button onclick="start();">Start</button>
+    <button onclick="stop();">Stop</button>
+    <label><input name="speedRadioSlow" id="speedRadioSlow" type="radio" value="slow">slow</label>
+    <label><input name="speedRadioSlow" type="radio" value="fast" checked="checked">fast</label>
 </div>
 
+<div id="container"></div>
 
 <div class="footer">
 	<div>
@@ -75,8 +76,8 @@ Translate and rotate the pieces. Colored paths form as the pieces touch each oth
 
 function createHexagon (x,y,radius){
    var hexagon = new Konva.RegularPolygon({
-      x: x, 
-      y: y, 
+      x: x,
+      y: y,
       sides: 6,
       radius: radius,
       fill: 'black'
@@ -90,10 +91,10 @@ function createLine (x, y, radius, sides, color_value, color_name) {
     var pos2=5; while(sides[pos2] != color_value) pos2--;
 
   var radius5 = radius *5/6;
-  var a = Math.cos(pos1 * Math.PI/3) * radius5 , 
-      b = Math.sin(pos1 * Math.PI/3) * radius5, 
-      c = Math.cos(pos2 * Math.PI/3) * radius5, 
-      d = Math.sin(pos2 * Math.PI/3) * radius5; 
+  var a = Math.cos(pos1 * Math.PI/3) * radius5 ,
+      b = Math.sin(pos1 * Math.PI/3) * radius5,
+      c = Math.cos(pos2 * Math.PI/3) * radius5,
+      d = Math.sin(pos2 * Math.PI/3) * radius5;
 
   var line = new Konva.Line({
       points: [x+a,y+b,x+c,y+d],
@@ -112,7 +113,8 @@ function createPiece (hexData){
 
     var x = PIECE_RADIUS * (Math.floor(hexData.i / 2)* 2 + 1.1 ),
         y = PIECE_RADIUS * ((hexData.i % 2)*3 + 1.5);
-   
+
+    x=0,y=0;
     var hexagon = createHexagon(x,y,PIECE_RADIUS);
     group.add(hexagon);
 
@@ -170,41 +172,114 @@ arr.push( [BLUE, YELLOW, YELLOW, BLUE, RED, RED] );
     });
 
     var shapesLayer = new Konva.Layer();
-    
-    for(var i = 0; i < 10; i++) {
-        var piece = createPiece({i:i, sides: arr[i]});
-        shapesLayer.add(piece);
+
+    var pieces = [];
+
+function int_random(excludedMaxInt){
+    return Math.floor(Math.random() * excludedMaxInt);
+}
+
+    for(var i = arr.length -1; i >=0; i--) {
+        var element = arr.splice(int_random(arr.length), 1)[0]; // random piece shuffle
+        for (var r=int_random(element.length); r>=0; r--) {
+            // random piece rotation
+            element.unshift(element.pop());
+        }
+        pieces[i] = createPiece({i:i, sides: element});
+        shapesLayer.add(pieces[i]);
     }
 
     stage.add(shapesLayer);
 
 
-// ================ solver ================ 
+// ================ solver ================
 
 function check(){ return true; }
 
-var target = [];
+var speedRadioSlow = document.getElementById("speedRadioSlow");
 
-var currentArr = 0;
-var currentTarget = 0;
-var currentAngle = 0;
+function moveTo(piece, x1, y1) {
+    console.log("Moving to " + x1 + "," + y1);
+    return function (frame) {
+    // console.log(frame);
+    // var dx = frame.timeDiff/1000 ;// 1px / second
 
-target[currentTarget] = [arr[currentArr], currentAngle];
-if (check(target)){
-	// combines, add new piece !
-	currentArr++;
-	currentTarget++;
-	currentAngle = 0;
-} else {
-	if (currentAngle < 5) {
-		// broke sequence, can rotate
-		currentAngle ++;
-	} else {
-		// broke sequence, can't rotate, so remove
-		currentArr--;
-		currentTarget++;
-	}
+        var x0 = piece.getX();
+        var y0 = piece.getY();
+
+        var dx = (x0 < x1 ? -1 : x1 == x0 ? 0 : 1);
+        var dy = (y0 < y1 ? -1 : y1 == y0 ? 0 : 1);
+        if (speedRadioSlow.checked) {
+            x0 -= dx;
+            y0 -= dy;
+        } else {
+            x0 = x1;
+            y0 = y1;
+        }
+        piece.setX (Math.floor(x0));
+        piece.setY (Math.floor(y0));
+
+        if (dx == 0 && dy ==0) {
+            stop();
+            start();
+        }
+        return true;
+    }
 }
+
+function getNextAnimation(){
+    console.log("getNextAnimation");
+    for (var i=0; i<pieces.length; i++) {
+        var piece = pieces[i];
+        console.log("Piece " +i + "@" + piece.getX() +","+piece.getY());
+        var x1 = Math.floor(PIECE_RADIUS + PIECE_RADIUS * 2.5 *(i%4));
+        var y1 = Math.floor(PIECE_RADIUS + PIECE_RADIUS * 2.1 * Math.floor(i/4));
+        if (piece.getX() != x1 || piece.getY() != y1)
+            return new Konva.Animation(moveTo(piece, x1, y1), shapesLayer);
+    }
+    return null;
+}
+
+function start(){
+    anim = getNextAnimation();
+    if (anim != null)
+        anim.start();
+}
+
+function stop(){
+    if (anim != null)
+        anim.stop();
+}
+
+var anim ;
+
+function autoSolve() {
+
+    var target = [];
+
+    var currentArr = 0;
+    var currentTarget = 0;
+    var currentAngle = 0;
+
+    target[currentTarget] = [arr[currentArr], currentAngle];
+    if (check(target)){
+        // combines, add new piece !
+        currentArr++;
+        currentTarget++;
+        currentAngle = 0;
+    } else {
+        if (currentAngle < 5) {
+            // broke sequence, can rotate
+            currentAngle ++;
+        } else {
+            // broke sequence, can't rotate, so remove
+            currentArr--;
+            currentTarget++;
+        }
+    }
+}
+
+start();
 
 </script>
 
