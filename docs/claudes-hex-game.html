@@ -110,14 +110,18 @@ function createLine (x, y, radius, sides, color_value, color_name) {
 }
 
 function createPiece (hexData){
-    var group = new Konva.Group({
-        draggable: true
-    });
 
     var x = PIECE_RADIUS * (Math.floor(hexData.i / 2)* 2 + 1.1 ),
         y = PIECE_RADIUS * ((hexData.i % 2)*3 + 1.5);
+    // x=0,y=0;
 
-    x=0,y=0;
+    var group = new Konva.Group({
+        draggable: true,
+		  offsetX: x,
+		  offsetY: y,
+    });
+
+
     var hexagon = createHexagon(x,y,PIECE_RADIUS);
     group.add(hexagon);
 
@@ -138,7 +142,14 @@ function createPiece (hexData){
     group.on('mouseout', function() {
         document.body.style.cursor = 'default';
     });
-return group;
+    group.on('click', function() {
+        rotate(group, 1);
+        shapesLayer.draw();
+    });
+
+   rotate(group, hexData.rotation);
+
+	return group;
 }
 
 // ============= GAME CONSTANTS ============= //
@@ -188,7 +199,8 @@ function int_random(excludedMaxInt){
             // random piece rotation
             element.unshift(element.pop());
         }
-        pieces[i] = createPiece({i:i, sides: element});
+        var random_rotation = int_random(6);
+        pieces[i] = createPiece({i:i, sides: element, rotation: random_rotation});
         shapesLayer.add(pieces[i]);
     }
 
@@ -200,6 +212,11 @@ function int_random(excludedMaxInt){
 function check(){ return true; }
 
 var speedRadioSlow = document.getElementById("speedRadioSlow");
+
+
+function rotate(piece, nb_sixth_of_circle) {
+    piece.rotate(nb_sixth_of_circle * 60);
+}
 
 function moveTo(piece, x1, y1) {
     console.log("Moving to " + x1 + "," + y1);
