@@ -50,7 +50,7 @@ Translate and rotate the pieces. Colored paths form as the pieces touch each oth
 
 
 <div class="solver">
-    <p>Iterations: <span id="iterations"/></span></p>
+    <p>Iterations: <span id="testCounterDisplay"/></span></p>
     <p>State: <span id="stateDisplay"/></span></p>
     <p>Compute time: <span id="ctime"/></span>ns.</p>
     <button onclick="start();">Start</button>
@@ -178,25 +178,26 @@ arr.push( [BLUE, YELLOW, YELLOW, BLUE, RED, RED] );
 
 // ============= CANVAS AND ADD PIECES ============= //
 
-    var width = window.innerWidth / 2;
-    var height = window.innerHeight * 3/5;
-
-    var stage = new Konva.Stage({
-        container: 'container',
-        width: width,
-        height: height
-    });
-
-    var shapesLayer = new Konva.Layer();
-
-    var pieces = [];
 
 function int_random(excludedMaxInt){
     return Math.floor(Math.random() * excludedMaxInt);
 }
 
-    for(var i = arr.length -1; i >=0; i--) {
-        var element = arr.splice(int_random(arr.length), 1)[0]; // random piece shuffle
+    var width = window.innerWidth / 2;
+    var height = window.innerHeight * 3/5;
+
+    var stage ;
+
+    var shapesLayer;
+
+    var pieces;
+
+function createPiecesAndStage() {
+    shapesLayer = new Konva.Layer();
+    pieces = [];
+    var arrayCopy = arr.slice(0); // array copy
+    for(var i = arrayCopy.length -1; i >=0; i--) {
+        var element = arrayCopy.splice(int_random(arrayCopy.length), 1)[0]; // random piece shuffle
         for (var r=int_random(element.length); r>=0; r--) {
             // random piece rotation
             element.unshift(element.pop());
@@ -205,8 +206,13 @@ function int_random(excludedMaxInt){
         pieces[i] = createPiece({i:i, sides: element, rotation: random_rotation});
         shapesLayer.add(pieces[i]);
     }
-
+    stage = new Konva.Stage({
+        container: 'container',
+        width: width,
+        height: height
+    });
     stage.add(shapesLayer);
+}
 
 
 // ================ solver ================
@@ -250,27 +256,12 @@ function moveTo(piece, x1, y1) {
     }
 }
 
-var state;
-
-var placed = [], unplaced;
-
-var grid = [
-{x:Math.floor(3*PIECE_RADIUS),    y:Math.floor(PIECE_RADIUS)},
-{x:Math.floor(5*PIECE_RADIUS),    y:Math.floor(PIECE_RADIUS)},
-{x:Math.floor(7*PIECE_RADIUS),    y:Math.floor(PIECE_RADIUS)},
-{x:Math.floor(2*PIECE_RADIUS),  y:Math.floor(2.5*PIECE_RADIUS)},
-{x:Math.floor(4*PIECE_RADIUS),  y:Math.floor(2.5*PIECE_RADIUS)},
-{x:Math.floor(6*PIECE_RADIUS),  y:Math.floor(2.5*PIECE_RADIUS)},
-{x:Math.floor(8*PIECE_RADIUS),  y:Math.floor(2.5*PIECE_RADIUS)},
-{x:Math.floor(3*PIECE_RADIUS),    y:Math.floor(4*PIECE_RADIUS)},
-{x:Math.floor(5*PIECE_RADIUS),    y:Math.floor(4*PIECE_RADIUS)},
-{x:Math.floor(7*PIECE_RADIUS),    y:Math.floor(4*PIECE_RADIUS)}
-]
-; 
 function getNextAnimation(){
     var piece;
-    console.log("getNextAnimation");
+    console.log("getNextAnimation, state=" +state);
     if (state=='ordering') {
+		     console.log("Pieces ");
+		     console.log(pieces);
 		 for (var i=0; i<pieces.length; i++) {
 		     piece = pieces[i];
 		     console.log("Piece " +i + "@" + piece.getX() +","+piece.getY());
@@ -299,7 +290,9 @@ function getNextAnimation(){
 					}
 		 } // end for
        // rotated 6 times was not enough: check others pieces, or rotate previous! 
-       console.log ("loop n backtrack not coded");
+       console.log("loop n backtrack not coded. Play again!");
+       setTimeout(playAgain, 10);
+       return null;
       }
       // no piece left to place : we're done!
 		setState('all_set');
@@ -307,10 +300,12 @@ function getNextAnimation(){
     return null;
 }
 
+
 /*  
  @return boolean, answer to : piece, under rotation, may be placed at placeNb.
 */
 function mayPlace(piece, rotation, placeNb){
+   testCount(); 
    if (placeNb == 0)
 		return true;
    if (placeNb == 1) {
@@ -358,8 +353,7 @@ function mayPlace(piece, rotation, placeNb){
  @return boolean, true if match between placed[index] (rotated r1) and piece (rotated r2 + rotation)  
 */
 function pieceCompare(index0, index1, piece, r1, r2, rotation) {
-      console.log ("PREV. AT PLACE "+index0+" (with extra rotation "+placed[index0][1]+"): " + p_t_s(placed[index0][0]));
-      
+      console.log ("PREV. AT PLACE "+index0+" (with extra rotation "+placed[index0][1]+"): " + p_t_s(placed[index0][0]));      
       console.log ("ABOUT TO PLACE "+(index1)+" (with extra rotation "+rotation+"): " + p_t_s(piece) );
       
       var i1 = (12 + r1 - placed[index0][1] - placed[index0][0].my_data.rotation) % 6;
@@ -371,11 +365,11 @@ function pieceCompare(index0, index1, piece, r1, r2, rotation) {
 
 
 function p_t_s(piece){
-var s = '';
-s+='i: ' + piece.my_data.i ;
-s+=' sides: ' + piece.my_data.sides.join(',');
-s+=' rotation: ' + piece.my_data.rotation;
-return (s);
+  var s = '';
+  s+='i: ' + piece.my_data.i ;
+  s+=' sides: ' + piece.my_data.sides.join(',');
+  s+=' rotation: ' + piece.my_data.rotation;
+  return (s);
 }			 
 
 function start(){
@@ -389,43 +383,62 @@ function stop(){
         anim.stop();
 }
 
+
+ ///        ============ constants
+var grid = [
+{x:Math.floor(3*PIECE_RADIUS),    y:Math.floor(PIECE_RADIUS)},
+{x:Math.floor(5*PIECE_RADIUS),    y:Math.floor(PIECE_RADIUS)},
+{x:Math.floor(7*PIECE_RADIUS),    y:Math.floor(PIECE_RADIUS)},
+{x:Math.floor(2*PIECE_RADIUS),  y:Math.floor(2.5*PIECE_RADIUS)},
+{x:Math.floor(4*PIECE_RADIUS),  y:Math.floor(2.5*PIECE_RADIUS)},
+{x:Math.floor(6*PIECE_RADIUS),  y:Math.floor(2.5*PIECE_RADIUS)},
+{x:Math.floor(8*PIECE_RADIUS),  y:Math.floor(2.5*PIECE_RADIUS)},
+{x:Math.floor(3*PIECE_RADIUS),    y:Math.floor(4*PIECE_RADIUS)},
+{x:Math.floor(5*PIECE_RADIUS),    y:Math.floor(4*PIECE_RADIUS)},
+{x:Math.floor(7*PIECE_RADIUS),    y:Math.floor(4*PIECE_RADIUS)}
+]
+; 
+
+
+    var width = window.innerWidth / 2;
+    var height = window.innerHeight * 3/5;
+
+// ================== variables
+
 var anim ;
 
-var board = [];
+var board;
 
-function autoSolve() {
+var state;
 
-    var target = [];
+var placed, unplaced;
 
-    var currentArr = 0;
-    var currentTarget = 0;
-    var currentAngle = 0;
+var stage ;
 
-    target[currentTarget] = [arr[currentArr], currentAngle];
-    if (check(target)){
-        // combines, add new piece !
-        currentArr++;
-        currentTarget++;
-        currentAngle = 0;
-    } else {
-        if (currentAngle < 5) {
-            // broke sequence, can rotate
-            currentAngle ++;
-        } else {
-            // broke sequence, can't rotate, so remove
-            currentArr--;
-            currentTarget++;
-        }
-    }
-}
+var shapesLayer;
+
+var pieces;
 
 function setState(newState){
   state = newState;
   stateDisplay.innerHTML = state + '('+placed.length +')'; 
 }
 
-setState('ordering')
-start();
+var testCounter = 0;
+function testCount(newState){
+ testCounter ++;
+  testCounterDisplay.innerHTML = testCounter; 
+}
+
+function playAgain(){
+  board = [];
+  placed = [], unplaced = undefined;
+  setState('ordering');
+  createPiecesAndStage();
+  start();
+}
+
+playAgain();
 
 </script>
 
