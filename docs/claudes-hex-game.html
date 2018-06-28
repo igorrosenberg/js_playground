@@ -314,30 +314,68 @@ function mayPlace(piece, rotation, placeNb){
    if (placeNb == 0)
 		return true;
    if (placeNb == 1) {
-       
-      console.log ("AT PLACE 0 (with extra rotation "+placed[0][1]+"):");
-      mlog(placed[0][0]);
-      console.log ("ABOUT TO PLACE 1 (with extra rotation "+rotation+"):");
-      mlog(piece);
-      console.log ("iii " + "placed[0][1] " + placed[0][1] + " placed[0][0].my_data.rotation " + placed[0][0].my_data.rotation);
-      var i1 = (12 + 0 - placed[0][1] - placed[0][0].my_data.rotation) % 6;
-      var i2 = (12 + 3 - rotation - piece.my_data.rotation)%6;
-      console.log ("Must compare " + placed[0][0].my_data.sides[i1] + " == " + piece.my_data.sides[i2]);
- 
-		return (placed[0][0].my_data.sides[i1] == piece.my_data.sides[i2]);
+      return pieceCompare(0,1, piece, 0, 3, rotation); 
    }
-//   if (rotation == 5 && placeNb < 5)
-//		return true ;
-   else
-      return false;
+   if (placeNb == 2) {
+      return pieceCompare(1,2, piece, 0, 3, rotation); 
+   }
+   if (placeNb == 3) {
+      return pieceCompare(0,3, piece, 2, 5, rotation); 
+   }
+   if (placeNb == 4) {
+      return pieceCompare(0,4, piece, 1, 4, rotation) &&  
+       pieceCompare(1,4, piece, 2, 5, rotation) &&  
+       pieceCompare(3,4, piece, 0, 3, rotation) ;
+   }
+   if (placeNb == 5) {
+      return pieceCompare(1,5, piece, 1, 4, rotation) &&  
+       pieceCompare(2,5, piece, 2, 5, rotation) &&  
+       pieceCompare(4,5, piece, 0, 3, rotation) ;
+   }
+   if (placeNb == 6) {
+      return pieceCompare(2,6, piece, 1, 4, rotation) &&  
+       pieceCompare(5,6, piece, 0, 3, rotation) ;
+   }
+   if (placeNb == 7) {
+      return pieceCompare(3,7, piece, 1, 4, rotation) &&  
+       pieceCompare(4,7, piece, 2, 5, rotation) ;
+   }
+   if (placeNb == 8) {
+      return pieceCompare(4,8, piece, 1, 4, rotation) &&  
+       pieceCompare(5,8, piece, 2, 5, rotation) &&
+       pieceCompare(7,8, piece, 0, 3, rotation) ;
+   }
+   if (placeNb == 9) {
+      return pieceCompare(5,9, piece, 1, 4, rotation) &&  
+       pieceCompare(6,9, piece, 2, 5, rotation) &&
+       pieceCompare(8,9, piece, 0, 3, rotation) ;
+   }
+
+   return false;
 }; 
 
-function mlog(piece){
+/*
+ @return boolean, true if match between placed[index] (rotated r1) and piece (rotated r2 + rotation)  
+*/
+function pieceCompare(index0, index1, piece, r1, r2, rotation) {
+      console.log ("PREV. AT PLACE "+index0+" (with extra rotation "+placed[index0][1]+"): " + p_t_s(placed[index0][0]));
+      
+      console.log ("ABOUT TO PLACE "+(index1)+" (with extra rotation "+rotation+"): " + p_t_s(piece) );
+      
+      var i1 = (12 + r1 - placed[index0][1] - placed[index0][0].my_data.rotation) % 6;
+      var i2 = (12 + r2 - rotation - piece.my_data.rotation)%6;
+      console.log ("Must compare " + placed[index0][0].my_data.sides[i1] + " == " + piece.my_data.sides[i2]);
+ 
+		return (placed[index0][0].my_data.sides[i1] == piece.my_data.sides[i2]);
+}
+
+
+function p_t_s(piece){
 var s = '';
 s+='i: ' + piece.my_data.i ;
 s+=' sides: ' + piece.my_data.sides.join(',');
 s+=' rotation: ' + piece.my_data.rotation;
-console.log (s);
+return (s);
 }			 
 
 function start(){
