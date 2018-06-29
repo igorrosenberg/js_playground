@@ -118,17 +118,13 @@
             points: [x + a, y + b, xM, yM, x + c, y + d],
             stroke: color_name,
             strokeWidth: 10,
-//        lineCap: 'round',
-//        lineJoin: 'round',
             tension: 0.5
         });
     }
 
     function createPiece(hexData) {
 
-        var x = PIECE_RADIUS * (Math.floor(hexData.i / 2) * 2 + 1.1 ),
-            y = PIECE_RADIUS * ((hexData.i % 2) * 3 + 1.5);
-        // x=0,y=0;
+        var x = initialX(hexData.i), y = initialY(hexData.i);
 
         var group = new Konva.Group({
             draggable: true,
@@ -136,20 +132,10 @@
             offsetY: y
         });
 
-
-        var hexagon = createHexagon(x, y, PIECE_RADIUS);
-        group.add(hexagon);
-
-        var line;
-
-        line = createLine(x, y, PIECE_RADIUS, hexData.sides, YELLOW, colors[YELLOW]);
-        group.add(line);
-
-        line = createLine(x, y, PIECE_RADIUS, hexData.sides, BLUE, colors[BLUE]);
-        group.add(line);
-
-        line = createLine(x, y, PIECE_RADIUS, hexData.sides, RED, colors[RED]);
-        group.add(line);
+        group.add(createHexagon(x, y, PIECE_RADIUS));
+        group.add(createLine(x, y, PIECE_RADIUS, hexData.sides, YELLOW, colors[YELLOW]));
+        group.add(createLine(x, y, PIECE_RADIUS, hexData.sides, BLUE, colors[BLUE]));
+        group.add(createLine(x, y, PIECE_RADIUS, hexData.sides, RED, colors[RED]));
 
         group.on('mouseover', function () {
             document.body.style.cursor = 'pointer';
@@ -163,6 +149,8 @@
         });
 
         rotate(group, hexData.rotation);
+        group.setX(Math.floor(x));
+        group.setY(Math.floor(y));
 
         group.my_data = hexData;
 
@@ -228,7 +216,7 @@
             pieces[i] = createPiece({i: i, sides: element, rotation: random_rotation});
             shapesLayer.add(pieces[i]);
         }
-        stage = new Konva.Stage({
+        var stage = new Konva.Stage({
             container: 'container',
             width: window.innerWidth / 2,
             height: window.innerHeight * 3 / 5
@@ -246,46 +234,49 @@
 
     function moveTo(piece, x1, y1) {
         console.log("Moving to " + x1 + "," + y1);
-        return function (frame) {
-            // console.log(frame);
-            // var dx = frame.timeDiff/1000 ;// 1px / second
-
-            var x0 = piece.getX();
-            var y0 = piece.getY();
-
-            var dx = (x0 < x1 ? -1 : x1 === x0 ? 0 : 1);
-            var dy = (y0 < y1 ? -1 : y1 === y0 ? 0 : 1);
-            if (speedRadioSlow.checked) {
+        if (speedRadioSlow.checked) {
+            return function (frame) {
+                var x0 = piece.getX();
+                var y0 = piece.getY();
+                var dx = (x0 < x1 ? -1 : x1 === x0 ? 0 : 1);
+                var dy = (y0 < y1 ? -1 : y1 === y0 ? 0 : 1);
                 x0 -= dx;
                 y0 -= dy;
-            } else {
-                x0 = x1;
-                y0 = y1;
+                piece.setX(Math.floor(x0));
+                piece.setY(Math.floor(y0));
+                if (dx === 0 && dy === 0) {
+                    stop();
+                    start();
+                }
+                return true;
             }
-            piece.setX(Math.floor(x0));
-            piece.setY(Math.floor(y0));
-
-            if (dx === 0 && dy === 0) {
+        } else {
+            return function (frame) {
+                piece.setX(Math.floor(x1));
+                piece.setY(Math.floor(y1));
                 stop();
                 start();
+                return true;
             }
-            return true;
         }
+    }
+
+    function initialX(i) {
+        return 0;
+    }
+
+    function initialY(i) {
+        return Math.floor(PIECE_RADIUS + PIECE_RADIUS / 4 * (9 - i));
     }
 
     function getNextAnimation() {
         var piece;
         console.log("getNextAnimation, state=" + state);
         if (state === 'ordering') {
-            console.log("Pieces ");
-            console.log(pieces);
             for (var i = 0; i < pieces.length; i++) {
                 piece = pieces[i];
                 console.log("Piece " + i + "@" + piece.getX() + "," + piece.getY());
-                // var x1 = Math.floor(PIECE_RADIUS + PIECE_RADIUS * 2.5 *(i%4));
-                // var y1 = Math.floor(PIECE_RADIUS + PIECE_RADIUS * 2.1 * Math.floor(i/4));
-                var x1 = 0;//Math.floor(PIECE_RADIUS);
-                var y1 = Math.floor(PIECE_RADIUS + PIECE_RADIUS / 4 * i);
+                var x1 = initialX(i), y1 = initialY(i);
                 if (piece.getX() !== x1 || piece.getY() !== y1)
                     return new Konva.Animation(moveTo(piece, x1, y1), shapesLayer);
             }
@@ -308,7 +299,7 @@
                 } // end for
                 // rotated 6 times was not enough: check others pieces, or rotate previous!
                 console.log("loop n backtrack not coded. Play again!");
-                setTimeout(playAgain, 10);
+                setTimeout(playAgain, 1);
                 return null;
             }
             // no piece left to place : we're done!
@@ -323,8 +314,9 @@
      */
     function mayPlace(piece, rotation, placeNb) {
         testCount();
-        if (placeNb === 0)
+        if (placeNb === 0) {
             return true;
+        }
         if (placeNb === 1) {
             return pieceCompare(0, 1, piece, 0, 3, rotation);
         }
@@ -371,7 +363,7 @@
      */
     function pieceCompare(index0, index1, piece, r1, r2, rotation) {
         console.log("PREV. AT PLACE " + index0 + " (with extra rotation " + placed[index0][1] + "): " + p_t_s(placed[index0][0]));
-        console.log("ABOUT TO PLACE " + (index1) + " (with extra rotation " + rotation + "): " + p_t_s(piece));
+        console.log("ABOUT TO PLACE " + index1 + " (with extra rotation " + rotation + "): " + p_t_s(piece));
 
         var i1 = (12 + r1 - placed[index0][1] - placed[index0][0].my_data.rotation) % 6;
         var i2 = (12 + r2 - rotation - piece.my_data.rotation) % 6;
@@ -380,7 +372,7 @@
         return (placed[index0][0].my_data.sides[i1] === piece.my_data.sides[i2]);
     }
 
-
+    /* Piece to String */
     function p_t_s(piece) {
         var s = '';
         s += 'i: ' + piece.my_data.i;
@@ -406,34 +398,39 @@
     var anim;
     var state;
     var placed, unplaced;
-    var shapesLayer, stage;
+    var shapesLayer;
     var pieces;
-    var testCounter = 0;
-    var maxAttained= 0;
 
     function setState(newState) {
         state = newState;
-        if (state === 'setting'){
-            stateDisplay.innerHTML = state + '(' + placed.length + ')' ;
+        if (state === 'setting') {
+            stateDisplay.innerHTML = state + '(' + placed.length + ')';
             storeMaxAttained(placed.length);
         } else {
-            stateDisplay.innerHTML = state ;
-            }
-    }
-
-    function storeMaxAttained(newMax){
-        if (newMax > maxAttained) {
-            maxAttained = newMax;
-            maxAttainedDisplay.innerHTML = maxAttained ;
+            stateDisplay.innerHTML = state;
         }
     }
 
-    function testCount() {
-        testCounter++;
-        testCounterDisplay.innerHTML = testCounter;
-    }
+    var storeMaxAttained = (function () {
+        var maxAttained = 0;
+        return function (newMax) {
+            if (newMax > maxAttained) {
+                maxAttained = newMax;
+                maxAttainedDisplay.innerHTML = maxAttained;
+            }
+        };
+    })();
+
+    var testCount = (function () {
+        var testCounter = 0;
+        return function () {
+            testCounter++;
+            testCounterDisplay.innerHTML = testCounter;
+        }
+    })();
 
     function playAgain() {
+        placed = [];
         setState('ordering');
         createPiecesAndStage();
         start();
@@ -445,4 +442,3 @@
 
 </body>
 </html>
-
