@@ -48,7 +48,7 @@ img.micro {
 
 		<label>
 			<span class="col">Upload your own:</span>
-			<input class="col" type="file" id="input_file" />
+			<input autocomplete="off" class="col" type="file" id="input_file" />
 		</label>
 
 		<label>
@@ -62,6 +62,16 @@ img.micro {
 					<img class="micro" src="http://blog.joinapp.fr/wp-content/uploads/2017/08/ticket-de-caisse-pour.jpg"/>
 				</a> 
 			</div>
+
+		</label>
+
+		<label>
+			<span class="col">Check this out:</span>
+			<div class="col">
+<a href="https://codepen.io/taylorcoffelt/pen/EsCcr">
+				Javascript Edge Detection, A Pen By Taylor Coffelt
+			</a>					
+			</div>
 		</label>
 
 	</div>
@@ -69,9 +79,15 @@ img.micro {
 
 
 <div class="col">
-<div>
-    <canvas width="400" height="300" id="canvas"/>
-</div>
+	<h4>Results</h4>
+	<div>
+		 <canvas width="400" height="300" id="canvas"/>
+	</div>
+	<div>
+		<h4>Log</h4>
+		<div id="log">
+		</div>
+	</div>
 </div>
 
 
@@ -88,8 +104,7 @@ window.onload = function() {
 }
 
 function handleExistingFile(e) {
-//	console.log(e.target.children[0].src);
-   console.log(e.target.src);
+   my_log(e.target.src);  //	was expecting e.target.children[0].src ?!
    var ctx = document.getElementById('canvas').getContext('2d');
    ctx.drawImage(e.target, 0, 0
             , ctx.canvas.width, ctx.canvas.height
@@ -98,7 +113,7 @@ function handleExistingFile(e) {
 
 function handleInputFiles(e) {
     var file = e.target.files[0];
-    console.log(file.name);
+    my_log(file.name);
 
     var img = new Image();
     img.onload = function() {
@@ -117,6 +132,17 @@ function handleInputFiles(e) {
     }
     reader.readAsDataURL(file);
 }
+
+var my_log = (function(){
+   var logElem = document.getElementById('log');
+	return function(s){
+      var newElem = document.createElement('p');
+      newElem.innerHTML = s;
+      logElem.appendChild(newElem);
+	};
+})();
+        
+
 
 </script>
 
