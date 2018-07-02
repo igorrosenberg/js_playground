@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Image I/O</title>
+    <script src="https://cdn.rawgit.com/konvajs/konva/2.1.6/konva.min.js"></script>
+    <style>
+body {
+	margin: 10px;
+	padding: 0;
+	background-color: #F0F0F0;
+	text-align: left;
+}
+
+.header{text-align: center; }
+
+canvas {border: 1px solid black;}
+.col {float:left; width: 49%; margin:0;}
+
+label{ margin-bottom: 10px;}
+
+.xref {font-size: 70%;}
+
+img.micro { 
+  display: block; 
+  max-width:230px; max-height:230px;
+  width: auto;  height: auto; 
+}
+    </style>
+</head>
+<body id='body'>
+
+<div class="header">
+    <h1>Image I/O</h1>
+</div>
+
+<div class="col">
+	<div>
+		<h4>Instructions</h4>
+		<ul>
+			<li>Select an image.</li>
+			<li>Border detection is applied.</li>
+			<li>Then the greatest enclosing polygon (rectangle?) is extracted.</li>
+		</ul>
+	</div>
+	<div>
+		<h4>Data</h4>
+
+		<label>
+			<span class="col">Upload your own:</span>
+			<input class="col" type="file" id="input" />
+		</label>
+
+		<label>
+			<span class="col">Random pic from some blog: <br/>
+				 <span class="xref">
+					(<a href="http://blog.joinapp.fr/2017/08/03/quest-ce-quun-ticket-de-caisse/">blog.joinapp.fr</a>)
+				</span>
+			</span>
+			<div class="col">
+				<a href="#" onclick="loadRemote()">
+					<img class="micro" src="http://blog.joinapp.fr/wp-content/uploads/2017/08/ticket-de-caisse-pour.jpg"/>
+				</a> 
+			</div>
+		</label>
+
+	</div>
+</div>
+
+
+<div class="col">
+<div>
+    <canvas width="400" height="300" id="canvas"/>
+</div>
+</div>
+
+
+
+
+<script>
+
+
+
+var URL = window.webkitURL || window.URL;
+
+window.onload = function() {
+    var input = document.getElementById('input');
+    input.addEventListener('change', handleFiles, false);
+}
+
+function handleFiles(e) {
+    var ctx = document.getElementById('canvas').getContext('2d');
+    var reader  = new FileReader();
+    var file = e.target.files[0];
+    // load to image to get it's width/height
+    var img = new Image();
+    img.onload = function() {
+        // scale canvas to image
+        ctx.canvas.width = img.width;
+        ctx.canvas.height = img.height;
+        // draw image
+        ctx.drawImage(img, 0, 0
+            , ctx.canvas.width, ctx.canvas.height
+        );
+    }
+    // this is to setup loading the image
+    reader.onloadend = function () {
+        img.src = reader.result;
+    }
+    // this is to read the file
+   	reader.readAsDataURL(file);
+}
+
+</script>
+
+</body>
+</html>
+
