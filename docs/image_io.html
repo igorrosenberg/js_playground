@@ -48,7 +48,7 @@ img.micro {
 
 		<label>
 			<span class="col">Upload your own:</span>
-			<input class="col" type="file" id="input" />
+			<input class="col" type="file" id="input_file" />
 		</label>
 
 		<label>
@@ -58,7 +58,7 @@ img.micro {
 				</span>
 			</span>
 			<div class="col">
-				<a href="#" onclick="loadRemote()">
+				<a href="#" id="existing_image">
 					<img class="micro" src="http://blog.joinapp.fr/wp-content/uploads/2017/08/ticket-de-caisse-pour.jpg"/>
 				</a> 
 			</div>
@@ -75,40 +75,47 @@ img.micro {
 </div>
 
 
-
-
 <script>
 
-
-
-var URL = window.webkitURL || window.URL;
+// var URL = window.webkitURL || window.URL;
 
 window.onload = function() {
-    var input = document.getElementById('input');
-    input.addEventListener('change', handleFiles, false);
+    var input_file = document.getElementById('input_file');
+    input_file.addEventListener('change', handleInputFiles, false);
+
+    var existing_image = document.getElementById('existing_image');
+    existing_image.addEventListener('click', handleExistingFile, false);
 }
 
-function handleFiles(e) {
-    var ctx = document.getElementById('canvas').getContext('2d');
-    var reader  = new FileReader();
+function handleExistingFile(e) {
+//	console.log(e.target.children[0].src);
+   console.log(e.target.src);
+   var ctx = document.getElementById('canvas').getContext('2d');
+   ctx.drawImage(e.target, 0, 0
+            , ctx.canvas.width, ctx.canvas.height
+        );
+}
+
+function handleInputFiles(e) {
     var file = e.target.files[0];
-    // load to image to get it's width/height
+    console.log(file.name);
+
     var img = new Image();
     img.onload = function() {
+        var ctx = document.getElementById('canvas').getContext('2d');
         // scale canvas to image
-        ctx.canvas.width = img.width;
-        ctx.canvas.height = img.height;
+        // ctx.canvas.width = img.width;
+        // ctx.canvas.height = img.height;
         // draw image
         ctx.drawImage(img, 0, 0
             , ctx.canvas.width, ctx.canvas.height
         );
     }
-    // this is to setup loading the image
+    var reader  = new FileReader();
     reader.onloadend = function () {
         img.src = reader.result;
     }
-    // this is to read the file
-   	reader.readAsDataURL(file);
+    reader.readAsDataURL(file);
 }
 
 </script>
