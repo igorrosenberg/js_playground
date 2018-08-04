@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Basic trigonometry</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+    </style>
+</head>
+<body>
+
+<h1>Basic trigonometry</h1>
+
+<div class="scalaire">
+    <h2>Produit scalaire</h2>
+    <div>
+        <label>
+            Ax:
+            <input type="number" id="ax" value="5">
+        </label>
+        <label>
+            Ay:
+            <input type="number" id="ay" value="2">
+        </label>
+    </div>
+
+    <div>
+        <label>
+            Bx:
+            <input type="number" id="bx" value="1.5">
+        </label>
+        <label>
+            By:
+            <input type="number" id="by" value="-2.4">
+        </label>
+    </div>
+
+    <div>
+        <canvas></canvas>
+    </div>
+
+</div>
+
+<script>
+
+    function reload() {
+
+        var W = 300, H = 300;
+        var canvas = document.getElementsByClassName('scalaire')[0].getElementsByTagName("canvas")[0];
+        var ctx = canvas.getContext("2d");
+
+        canvas.width = W;
+        canvas.height = H;
+
+        // clear and outer margin
+        ctx.clearRect(0, 0, W, H);
+        ctx.strokeStyle = "#FFFFF";
+        ctx.lineWidth = 5;
+        ctx.strokeRect(0, 0, W, H);
+
+        // origin
+        ctx.strokeStyle = "#FF00FF";
+        ctx.lineWidth = 1;
+        var w2 = W / 2, h2 = H / 2;
+        ctx.strokeRect(w2 - 10, h2 - 1, 21, 3);
+        ctx.strokeRect(w2 - 1, h2 - 10, 3, 21);
+
+        function drawVector(name, color, x, y, scale) {
+            var inversion = -1;
+            scale = scale || 10;
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(w2, h2);
+            ctx.lineTo(w2 + x * scale, h2 + inversion * y * scale);
+            ctx.closePath();
+            ctx.stroke();
+
+            ctx.fillStyle = color;
+            ctx.font = "14px Verdana";
+            ctx.fillText(name, w2 + x * scale * 1.1, h2 + inversion * y * scale * 1.1);
+        }
+
+        var ax = parseFloat(document.getElementById('ax').value);
+        document.getElementById('ax').value = ax;
+        var bx = parseFloat(document.getElementById('bx').value);
+        document.getElementById('bx').value = bx;
+        var ay = parseFloat(document.getElementById('ay').value);
+        document.getElementById('ay').value = ay;
+        var by = parseFloat(document.getElementById('by').value);
+        document.getElementById('by').value = by;
+
+
+        var inversion = -1; // inversion du repère
+        drawVector('A', '#ffff00', ax, ay); // A jaune
+        drawVector('B', '#00ff00', bx, by); // B vert
+        drawVector('Ortho', '#ff0000', ay, -ax); // A_orthogonal rouge
+
+        function bottomNote(s, line) {
+            ctx.fillStyle = "#000";
+            ctx.font = "14px Verdana";
+            ctx.fillText(s, 10, H - 16 * line);
+        }
+
+        var scalaire = ax * bx + ay * by;
+        bottomNote("Produit Scalaire: " + scalaire.toFixed(4), 2);
+
+        var scalaireOrtho = ay * bx - ax * by;
+        bottomNote("Produit Scalaire orthogonal: " + scalaireOrtho.toFixed(4), 1);
+
+    }
+
+    var l = document.getElementsByClassName('scalaire')[0].getElementsByTagName('input');
+    for (i = 0; i < l.length; i++) {
+        l[i].addEventListener("keyup", reload);
+        l[i].addEventListener("change", reload);
+    }
+    reload();
+
+</script>
+
+<div class="projection_orthogonale">
+    <h2>Projection orthogonale</h2>
+
+    <img src="images/projection-orthogonale.PNG">
+
+    <div>
+        <label>
+            Ax:
+            <input type="number" id="ax2" value="0">
+        </label>
+        <label>
+            Ay:
+            <input type="number" id="ay2" value="4">
+        </label>
+    </div>
+
+    <div>
+        <label>
+            Bx:
+            <input type="number" id="bx2" value="-9">
+        </label>
+        <label>
+            By:
+            <input type="number" id="by2" value="-2">
+        </label>
+    </div>
+
+    <div>
+        <label>
+            Cx:
+            <input type="number" id="cx2" value="-3">
+        </label>
+        <label>
+            Cy:
+            <input type="number" id="cy2" value="0">
+        </label>
+    </div>
+
+    <div>
+        <canvas></canvas>
+    </div>
+
+    <script>
+
+        function reload2() {
+
+            var W = 300, H = 300;
+            var canvas = document.getElementsByClassName('projection_orthogonale')[0].getElementsByTagName("canvas")[0];
+            var ctx = canvas.getContext("2d");
+
+            canvas.width = W;
+            canvas.height = H;
+
+            // clear and outer margin
+            ctx.clearRect(0, 0, W, H);
+            ctx.strokeStyle = "#FFFFF";
+            ctx.lineWidth = 5;
+            ctx.strokeRect(0, 0, W, H);
+
+            // origin
+            ctx.strokeStyle = "#FF00FF";
+            ctx.lineWidth = 1;
+            var w2 = W / 2, h2 = H / 2;
+            ctx.strokeRect(w2 - 10, h2 - 1, 21, 3);
+            ctx.strokeRect(w2 - 1, h2 - 10, 3, 21);
+
+            function halfLine(ux, uy, vx, vy, scale, inversion) {
+                var Dx = vx - ux;
+                var Dy = vy - uy;
+
+                var Nx = w2 + vx * scale;
+                var Ny = h2 + inversion * vy * scale;
+                while (true) {
+                    Nx += Dx;
+                    Ny += inversion * Dy;
+                    if (Nx < 0 || Nx > W || Ny < 0 || Ny > H)
+                        break;
+                    Dx += Dx;   // increase exponentially
+                    Dy += Dy;   // increase exponentially
+                }
+                ctx.beginPath();
+                ctx.moveTo(w2 + ux * scale, h2 + inversion * uy * scale);
+                ctx.lineTo(Nx, Ny);
+                ctx.closePath();
+                ctx.stroke();
+            }
+
+            function drawLine(color, ux, uy, vx, vy, scale) {
+                if (ux == vx && uy == vy) return; // not a line if points are the same
+                var inversion = -1;
+                scale = scale || 10;
+
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'black';
+                halfLine(ux, uy, vx, vy, scale, inversion);
+                halfLine(vx, vy, ux, uy, scale, inversion);
+
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = color;
+                ctx.beginPath();
+                ctx.moveTo(w2 + ux * scale, h2 + inversion * uy * scale);
+                ctx.lineTo(w2 + vx * scale, h2 + inversion * vy * scale);
+                ctx.closePath();
+                ctx.stroke();
+
+            }
+
+            function drawPoint(name, color, x, y, scale) {
+                var inversion = -1;
+                scale = scale || 10;
+
+                ctx.fillStyle = color;
+                ctx.font = "14px Verdana";
+                ctx.fillText(name, w2 + x * scale * 1.1, h2 + inversion * y * scale * 1.1);
+            }
+
+            function projecte (xa, ya, xb, yb, xc, yc) {
+                var xv  = cx - bx;
+                var yv  = cy - by;
+                var N = xv * xv + yv * yv;
+
+                var hx = xb + ((xa -xb) * xv + (ya -yb) * yv) * xv / N;
+                var hy = yb + ((xa -xb) * xv + (ya -yb) * yv) * yv / N;
+                return [hx, hy];
+            }
+
+            var ax = parseFloat(document.getElementById('ax2').value);
+            document.getElementById('ax2').value = ax;
+            var bx = parseFloat(document.getElementById('bx2').value);
+            document.getElementById('bx2').value = bx;
+            var cx = parseFloat(document.getElementById('cx2').value);
+            document.getElementById('cx2').value = cx;
+            var ay = parseFloat(document.getElementById('ay2').value);
+            document.getElementById('ay2').value = ay;
+            var by = parseFloat(document.getElementById('by2').value);
+            document.getElementById('by2').value = by;
+            var cy = parseFloat(document.getElementById('cy2').value);
+            document.getElementById('cy2').value = cy;
+
+
+            var inversion = -1; // inversion du repère
+            drawLine('#ffff00', bx, by, cx, cy); // BC jaune/bleu
+            drawPoint('A', '#00ff00', ax, ay); // A vert
+            drawPoint('B', '#0000ff', bx, by); // B bleu
+            drawPoint('C', '#0000ff', cx, cy); // C bleu
+
+            function bottomNote(s, line) {
+                ctx.fillStyle = "#000";
+                ctx.font = "14px Verdana";
+                ctx.fillText(s, 10, H - 16 * line);
+            }
+
+            var projete = projecte (ax, ay, bx, by, cx, cy);
+            drawLine('#ff0000', ax, ay, projete[0], projete[1]); // AH rouge/xx
+            drawPoint('H', '#ff0000', projete[0], projete[1]); // H rouge
+            bottomNote("Projete: " + projete[0].toFixed(4) + ', ' + projete[1].toFixed(4), 1);
+        }
+
+        var l = document.getElementsByClassName('projection_orthogonale')[0].getElementsByTagName('input');
+        for (i = 0; i < l.length; i++) {
+            l[i].addEventListener("keyup", reload2);
+            l[i].addEventListener("change", reload2);
+        }
+        reload2();
+
+    </script>
+
+</div>
+
+
+
+</body>
+</html>

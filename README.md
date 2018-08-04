@@ -38,6 +38,14 @@ Because I couldn't do it in my head, I wrote a JavaScript solver. Current versio
 Find a live version here 
 <a href="https://igorrosenberg.github.io/js_playground/claudes-hex-game.html">Claude's hex game</a>.
 
+#### Basic trigonometry
+
+I needed some trig refreshers, for some image analysis project.
+So I coded some math illustrations.
+
+Find a live version here 
+<a href="https://igorrosenberg.github.io/js_playground/basic-trigonometry.html">Basic trigonometry</a>.
+
 #### Dice
 
 A wooden brain-teaser: within a tower, four dice are inserted. They bear one of four colors on each side. The dice can be rotated in any direction. The objective is have each side of the column showing four different colors.
