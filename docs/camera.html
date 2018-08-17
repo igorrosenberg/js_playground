@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Using mobile camera</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        img, canvas {
+            width: 50%;
+        }
+
+        td {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Using mobile camera</h1>
+
+<p>Objective: use the device's image capture, crop the image, then send via XHR.</p>
+
+<i>
+    Reference:
+    <a href="https://www.w3.org/TR/html-media-capture/">https://www.w3.org/TR/html-media-capture/</a>
+</i>
+
+<hr>
+<h4>Simplistic form upload</h4>
+<form action="server.cgi" method="post" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*" capture="user">
+    <input type="submit" value="Upload">
+</form>
+
+<hr>
+<h4>JS controlled input</h4>
+
+<div>
+    <input id="photoShoot" type="file" accept="image/*" capture>
+</div>
+
+<table>
+    <tr>
+        <td>Images</td>
+        <td>Canvas</td>
+    </tr>
+    <tr>
+        <td>
+            <div id="imageArea"></div>
+        </td>
+        <td>
+            <div id="canvasArea"></div>
+        </td>
+    </tr>
+</table>
+
+
+<div id="logs"></div>
+
+<script>
+    var log = (function () {
+        var logs = document.getElementById('logs');
+        return function (s) {
+            logs.innerHTML += s + '<br>';
+        }
+    })();
+
+    var photoInput = document.getElementById('photoShoot');
+    photoInput.onchange = function () {
+        var file = photoInput.files[0];
+        upload(file);
+        drawOnCanvas(file);
+        displayAsImage(file);
+    };
+
+    function upload(file) {
+        log("uploading to remote");
+        var form = new FormData();
+        form.append('image', file);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('post', 'server.cgi', true);
+        xhr.send(form);
+
+        xhr.onreadystatechange = function () {
+            log('XHR state=' + xhr.readyState + ' status=' + xhr.status + ' response=' + xhr.responseText);
+        };
+
+    }
+
+    function drawOnCanvas(file) {
+        log("drawing on canvas (cropped)");
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            var dataURL = e.target.result;
+            var img = new Image();
+
+            img.onload = function () {
+                var c = document.createElement('canvas');
+                /*
+                 // copy-paste input's image into canvas
+                 c.width = img.width;
+                 c.height = img.height;
+                 var ctx = c.getContext('2d');
+                 ctx.drawImage(img, 0, 0);
+                 */
+
+                // or shave 20% off each side
+                var w = img.width / 5;
+                var h = img.height / 5;
+                c.width = 3 * w;
+                c.height = 3 * h;
+                var ctx = c.getContext('2d');
+                ctx.drawImage(img, w, h, 3 * w, 3 * h, 0, 0, 3 * w, 3 * h);
+
+                replaceContent("canvasArea", c);
+            };
+
+            img.src = dataURL;
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    function displayAsImage(file) {
+        log("display as image");
+        var imgURL = URL.createObjectURL(file);
+        var img = document.createElement('img');
+
+        img.onload = function () {
+            URL.revokeObjectURL(imgURL);
+        };
+
+        img.src = imgURL;
+        replaceContent("imageArea", img);
+    }
+
+    function replaceContent(elementId, img) {
+        var imageContainer = document.getElementById(elementId);
+        while (imageContainer.firstChild) {
+            imageContainer.removeChild(imageContainer.firstChild);
+        }
+        imageContainer.appendChild(img);
+    }
+</script>
+
+</body>
+</html>
