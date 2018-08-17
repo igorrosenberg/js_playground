@@ -239,13 +239,13 @@
                 ctx.fillText(name, w2 + x * scale * 1.1, h2 + inversion * y * scale * 1.1);
             }
 
-            function projecte (xa, ya, xb, yb, xc, yc) {
-                var xv  = cx - bx;
-                var yv  = cy - by;
+            function projecte(xa, ya, xb, yb, xc, yc) {
+                var xv = cx - bx;
+                var yv = cy - by;
                 var N = xv * xv + yv * yv;
 
-                var hx = xb + ((xa -xb) * xv + (ya -yb) * yv) * xv / N;
-                var hy = yb + ((xa -xb) * xv + (ya -yb) * yv) * yv / N;
+                var hx = xb + ((xa - xb) * xv + (ya - yb) * yv) * xv / N;
+                var hy = yb + ((xa - xb) * xv + (ya - yb) * yv) * yv / N;
                 return [hx, hy];
             }
 
@@ -275,7 +275,7 @@
                 ctx.fillText(s, 10, H - 16 * line);
             }
 
-            var projete = projecte (ax, ay, bx, by, cx, cy);
+            var projete = projecte(ax, ay, bx, by, cx, cy);
             drawLine('#ff0000', ax, ay, projete[0], projete[1]); // AH rouge/xx
             drawPoint('H', '#ff0000', projete[0], projete[1]); // H rouge
             bottomNote("Projete: " + projete[0].toFixed(4) + ', ' + projete[1].toFixed(4), 1);
@@ -292,6 +292,154 @@
 
 </div>
 
+<div class="angle_vecteur">
+    <h2>Angle entre vecteurs</h2>
+
+    <div>
+        <label>
+            Ax:
+            <input type="number" id="ax3" value="1.0459645600989461">
+        </label>
+        <label>
+            Ay:
+            <input type="number" id="ay3" value="10.343599997833371">
+        </label>
+    </div>
+
+    <div>
+        <label>
+            Bx:
+            <input type="number" id="bx3" value="4.2631778439972095">
+        </label>
+        <label>
+            By:
+            <input type="number" id="by3" value="9.425695445434394">
+        </label>
+    </div>
+
+    <div>
+        <label>
+            Cx:
+            <input type="number" id="cx3" value="12.728393717466611">
+        </label>
+        <label>
+            Cy:
+            <input type="number" id="cy3" value="7.974928677622665">
+        </label>
+    </div>
+
+    <div>
+        <canvas></canvas>
+    </div>
+
+    <script>
+
+        function reload3() {
+
+            var W = 300, H = 300;
+            var canvas = document.getElementsByClassName('angle_vecteur')[0].getElementsByTagName("canvas")[0];
+            var ctx = canvas.getContext("2d");
+
+            canvas.width = W;
+            canvas.height = H;
+
+            // clear and outer margin
+            ctx.clearRect(0, 0, W, H);
+            ctx.strokeStyle = "#FFFFF";
+            ctx.lineWidth = 5;
+            ctx.strokeRect(0, 0, W, H);
+
+            // origin
+            ctx.strokeStyle = "#FF00FF";
+            ctx.lineWidth = 1;
+            var w2 = W / 2, h2 = H / 2;
+            ctx.strokeRect(w2 - 10, h2 - 1, 21, 3);
+            ctx.strokeRect(w2 - 1, h2 - 10, 3, 21);
+
+            function drawLine(color, ux, uy, vx, vy, scale) {
+                if (ux == vx && uy == vy) return; // not a line if points are the same
+                var inversion = -1;
+                scale = scale || 10;
+
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = color;
+                ctx.beginPath();
+                ctx.moveTo(w2 + ux * scale, h2 + inversion * uy * scale);
+                ctx.lineTo(w2 + vx * scale, h2 + inversion * vy * scale);
+                ctx.closePath();
+                ctx.stroke();
+
+            }
+
+            function drawPoint(name, color, x, y, scale) {
+                var inversion = -1;
+                scale = scale || 10;
+
+                ctx.fillStyle = color;
+                ctx.font = "14px Verdana";
+                ctx.fillText(name, w2 + x * scale * 1.1, h2 + inversion * y * scale * 1.1);
+            }
+
+            function projecte(xa, ya, xb, yb, xc, yc) {
+                var xv = cx - bx;
+                var yv = cy - by;
+                var N = xv * xv + yv * yv;
+
+                var hx = xb + ((xa - xb) * xv + (ya - yb) * yv) * xv / N;
+                var hy = yb + ((xa - xb) * xv + (ya - yb) * yv) * yv / N;
+                return [hx, hy];
+            }
+
+            /**
+             * angle between P2 --> P1 --> P3
+             */
+            function angle(p2x, p2y, p1x, p1y, p3x, p3y) {
+                var result = Math.atan2(p3y - p1y, p3x - p1x) - Math.atan2(p2y - p1y, p2x - p1x);
+                console.log("source: " + p2 + '/' + p1 + '/' + p3 + " angle: " + result);
+                return result
+            }
+
+            var ax = parseFloat(document.getElementById('ax3').value);
+            document.getElementById('ax2').value = ax;
+            var bx = parseFloat(document.getElementById('bx3').value);
+            document.getElementById('bx2').value = bx;
+            var cx = parseFloat(document.getElementById('cx3').value);
+            document.getElementById('cx2').value = cx;
+            var ay = parseFloat(document.getElementById('ay3').value);
+            document.getElementById('ay2').value = ay;
+            var by = parseFloat(document.getElementById('by3').value);
+            document.getElementById('by2').value = by;
+            var cy = parseFloat(document.getElementById('cy3').value);
+            document.getElementById('cy2').value = cy;
+
+
+            var inversion = -1; // inversion du repère
+            drawLine('green', ax, ay, bx, by); // AB green
+            drawLine('#ffff00', bx, by, cx, cy); // BC jaune
+            drawPoint('A', '#00ff00', ax, ay); // A vert
+            drawPoint('B', '#0000ff', bx, by); // B bleu
+            drawPoint('C', '#0000ff', cx, cy); // C bleu
+
+            function bottomNote(s, line) {
+                ctx.fillStyle = "#000";
+                ctx.font = "14px Verdana";
+                ctx.fillText(s, 10, H - 16 * line);
+            }
+
+            var angle = angle(ax,ay,bx,by,cx,cy)
+            bottomNote("Angle: " + angle);
+        }
+
+        var l = document.getElementsByClassName('angle_vecteur')[0].getElementsByTagName('input');
+        for (i = 0; i < l.length; i++) {
+            l[i].addEventListener("keyup", reload3);
+            l[i].addEventListener("change", reload3);
+        }
+        reload3();
+
+    </script>
+
+</div>
 
 
 </body>
