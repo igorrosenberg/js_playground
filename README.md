@@ -110,3 +110,9 @@ Add nice functions to standard DOM elements: toggleDisplay, hasClass, addJavascr
 
 <a href="https://igorrosenberg.github.io/js_playground/element_extensions.js">element_extensions.js</a>.
 
+#### bootstrap-tabs.html
+
+Bootstrap dynamic tabs: add a tab if missing, then delete it on click.
+
+<a href="https://igorrosenberg.github.io/js_playground/bootstrap-tabs.html">bootstrap-tabs.html</a>.
+
