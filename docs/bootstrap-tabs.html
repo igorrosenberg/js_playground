@@ -42,15 +42,26 @@
 <script>
 
 $(document).ready(function () {
+  var $tabList = $("#tab-list");
+  $tabList.on('click', 'span.close', function(event){
+		event.preventDefault();
+		var $tab = $(this).parent();
+		var $liParent = $tab.parent()    ;
+		$liParent.remove(); //remove li of tab
+		$($tab.attr("href")).remove(); //remove tab content
+		if ($liParent.hasClass('active')) {
+			$tabList.find('li a').first().click(); // return home if needed
+		}
+		return false;
+  });
   $(".switch-to-tab a").on('click', function(e){
-    var $tabList = $("#tab-list");
     var linkId = e.target.getAttribute('href');
     var $tabWithLink=$tabList.find(`li a[href="${linkId}"]`);
     if ($tabWithLink.length) {
 			$tabWithLink.click()
     } else {
 			 var name = e.target.textContent;
-			 var $newTab = $(`<li><a data-toggle="tab" href="${linkId}">${name}</a></li>`);
+			 var $newTab = $(`<li ><a data-toggle="tab" href="${linkId}">${name} <span class="close">×</span></a></li>`);
 			 $tabList.append($newTab);
 			 var $newContent = $(
 `<div id="${linkId.substring(1)}" class="tab-pane fade">
