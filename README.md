@@ -14,7 +14,7 @@ This is similar to
 * <a href="http://jsfiddle.net/">jsfiddle</a>
 * any modern browser's developper "console"   
 
-Find a live version 
+Live version 
 <a href="http://igor.rosenberg.free.fr/public/dev/js_playground.html">here</a> 
 and 
 <a href="https://igorrosenberg.github.io/js_playground/js_playground.htm">here</a>.
@@ -23,7 +23,7 @@ and
 
 Via a CORS request, check that a remote site can be reached. This could be the start of an SPA monitoring framework.
 
-Find a live version here
+Live version here
 <a href="https://igorrosenberg.github.io/js_playground/is-internet-alive.html">is-internet-alive?</a>.
 
 
@@ -35,7 +35,7 @@ Can you make 3 continuous paths: red, blue, yellow ?
 
 Because I couldn't do it in my head, I wrote a JavaScript solver. Current version works nicely, but a complete rewrite is needed.
 
-Find a live version here 
+Live version here 
 <a href="https://igorrosenberg.github.io/js_playground/claudes-hex-game.html">Claude's hex game</a>.
 
 #### Dice
@@ -44,7 +44,7 @@ A wooden brain-teaser: within a tower, four dice are inserted. They bear one of 
 
 Because I couldn't do it in my head, I wrote a JavaScript solver. Optimizing the first naive version was fun. 
 
-Find a live version here 
+Live version here 
 <a href="https://igorrosenberg.github.io/js_playground/dice.html">dice</a>.
 
 
@@ -67,38 +67,48 @@ firefox http://localhost:8000/
 
 Given a server exposing HTML fragments, import them in another 'main' page via AJAX requests. Heavily based on `$.load`, which seems tailored to this exact need.
 
-Find a live version here
+Live version here
 <a href="https://igorrosenberg.github.io/js_playground/jquery-rewire.html">jquery-rewire</a>.
 
 #### X-mas tree, or concurrent array updating
 
 Via a long-running process, populate an array. It's a very naive basis for concurrent thinking in JS. 
 
+Live version here
 <a href="https://igorrosenberg.github.io/js_playground/xmas-tree.js">xmas-tree Javascript source</a>.
 
 #### Sort implementation
 
 As a futile exercice, rewrite a well-known sort algorithm.
 
+Live version here
 <a href="https://igorrosenberg.github.io/js_playground/sort-implem.js">sort-implem Javascript source</a>.
 
 #### JQuery disable button
 
 Simple demo of the 'disabled' attribute on a button.
 
-Find a live version here
+Live version here
 <a href="https://igorrosenberg.github.io/js_playground/jquery-disabled-test.html">jquery-disabled</a>.
 
 #### AJAX scroll
 
 Test an HTTP service via GET requests.
 
-Find a live version here
+Live version here
 <a href="https://igorrosenberg.github.io/js_playground/ajax_scroll.html">ajax_scroll</a>.
+
+#### Image IO 
+
+Using `canvas` and `<input type="file">`, extract a region from an image. Still work in progress!
+
+Live version here
+<a href="https://igorrosenberg.github.io/js_playground/image_io.html">image_io</a>.
 
 #### element_extensions.js
 
 Add nice functions to standard DOM elements: toggleDisplay, hasClass, addJavascript.
 
+Live version here
 <a href="https://igorrosenberg.github.io/js_playground/element_extensions.js">element_extensions.js</a>.
 

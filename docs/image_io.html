@@ -6,10 +6,10 @@
     <script src="https://cdn.rawgit.com/konvajs/konva/2.1.6/konva.min.js"></script>
     <style>
 body {
-	margin: 10px;
-	padding: 0;
-	background-color: #F0F0F0;
-	text-align: left;
+    margin: 10px;
+    padding: 0;
+    background-color: #F0F0F0;
+    text-align: left;
 }
 
 .header{text-align: center; }
@@ -35,59 +35,59 @@ img.micro {
 </div>
 
 <div class="col">
-	<div>
-		<h4>Instructions</h4>
-		<ul>
-			<li>Select an image.</li>
-			<li>Border detection is applied.</li>
-			<li>Then the greatest enclosing polygon (rectangle?) is extracted.</li>
-		</ul>
-	</div>
-	<div>
-		<h4>Data</h4>
+    <div>
+        <h4>Instructions</h4>
+        <ul>
+            <li>Select an image.</li>
+            <li>Border detection is applied. (not yet!)</li>
+            <li>Then the greatest enclosing polygon (rectangle?) is extracted. (not yet!)</li>
+        </ul>
+    </div>
+    <div>
+        <h4>Data</h4>
 
-		<label>
-			<span class="col">Upload your own:</span>
-			<input autocomplete="off" class="col" type="file" id="input_file" />
-		</label>
+        <label>
+            <span class="col">Upload your own:</span>
+            <input autocomplete="off" class="col" type="file" id="input_file" />
+        </label>
 
-		<label>
-			<span class="col">Random pic from some blog: <br/>
-				 <span class="xref">
-					(<a href="http://blog.joinapp.fr/2017/08/03/quest-ce-quun-ticket-de-caisse/">blog.joinapp.fr</a>)
-				</span>
-			</span>
-			<div class="col">
-				<a href="#" id="existing_image">
-					<img class="micro" src="http://blog.joinapp.fr/wp-content/uploads/2017/08/ticket-de-caisse-pour.jpg"/>
-				</a> 
-			</div>
+        <label>
+            <span class="col">Random pic from some blog: <br/>
+                 <span class="xref">
+                    (<a href="http://blog.joinapp.fr/2017/08/03/quest-ce-quun-ticket-de-caisse/">blog.joinapp.fr</a>)
+                </span>
+            </span>
+            <div class="col">
+                <a href="#" id="existing_image">
+                    <img class="micro" src="http://blog.joinapp.fr/wp-content/uploads/2017/08/ticket-de-caisse-pour.jpg"/>
+                </a> 
+            </div>
 
-		</label>
+        </label>
 
-		<label>
-			<span class="col">Check this out:</span>
-			<div class="col">
-<a href="https://codepen.io/taylorcoffelt/pen/EsCcr">
-				Javascript Edge Detection, A Pen By Taylor Coffelt
-			</a>					
-			</div>
-		</label>
+        <label>
+            <span class="col">Check this out:</span>
+            <div class="col">
+                <a href="https://codepen.io/taylorcoffelt/pen/EsCcr">
+                    Javascript Edge Detection, A Pen By Taylor Coffelt
+                </a>                    
+            </div>
+        </label>
 
-	</div>
+    </div>
 </div>
 
 
 <div class="col">
-	<h4>Results</h4>
-	<div>
-		 <canvas width="400" height="300" id="canvas"/>
-	</div>
-	<div>
-		<h4>Log</h4>
-		<div id="log">
-		</div>
-	</div>
+    <h4>Results</h4>
+    <div>
+         <canvas width="400" height="300" id="canvas"/>
+    </div>
+    <div>
+        <h4>Log</h4>
+        <div id="log">
+        </div>
+    </div>
 </div>
 
 
@@ -104,7 +104,7 @@ window.onload = function() {
 }
 
 function handleExistingFile(e) {
-   my_log(e.target.src);  //	was expecting e.target.children[0].src ?!
+   my_log(e.target.src);  //    was expecting e.target.children[0].src ?!
    var ctx = document.getElementById('canvas').getContext('2d');
    ctx.drawImage(e.target, 0, 0
             , ctx.canvas.width, ctx.canvas.height
@@ -134,16 +134,14 @@ function handleInputFiles(e) {
 }
 
 var my_log = (function(){
-   var logElem = document.getElementById('log');
-	return function(s){
+    var logElem = document.getElementById('log');
+    return function(s){
       var newElem = document.createElement('p');
       newElem.innerHTML = s;
       logElem.appendChild(newElem);
-	};
+    };
 })();
         
-
-
 </script>
 
 </body>
