@@ -119,6 +119,13 @@
             // the root node built is returned, and must be inserted in DOM by caller
             return $specific_tab_content;
         }
+
+        let $tab_content = $('#tab_content');
+        $tab_content.on('submit', 'form', function (event) {
+            console.log("form submit");
+            event.preventDefault();
+        });
+
     });
 </script>
 
