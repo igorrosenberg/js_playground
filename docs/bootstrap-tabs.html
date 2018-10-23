@@ -103,7 +103,7 @@
             let $specific_tab_content = $(`<div id="${id}" class="tab-pane fade"></div>`);
             $specific_tab_content.append($spinner_img.clone());
 
-            // perform ajax
+            // perform ajax, result goes into tab content
             $.ajax(ajax_url).done(function (data) {
                 $specific_tab_content.empty();
                 $specific_tab_content.append(data);
@@ -122,8 +122,37 @@
 
         let $tab_content = $('#tab_content');
         $tab_content.on('submit', 'form', function (event) {
-            console.log("form submit");
             event.preventDefault();
+            const $form = $(this);
+            const serialized_form = $form.serialize();
+
+            const $output = $(`<div border="1px solid grey"></div>`);
+            $form.closest('.row').children().last().append($output);
+
+            const $output_header = $("<div></div>");
+            $output_header.append(new Date()  + " (hide)" + " (destroy)");
+            console.log(decodeURIComponent(serialized_form).split('&'));
+            $.each(decodeURIComponent(serialized_form).split('&'), function(index,s){
+                $output_header.append("<br>");
+                $output_header.append(s);
+            });
+            $output.append($output_header);
+
+            const $output_result = $(   "<div></div>");
+            $output_result.append($spinner_img.clone());
+            $output.append($output_result);
+
+            $.ajax({
+                // type: "POST",
+                url: $form.attr('action'),
+                data: serialized_form
+            }).done(function (data) {
+                $output_result.empty();
+                $output_result.append(data);
+            }).fail(function (xhr, text_status, error_thrown) {
+                $output_result.empty();
+                $output_result.append(xhr + text_status + error_thrown);
+            });
         });
 
     });
