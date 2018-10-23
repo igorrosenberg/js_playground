@@ -11,7 +11,7 @@
 <body>
 
 <div id="spinner" style="display: none">
-    <img src="images/spinner.gif" />
+    <img src="images/spinner.gif"/>
 </div>
 
 <div class="container">
@@ -37,21 +37,21 @@
                 <tbody>
                 <tr>
                     <td>
-                        <a href="#gen_id_1">NewTab 1</a>
+                        <a href="#gen_id_1" data_ajax_url="fake_ajax/bootstrap-tabs.1.html">NewTab 1</a>
                     </td>
                     <td>D1</td>
                     <td>Show xyz</td>
                 </tr>
                 <tr>
                     <td>
-                        <a href="#gen_id_2">NewTab 2</a>
+                        <a href="#gen_id_2" data_ajax_url="fake_ajax/bootstrap-tabs.2.html">NewTab 2</a>
                     </td>
                     <td>D1</td>
                     <td>Show abc</td>
                 </tr>
                 <tr>
                     <td>
-                        <a href="#gen_id_3">NewTab 3</a>
+                        <a href="#gen_id_3" data_ajax_url="fake_ajax/bootstrap-tabs.3.html">NewTab 3</a>
                     </td>
                     <td>D2</td>
                     <td>Show def</td>
@@ -82,6 +82,7 @@
 
         $(".switch-to-tab a").on('click', function (e) {
             let linkId = e.target.getAttribute('href');
+            let ajax_url = e.target.getAttribute("data_ajax_url");
             let $tabWithLink = $tabList.find(`li a[href="${linkId}"]`);
             if ($tabWithLink.length) {
                 $tabWithLink.click();
@@ -89,7 +90,7 @@
                 let name = e.target.textContent;
                 let $newTab = $(`<li ><a data-toggle="tab" href="${linkId}">${name}&nbsp;<span class="close">×</span></a></li>`);
                 $tabList.append($newTab);
-                let $newContent = fetch(linkId.substring(1));
+                let $newContent = fetch(linkId.substring(1), ajax_url);
                 $("#tab-content").append($newContent);
                 $newTab.find("a").first().click();
             }
@@ -97,18 +98,29 @@
 
         const $spinner_img = $("#spinner img");
 
-        function fetch(id) {
+        function fetch(id, ajax_url) {
+            // add spinner
             let $tabContent = $(`<div id="${id}" class="tab-pane fade"></div>`);
             $tabContent.append($spinner_img.clone());
-            setTimeout(function () {
+
+            // perform ajax
+            $.ajax(ajax_url).done(function (data) {
                 $tabContent.empty();
-                $tabContent.append("<p>returned from AJAX");
-            }, 500);
+                $tabContent.append(data);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                $tabContent.empty();
+                $tabContent.append(jqXHR);
+                $tabContent.append('<br>');
+                $tabContent.append(textStatus);
+                $tabContent.append('<br>');
+                $tabContent.append(errorThrown);
+            });
+
+            // the root node built is returned, and must be inserted in DOM by caller
             return $tabContent;
         }
     });
 </script>
-
 
 </body>
 </html>
