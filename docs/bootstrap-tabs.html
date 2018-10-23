@@ -18,11 +18,11 @@
     <h2>Dynamic Tabs</h2>
 
 
-    <ul class="nav nav-tabs" id="tab-list">
+    <ul class="nav nav-tabs" id="tab_list">
         <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
     </ul>
 
-    <div class="tab-content" id="tab-content">
+    <div class="tab-content" id="tab_content">
         <div id="home" class="tab-pane fade in active">
             <h3>List</h3>
 
@@ -67,32 +67,32 @@
 
     $(document).ready(function () {
 
-        let $tabList = $("#tab-list");
-        $tabList.on('click', 'span.close', function (event) {
+        let $tab_list = $("#tab_list");
+        $tab_list.on('click', 'span.close', function (event) {
             event.preventDefault();
             let $tab = $(this).parent();
             let $liParent = $tab.parent();
             $liParent.remove(); //remove li of tab
             $($tab.attr("href")).remove(); //remove tab content
             if ($liParent.hasClass('active')) {
-                $tabList.find('li a').first().click(); // return home if needed
+                $tab_list.find('li a').first().click(); // return home if needed
             }
             return false;
         });
 
         $(".switch-to-tab a").on('click', function (e) {
-            let linkId = e.target.getAttribute('href');
+            let link_id = e.target.getAttribute('href');
             let ajax_url = e.target.getAttribute("data_ajax_url");
-            let $tabWithLink = $tabList.find(`li a[href="${linkId}"]`);
-            if ($tabWithLink.length) {
-                $tabWithLink.click();
+            let $tab_with_link = $tab_list.find(`li a[href="${link_id}"]`);
+            if ($tab_with_link.length) {
+                $tab_with_link.click();
             } else {
                 let name = e.target.textContent;
-                let $newTab = $(`<li ><a data-toggle="tab" href="${linkId}">${name}&nbsp;<span class="close">×</span></a></li>`);
-                $tabList.append($newTab);
-                let $newContent = fetch(linkId.substring(1), ajax_url);
-                $("#tab-content").append($newContent);
-                $newTab.find("a").first().click();
+                let $new_tab = $(`<li ><a data-toggle="tab" href="${link_id}">${name}&nbsp;<span class="close">×</span></a></li>`);
+                $tab_list.append($new_tab);
+                let $specific_tab_content = fetch(link_id.substring(1), ajax_url);
+                $("#tab_content").append($specific_tab_content);
+                $new_tab.find("a").first().click();
             }
         });
 
@@ -100,24 +100,24 @@
 
         function fetch(id, ajax_url) {
             // add spinner
-            let $tabContent = $(`<div id="${id}" class="tab-pane fade"></div>`);
-            $tabContent.append($spinner_img.clone());
+            let $specific_tab_content = $(`<div id="${id}" class="tab-pane fade"></div>`);
+            $specific_tab_content.append($spinner_img.clone());
 
             // perform ajax
             $.ajax(ajax_url).done(function (data) {
-                $tabContent.empty();
-                $tabContent.append(data);
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                $tabContent.empty();
-                $tabContent.append(jqXHR);
-                $tabContent.append('<br>');
-                $tabContent.append(textStatus);
-                $tabContent.append('<br>');
-                $tabContent.append(errorThrown);
+                $specific_tab_content.empty();
+                $specific_tab_content.append(data);
+            }).fail(function (xhr, text_status, error_thrown) {
+                $specific_tab_content.empty();
+                $specific_tab_content.append(xhr);
+                $specific_tab_content.append('<br>');
+                $specific_tab_content.append(text_status);
+                $specific_tab_content.append('<br>');
+                $specific_tab_content.append(error_thrown);
             });
 
             // the root node built is returned, and must be inserted in DOM by caller
-            return $tabContent;
+            return $specific_tab_content;
         }
     });
 </script>
