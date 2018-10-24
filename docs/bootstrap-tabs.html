@@ -11,6 +11,7 @@
         .x_output a:link {
             text-decoration: none;
         }
+
         .x_output {
             margin-bottom: 5px;
         }
@@ -27,12 +28,12 @@
 
 
     <ul class="nav nav-tabs" id="tab_list">
-        <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
+        <li class="active"><a data-toggle="tab" href="#home">List</a></li>
+        <li><a data-toggle="tab" href="#gen_id_0">Previous results</a></li>
     </ul>
 
     <div class="tab-content" id="tab_content">
         <div id="home" class="tab-pane fade in active">
-            <h3>List</h3>
 
             <table class="table table-hover table-striped switch-to-tab">
                 <thead>
@@ -66,7 +67,13 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
 
+        <div id="gen_id_0" class="tab-pane fade in">
+            <div class="data" data-refresh-url="fake_ajax/bootstrap-tabs.previous.html"></div>
+            <div class="pull-right">
+                <a id="refresh" href="#refresh" class="btn btn-primary">Refresh</a>
+            </div>
         </div>
     </div>
 </div>
@@ -104,15 +111,18 @@
                 let name = e.target.textContent;
                 let $new_tab = $(`<li ><a data-toggle="tab" href="${link_id}">${name}&nbsp;<span class="close">×</span></a></li>`);
                 $tab_list.append($new_tab);
-                let $specific_tab_content = fetch(link_id.substring(1), ajax_url);
+                let $specific_tab_content = fetch_params_form(link_id.substring(1), ajax_url);
                 $("#tab_content").append($specific_tab_content);
                 $new_tab.find("a").first().click();
             }
         });
 
-        const $spinner_img = $("#spinner img");
+        const $spinner_img = $("#spinner").find("img");
 
-        function fetch(id, ajax_url) {
+        /**
+         * Given a URL representing an HTML fragment, fetch it and return it as a jquery.node
+         */
+        function fetch_params_form(id, ajax_url) {
             // add spinner
             let $specific_tab_content = $(`<div id="${id}" class="tab-pane fade"></div>`);
             $specific_tab_content.append($spinner_img.clone());
@@ -139,11 +149,21 @@
             $(this).closest('.x_output').remove();
         });
         $tab_content.on('click', '.x_hide', function (event) {
-            $(this).closest('.x_output').find('.x_output_result').hide();
+            let $this = $(this);
+            $this.closest('.x_output').find('.x_output_result').hide();
+            $this.hide();
+            $this.siblings('.x_show').show();
         });
         $tab_content.on('click', '.x_show', function (event) {
-            $(this).closest('.x_output').find('.x_output_result').show();
+            let $this = $(this);
+            $this.closest('.x_output').find('.x_output_result').show();
+            $this.hide();
+            $this.siblings('.x_hide').show();
         });
+
+        /**
+         * Intercept form submits.
+         */
         $tab_content.on('submit', 'form', function (event) {
             event.preventDefault();
             const $form = $(this);
@@ -158,7 +178,7 @@
                 `
 <div style="float:left">${new Date().toLocaleString("FR")}</div>
 <div style="float:right">
-<a href="#" class="x_show" title="Show">${icon.show}</a>
+<a href="#" class="x_show" title="Show" style="display:none">${icon.show}</a>
 <a href="#" class="x_hide" title="Hide">${icon.hide}</a>
 <a href="#" class="x_bomb" title="Remove">${icon.bomb}</a>
 </div>
@@ -174,18 +194,62 @@
             $output_result.append($spinner_img.clone());
             $output.append($output_result);
 
+            /**
+             * AJAX submit the form
+             */
             $.ajax({
                 // type: "POST",
                 url: $form.attr('action'),
                 data: serialized_form
             }).done(function (data) {
-                $output_result.empty();
-                $output_result.append(data);
+                // data is a URL, ==> 404 while building, 200 when OK
+                getPage($output_result, data, 100);
             }).fail(function (xhr, text_status, error_thrown) {
                 $output_result.empty();
                 $output_result.append(xhr + text_status + error_thrown);
             });
         });
+
+        // URL returns 404 while building, 200 when OK
+        function getPage($output_result, url, previous_delay) {
+            $.ajax(url).done(function (data) {
+                $output_result.empty();
+                $output_result.append(data);
+            }).fail(function (xhr, text_status, error_thrown) {
+                if (xhr.status === 404) {
+                    const new_delay = Math.min(previous_delay * 2, 60 * 1000);
+                    setTimeout(
+                        function () {
+                            getPage($output_result, url, new_delay);
+                        },
+                        new_delay
+                    );
+                    $output_result.empty();
+                    $output_result.append($spinner_img.clone());
+                    $output_result.append("&nbsp; Not ready. Retry in " + Math.floor(new_delay / 1000) + " seconds");
+                } else {
+                    $output_result.empty();
+                    $output_result.append(xhr + text_status + error_thrown);
+                }
+            });
+
+        }
+
+        function refresh_previous() {
+            const $root = $("#gen_id_0").find(".data");
+            $root.empty();
+            $root.append($spinner_img);
+            $.ajax($root.attr("data-refresh-url")).done(function (data) {
+                $root.empty();
+                $root.append(data);
+            }).fail(function (xhr, text_status, error_thrown) {
+                $root.empty();
+                $root.append(xhr + text_status + error_thrown);
+            });
+        }
+
+        $("a#refresh").on('click', refresh_previous);
+        refresh_previous();
 
     });
 </script>
