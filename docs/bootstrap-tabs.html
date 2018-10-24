@@ -28,12 +28,12 @@
 
 
     <ul class="nav nav-tabs" id="tab_list">
-        <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
+        <li class="active"><a data-toggle="tab" href="#home">List</a></li>
+        <li><a data-toggle="tab" href="#gen_id_0">Previous results</a></li>
     </ul>
 
     <div class="tab-content" id="tab_content">
         <div id="home" class="tab-pane fade in active">
-            <h3>List</h3>
 
             <table class="table table-hover table-striped switch-to-tab">
                 <thead>
@@ -67,7 +67,13 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
 
+        <div id="gen_id_0" class="tab-pane fade in">
+            <div class="data" data-refresh-url="fake_ajax/bootstrap-tabs.previous.html"></div>
+            <div class="pull-right">
+                <a id="refresh" href="#refresh" class="btn btn-primary">Refresh</a>
+            </div>
         </div>
     </div>
 </div>
@@ -222,12 +228,28 @@
                     $output_result.append($spinner_img.clone());
                     $output_result.append("&nbsp; Not ready. Retry in " + Math.floor(new_delay / 1000) + " seconds");
                 } else {
-                $output_result.empty();
-                $output_result.append(xhr + text_status + error_thrown);
+                    $output_result.empty();
+                    $output_result.append(xhr + text_status + error_thrown);
                 }
             });
 
         }
+
+        function refresh_previous() {
+            const $root = $("#gen_id_0").find(".data");
+            $root.empty();
+            $root.append($spinner_img);
+            $.ajax($root.attr("data-refresh-url")).done(function (data) {
+                $root.empty();
+                $root.append(data);
+            }).fail(function (xhr, text_status, error_thrown) {
+                $root.empty();
+                $root.append(xhr + text_status + error_thrown);
+            });
+        }
+
+        $("a#refresh").on('click', refresh_previous);
+        refresh_previous();
 
     });
 </script>
