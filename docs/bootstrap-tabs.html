@@ -110,7 +110,7 @@
             }
         });
 
-        const $spinner_img = $("#spinner img");
+        const $spinner_img = $("#spinner").find("img");
 
         function fetch(id, ajax_url) {
             // add spinner
@@ -139,10 +139,16 @@
             $(this).closest('.x_output').remove();
         });
         $tab_content.on('click', '.x_hide', function (event) {
-            $(this).closest('.x_output').find('.x_output_result').hide();
+            let $this = $(this);
+            $this.closest('.x_output').find('.x_output_result').hide();
+            $this.hide();
+            $this.siblings('.x_show').show();
         });
         $tab_content.on('click', '.x_show', function (event) {
-            $(this).closest('.x_output').find('.x_output_result').show();
+            let $this = $(this);
+            $this.closest('.x_output').find('.x_output_result').show();
+            $this.hide();
+            $this.siblings('.x_hide').show();
         });
         $tab_content.on('submit', 'form', function (event) {
             event.preventDefault();
@@ -158,7 +164,7 @@
                 `
 <div style="float:left">${new Date().toLocaleString("FR")}</div>
 <div style="float:right">
-<a href="#" class="x_show" title="Show">${icon.show}</a>
+<a href="#" class="x_show" title="Show" style="display:none">${icon.show}</a>
 <a href="#" class="x_hide" title="Hide">${icon.hide}</a>
 <a href="#" class="x_bomb" title="Remove">${icon.bomb}</a>
 </div>
