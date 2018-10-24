@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .x_output a:link {
+            text-decoration: none;
+        }
+        .x_output {
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
 
@@ -67,6 +75,12 @@
 
     $(document).ready(function () {
 
+        const icon = {
+            show: '&#x1F453;',
+            hide: '&#x1F576',
+            bomb: '&#x1F4A3;',
+        };
+
         let $tab_list = $("#tab_list");
         $tab_list.on('click', 'span.close', function (event) {
             event.preventDefault();
@@ -121,24 +135,42 @@
         }
 
         let $tab_content = $('#tab_content');
+        $tab_content.on('click', '.x_bomb', function (event) {
+            $(this).closest('.x_output').remove();
+        });
+        $tab_content.on('click', '.x_hide', function (event) {
+            $(this).closest('.x_output').find('.x_output_result').hide();
+        });
+        $tab_content.on('click', '.x_show', function (event) {
+            $(this).closest('.x_output').find('.x_output_result').show();
+        });
         $tab_content.on('submit', 'form', function (event) {
             event.preventDefault();
             const $form = $(this);
             const serialized_form = $form.serialize();
 
-            const $output = $(`<div border="1px solid grey"></div>`);
+            const $output = $(`<div class="x_output"></div>`);
             $form.closest('.row').children().last().append($output);
 
             const $output_header = $("<div></div>");
-            $output_header.append(new Date()  + " (hide)" + " (destroy)");
-            console.log(decodeURIComponent(serialized_form).split('&'));
-            $.each(decodeURIComponent(serialized_form).split('&'), function(index,s){
+
+            const first_line =
+                `
+<div style="float:left">${new Date().toLocaleString("FR")}</div>
+<div style="float:right">
+<a href="#" class="x_show" title="Show">${icon.show}</a>
+<a href="#" class="x_hide" title="Hide">${icon.hide}</a>
+<a href="#" class="x_bomb" title="Remove">${icon.bomb}</a>
+</div>
+`;
+            $output_header.append(first_line);
+            $.each(decodeURIComponent(serialized_form).split('&'), function (index, s) {
                 $output_header.append("<br>");
                 $output_header.append(s);
             });
             $output.append($output_header);
 
-            const $output_result = $(   "<div></div>");
+            const $output_result = $("<div class='x_output_result'></div>");
             $output_result.append($spinner_img.clone());
             $output.append($output_result);
 
