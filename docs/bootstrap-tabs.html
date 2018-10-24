@@ -1,81 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Dynamic Tabs</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .x_output a:link {
+            text-decoration: none;
+        }
+        .x_output {
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
 
+<div id="spinner" style="display: none">
+    <img src="images/spinner.gif"/>
+</div>
+
 <div class="container">
-  <h2>Dynamic Tabs</h2>
+    <h2>Dynamic Tabs</h2>
 
-  <ul class="nav nav-tabs" id="tab-list">
-    <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
-  </ul>
 
-  <div class="tab-content" id="tab-content">
-    <div id="home" class="tab-pane fade in active">
-      <h3>List</h3>
+    <ul class="nav nav-tabs" id="tab_list">
+        <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
+    </ul>
 
-<table class="switch-to-tab">
-<tr>
-<th>Name</th><th>Description</th>
-</tr>
-<tr>
-<td>
-<a href="#gen_id_1" data-toggle="tab">NewTab 1</a></td><td> Show xyz</td>
-</tr>
-<tr>
-<td>
-<a href="#gen_id_2">NewTab 2</a></td><td> Show abc</td>
-</tr>
-</table>
+    <div class="tab-content" id="tab_content">
+        <div id="home" class="tab-pane fade in active">
+            <h3>List</h3>
 
+            <table class="table table-hover table-striped switch-to-tab">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Domain</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <a href="#gen_id_1" data_ajax_url="fake_ajax/bootstrap-tabs.1.html">NewTab 1</a>
+                    </td>
+                    <td>D1</td>
+                    <td>Show xyz</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#gen_id_2" data_ajax_url="fake_ajax/missing">NewTab 2</a>
+                    </td>
+                    <td>D1</td>
+                    <td>Show abc</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#gen_id_3" data_ajax_url="fake_ajax/missing">NewTab 3</a>
+                    </td>
+                    <td>D2</td>
+                    <td>Show def</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
     </div>
-  </div>
 </div>
 
 <script>
 
-$(document).ready(function () {
-  var $tabList = $("#tab-list");
-  $tabList.on('click', 'span.close', function(event){
-		event.preventDefault();
-		var $tab = $(this).parent();
-		var $liParent = $tab.parent()    ;
-		$liParent.remove(); //remove li of tab
-		$($tab.attr("href")).remove(); //remove tab content
-		if ($liParent.hasClass('active')) {
-			$tabList.find('li a').first().click(); // return home if needed
-		}
-		return false;
-  });
-  $(".switch-to-tab a").on('click', function(e){
-    var linkId = e.target.getAttribute('href');
-    var $tabWithLink=$tabList.find(`li a[href="${linkId}"]`);
-    if ($tabWithLink.length) {
-			$tabWithLink.click()
-    } else {
-			 var name = e.target.textContent;
-			 var $newTab = $(`<li ><a data-toggle="tab" href="${linkId}">${name} <span class="close">×</span></a></li>`);
-			 $tabList.append($newTab);
-			 var $newContent = $(
-`<div id="${linkId.substring(1)}" class="tab-pane fade">
-   <h3>${name}... ${linkId}</h3>
-	<p>Spinner here, because ajax fill.</p>
-</div>`);
-			 $("#tab-content").append($newContent);
-			 $newTab.find("a").first().click();
-		}
-  });
+    $(document).ready(function () {
 
-});
+        const icon = {
+            show: '&#x1F453;',
+            hide: '&#x1F576',
+            bomb: '&#x1F4A3;',
+        };
+
+        let $tab_list = $("#tab_list");
+        $tab_list.on('click', 'span.close', function (event) {
+            event.preventDefault();
+            let $tab = $(this).parent();
+            let $liParent = $tab.parent();
+            $liParent.remove(); //remove li of tab
+            $($tab.attr("href")).remove(); //remove tab content
+            if ($liParent.hasClass('active')) {
+                $tab_list.find('li a').first().click(); // return home if needed
+            }
+            return false;
+        });
+
+        $(".switch-to-tab a").on('click', function (e) {
+            let link_id = e.target.getAttribute('href');
+            let ajax_url = e.target.getAttribute("data_ajax_url");
+            let $tab_with_link = $tab_list.find(`li a[href="${link_id}"]`);
+            if ($tab_with_link.length) {
+                $tab_with_link.click();
+            } else {
+                let name = e.target.textContent;
+                let $new_tab = $(`<li ><a data-toggle="tab" href="${link_id}">${name}&nbsp;<span class="close">×</span></a></li>`);
+                $tab_list.append($new_tab);
+                let $specific_tab_content = fetch(link_id.substring(1), ajax_url);
+                $("#tab_content").append($specific_tab_content);
+                $new_tab.find("a").first().click();
+            }
+        });
+
+        const $spinner_img = $("#spinner img");
+
+        function fetch(id, ajax_url) {
+            // add spinner
+            let $specific_tab_content = $(`<div id="${id}" class="tab-pane fade"></div>`);
+            $specific_tab_content.append($spinner_img.clone());
+
+            // perform ajax, result goes into tab content
+            $.ajax(ajax_url).done(function (data) {
+                $specific_tab_content.empty();
+                $specific_tab_content.append(data);
+            }).fail(function (xhr, text_status, error_thrown) {
+                $specific_tab_content.empty();
+                $specific_tab_content.append(xhr);
+                $specific_tab_content.append('<br>');
+                $specific_tab_content.append(text_status);
+                $specific_tab_content.append('<br>');
+                $specific_tab_content.append(error_thrown);
+            });
+
+            // the root node built is returned, and must be inserted in DOM by caller
+            return $specific_tab_content;
+        }
+
+        let $tab_content = $('#tab_content');
+        $tab_content.on('click', '.x_bomb', function (event) {
+            $(this).closest('.x_output').remove();
+        });
+        $tab_content.on('click', '.x_hide', function (event) {
+            $(this).closest('.x_output').find('.x_output_result').hide();
+        });
+        $tab_content.on('click', '.x_show', function (event) {
+            $(this).closest('.x_output').find('.x_output_result').show();
+        });
+        $tab_content.on('submit', 'form', function (event) {
+            event.preventDefault();
+            const $form = $(this);
+            const serialized_form = $form.serialize();
+
+            const $output = $(`<div class="x_output"></div>`);
+            $form.closest('.row').children().last().append($output);
+
+            const $output_header = $("<div></div>");
+
+            const first_line =
+                `
+<div style="float:left">${new Date().toLocaleString("FR")}</div>
+<div style="float:right">
+<a href="#" class="x_show" title="Show">${icon.show}</a>
+<a href="#" class="x_hide" title="Hide">${icon.hide}</a>
+<a href="#" class="x_bomb" title="Remove">${icon.bomb}</a>
+</div>
+`;
+            $output_header.append(first_line);
+            $.each(decodeURIComponent(serialized_form).split('&'), function (index, s) {
+                $output_header.append("<br>");
+                $output_header.append(s);
+            });
+            $output.append($output_header);
+
+            const $output_result = $("<div class='x_output_result'></div>");
+            $output_result.append($spinner_img.clone());
+            $output.append($output_result);
+
+            $.ajax({
+                // type: "POST",
+                url: $form.attr('action'),
+                data: serialized_form
+            }).done(function (data) {
+                $output_result.empty();
+                $output_result.append(data);
+            }).fail(function (xhr, text_status, error_thrown) {
+                $output_result.empty();
+                $output_result.append(xhr + text_status + error_thrown);
+            });
+        });
+
+    });
 </script>
-
 
 </body>
 </html>
