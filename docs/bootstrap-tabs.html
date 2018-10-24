@@ -11,6 +11,7 @@
         .x_output a:link {
             text-decoration: none;
         }
+
         .x_output {
             margin-bottom: 5px;
         }
@@ -104,7 +105,7 @@
                 let name = e.target.textContent;
                 let $new_tab = $(`<li ><a data-toggle="tab" href="${link_id}">${name}&nbsp;<span class="close">×</span></a></li>`);
                 $tab_list.append($new_tab);
-                let $specific_tab_content = fetch(link_id.substring(1), ajax_url);
+                let $specific_tab_content = fetch_params_form(link_id.substring(1), ajax_url);
                 $("#tab_content").append($specific_tab_content);
                 $new_tab.find("a").first().click();
             }
@@ -112,7 +113,10 @@
 
         const $spinner_img = $("#spinner").find("img");
 
-        function fetch(id, ajax_url) {
+        /**
+         * Given a URL representing an HTML fragment, fetch it and return it as a jquery.node
+         */
+        function fetch_params_form(id, ajax_url) {
             // add spinner
             let $specific_tab_content = $(`<div id="${id}" class="tab-pane fade"></div>`);
             $specific_tab_content.append($spinner_img.clone());
@@ -150,6 +154,10 @@
             $this.hide();
             $this.siblings('.x_hide').show();
         });
+
+        /**
+         * Intercept form submits.
+         */
         $tab_content.on('submit', 'form', function (event) {
             event.preventDefault();
             const $form = $(this);
@@ -180,18 +188,46 @@
             $output_result.append($spinner_img.clone());
             $output.append($output_result);
 
+            /**
+             * AJAX submit the form
+             */
             $.ajax({
                 // type: "POST",
                 url: $form.attr('action'),
                 data: serialized_form
             }).done(function (data) {
-                $output_result.empty();
-                $output_result.append(data);
+                // data is a URL, ==> 404 while building, 200 when OK
+                getPage($output_result, data, 100);
             }).fail(function (xhr, text_status, error_thrown) {
                 $output_result.empty();
                 $output_result.append(xhr + text_status + error_thrown);
             });
         });
+
+        // URL returns 404 while building, 200 when OK
+        function getPage($output_result, url, previous_delay) {
+            $.ajax(url).done(function (data) {
+                $output_result.empty();
+                $output_result.append(data);
+            }).fail(function (xhr, text_status, error_thrown) {
+                if (xhr.status === 404) {
+                    const new_delay = Math.min(previous_delay * 2, 60 * 1000);
+                    setTimeout(
+                        function () {
+                            getPage($output_result, url, new_delay);
+                        },
+                        new_delay
+                    );
+                    $output_result.empty();
+                    $output_result.append($spinner_img.clone());
+                    $output_result.append("&nbsp; Not ready. Retry in " + Math.floor(new_delay / 1000) + " seconds");
+                } else {
+                $output_result.empty();
+                $output_result.append(xhr + text_status + error_thrown);
+                }
+            });
+
+        }
 
     });
 </script>
