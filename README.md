@@ -2,9 +2,6 @@
 
 This repo saves *experiments* in JS. The code below should be seen as sandbox futilities. 
 
-The source code is available in the docs sub-directory, served as gh-pages, and can be reached via the
-<a href="https://igorrosenberg.github.io/js_playground/">gh-pages index</a>.
-
 #### js_playground
 
 Immediate feedback while coding in javascript : enter javascript code in the textarea, and the result of the execution is displayed below, whenever a key is pressed.
