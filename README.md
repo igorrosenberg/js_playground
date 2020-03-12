@@ -110,16 +110,23 @@ Using `canvas` and `<input type="file">`, extract a region from an image. Still 
 Live version here
 <a href="https://igorrosenberg.github.io/js_playground/image_io.html">image_io</a>.
 
-#### element_extensions.js
+#### element extensions
 
 Add nice functions to standard DOM elements: toggleDisplay, hasClass, addJavascript.
 
 Live version here
 <a href="https://igorrosenberg.github.io/js_playground/element_extensions.js">element_extensions.js</a>.
 
-#### bootstrap-tabs.html
+#### bootstrap tabs
 
 Bootstrap dynamic tabs: add a tab if missing, then delete it on click.
 
 <a href="https://igorrosenberg.github.io/js_playground/bootstrap-tabs.html">bootstrap-tabs.html</a>.
+
+
+#### Oracle
+
+Ask and answer questions.
+
+<a href="https://igorrosenberg.github.io/js_playground/oracle.html">oracle.html</a>.
 
