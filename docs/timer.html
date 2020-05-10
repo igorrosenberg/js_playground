@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Timer</title>
+    <script src="easytimer-4.1.1.js"></script>
+    <style>
+        #references {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+        #timerWrapper {
+            text-align: center;
+            font-size: 25vw;
+        }
+
+        #buttonWrapper {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            text-align: center;
+            font-size: 400%;
+        }
+
+    </style>
+
+</head>
+<body id='body'>
+
+
+<div id="timerWrapper">
+    <div id="timerDiv"></div>
+</div>
+
+<div id="buttonWrapper">
+    <a href="#" id="startButton">Start</a>
+    <a href="#" id="stopButton">Stop</a>
+</div>
+
+<div id="references">
+    <a href="https://albert-gonzalez.github.io/easytimer.js/">Timer library</a>
+    <a href="https://github.com/igorrosenberg/js_playground">Dev home</a>
+</div>
+
+<script>
+
+    var timer = new easytimer.Timer();
+    var $element = document.getElementById('timerDiv');
+
+    var initialTime = 4;
+
+    update({minutes: initialTime, seconds: 0});
+
+    function update(currentTime) {
+        var currentTimeString = "";
+        if (currentTime.minutes < 10)
+            currentTimeString += "0";
+        currentTimeString += currentTime.minutes;
+        currentTimeString += ":";
+        if (currentTime.seconds < 10)
+            currentTimeString += "0";
+        currentTimeString += currentTime.seconds ;
+        $element.innerText = currentTimeString;
+    }
+    timer.addEventListener('secondsUpdated', function (e) {
+        update (timer.getTimeValues());
+    });
+    timer.addEventListener('targetAchieved', function (e) {
+        $element.innerText = 'KABOOM!!';
+    });
+
+    document.getElementById('startButton').addEventListener('click', function (e) {
+        timer.stop();
+        timer.start(
+            {countdown: true, startValues: {seconds: 60 * initialTime}}
+        );
+        update( timer.getTimeValues() );
+        return false;
+    });
+
+    document.getElementById('stopButton').addEventListener('click', function (e) {
+        timer.stop();
+        return false;
+    });
+
+
+</script>
+
+
+</body>
+</html>
+

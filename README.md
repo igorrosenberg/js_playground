@@ -139,3 +139,12 @@ Demo of the _audio_ element.
 
 
 
+#### Timer demo
+
+Specific timer for a friend.
+
+<a href="https://igorrosenberg.github.io/js_playground/timer.html">timer.html</a>.
+
+
+
+
