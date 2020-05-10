@@ -6,10 +6,11 @@
     <script src="easytimer-4.1.1.js"></script>
     <style>
         #references {
-            position: absolute;
+            position: fixed;
             bottom: 0;
             right: 0;
         }
+
         #timerWrapper {
             text-align: center;
             font-size: 25vw;
@@ -17,10 +18,23 @@
 
         #buttonWrapper {
             width: 100%;
-            position: absolute;
+            position: fixed;
             bottom: 0;
             text-align: center;
             font-size: 400%;
+        }
+
+        #setTimeWrapper {
+            display: none;
+            background-color: lightblue;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 10%;
+        }
+        #setTimeWrapper a {
+            display: block;
+            font-size: 5vw;
         }
 
     </style>
@@ -33,7 +47,21 @@
     <div id="timerDiv"></div>
 </div>
 
+<div id="setTimeWrapper">
+    <a href="#">10</a>
+    <a href="#">9</a>
+    <a href="#">8</a>
+    <a href="#">7</a>
+    <a href="#" id="x">6</a>
+    <a href="#">5</a>
+    <a href="#">4</a>
+    <a href="#">3</a>
+    <a href="#">2</a>
+    <a href="#">1</a>
+    </select>
+</div>
 <div id="buttonWrapper">
+    <a href="#" id="setTimerButton">Set timer</a>
     <a href="#" id="startButton">Start</a>
     <a href="#" id="stopButton">Stop</a>
 </div>
@@ -46,13 +74,33 @@
 <script>
 
     var timer = new easytimer.Timer();
-    var $element = document.getElementById('timerDiv');
+    var $timerDiv = document.getElementById('timerDiv');
 
     var initialTime = 4;
 
     update({minutes: initialTime, seconds: 0});
 
     function update(currentTime) {
+
+        var color = undefined;
+        if (currentTime.minutes > 0) {
+            color = 'white';
+        } else {
+            if (currentTime.seconds > 30) {
+                color = 'lightgreen';
+            } else {
+                if (currentTime.seconds > 10) {
+                    color = 'yellow';
+                } else {
+                    if (currentTime.seconds > 0) {
+                        color = 'orange';
+                    } else
+                        color = 'red';
+                }
+            }
+        }
+
+        $timerDiv.style.backgroundColor = color;
         var currentTimeString = "";
         if (currentTime.minutes < 10)
             currentTimeString += "0";
@@ -60,28 +108,42 @@
         currentTimeString += ":";
         if (currentTime.seconds < 10)
             currentTimeString += "0";
-        currentTimeString += currentTime.seconds ;
-        $element.innerText = currentTimeString;
+        currentTimeString += currentTime.seconds;
+        $timerDiv.innerText = currentTimeString;
     }
+
     timer.addEventListener('secondsUpdated', function (e) {
-        update (timer.getTimeValues());
+        update(timer.getTimeValues());
     });
-    timer.addEventListener('targetAchieved', function (e) {
-        $element.innerText = 'KABOOM!!';
-    });
+    // timer.addEventListener('targetAchieved', function (e) {});
 
     document.getElementById('startButton').addEventListener('click', function (e) {
         timer.stop();
         timer.start(
             {countdown: true, startValues: {seconds: 60 * initialTime}}
         );
-        update( timer.getTimeValues() );
         return false;
     });
 
     document.getElementById('stopButton').addEventListener('click', function (e) {
         timer.stop();
         return false;
+    });
+
+    document.getElementById('setTimerButton').addEventListener('click', function (e) {
+        $setTimeWrapper.style.display = 'block';
+        return false;
+    });
+
+    var $setTimeWrapper = document.getElementById('setTimeWrapper');
+    document.querySelectorAll("#setTimeWrapper a").forEach(function(element) {
+        element.addEventListener('click', function (e) {
+            timer.stop();
+            $setTimeWrapper.style.display = 'none';
+            initialTime = parseInt(e.target.innerText,10);
+            update({minutes: initialTime, seconds: 0});
+            return false;
+        })
     });
 
 
