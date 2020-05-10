@@ -26,15 +26,19 @@
 
         #setTimeWrapper {
             display: none;
+            text-align: center;
+            vertical-align: center;
             background-color: lightblue;
             position: fixed;
-            left: 0;
-            bottom: 5vw;
-            width: 10%;
+            left: 15vw;
+            bottom: 15vw;
+            top: 15vh;
+            right: 15vw;
+            font-size: 10vw;
         }
-        #setTimeWrapper a {
-            display: block;
-            font-size: 5vw;
+
+        input, button {
+            font-size: 10vw;
         }
 
     </style>
@@ -48,16 +52,15 @@
 </div>
 
 <div id="setTimeWrapper">
-    <a href="#">10</a>
-    <a href="#">9</a>
-    <a href="#">8</a>
-    <a href="#">7</a>
-    <a href="#" id="x">6</a>
-    <a href="#">5</a>
-    <a href="#">4</a>
-    <a href="#">3</a>
-    <a href="#">2</a>
-    <a href="#">1</a>
+    <form id="setTime">
+        <input type="tel" min="1" max="60" size="3"
+               pattern="[0-9]{1,2}"
+               value="4"
+               required
+        >
+        <button value="Set timer">Set timer</button>
+    </form>
+
 </div>
 <div id="buttonWrapper">
     <a href="#" id="setTimerButton">Set timer</a>
@@ -129,20 +132,20 @@
         return false;
     });
 
+    var $setTimeWrapper = document.getElementById('setTimeWrapper');
+
     document.getElementById('setTimerButton').addEventListener('click', function (e) {
-        $setTimeWrapper.style.display = 'block';
+        $setTimeWrapper.style.display = 'block';    // "modal" appears
         return false;
     });
 
-    var $setTimeWrapper = document.getElementById('setTimeWrapper');
-    document.querySelectorAll("#setTimeWrapper a").forEach(function(element) {
-        element.addEventListener('click', function (e) {
-            timer.stop();
-            $setTimeWrapper.style.display = 'none';
-            initialTime = parseInt(e.target.innerText,10);
-            update({minutes: initialTime, seconds: 0});
-            return false;
-        })
+    var form = document.getElementsByTagName("form")[0];
+    form.addEventListener('submit', function (e) {
+        timer.stop();
+        $setTimeWrapper.style.display = 'none';     // "modal" hide
+        initialTime = parseInt(form[0].value, 10);
+        update({minutes: initialTime, seconds: 0});
+        e.preventDefault();                         // no form bubbling
     });
 
 
