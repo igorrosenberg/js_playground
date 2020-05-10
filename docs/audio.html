@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Audio</title>
+</head>
+<body id='body'>
+
+<div>
+    <a href="https://github.com/igorrosenberg/js_playground">Home</a>
+</div>
+
+<p>Demo of the <i>&lt;audio&gt;</i> tag</p>
+
+<div>
+    <audio id="audiotag6" src="https://www.bensound.com/bensound-music/bensound-memories.mp3" preload="auto"></audio>
+
+    <ul>
+        <li><a href="javascript:play_from_start('audiotag6');">Play</a></li>
+        <li><a href="javascript:pause('audiotag6');">Pause</a></li>
+    </ul>
+</div>
+
+
+<p><small>For more on this tag, see <a target="_blank" href="http://www.storiesinflight.com/html5/audio.html">http://www.storiesinflight.com/html5/audio.html</a></small></p>
+
+<p><small>Royalty free music from <a href="https://www.bensound.com/royalty-free-music" target="_blank">Bensound.com</a></small></p>
+
+<script>
+
+    function play_from_start(id) {
+        console.log('Play', id);
+        var win = document.getElementById(id);
+        win.currentTime = 0;
+        win.play();
+    }
+
+    function pause(id) {
+        console.log('Pause', id);
+        var win = document.getElementById(id);
+        win.pause();
+    }
+
+</script>
+
+</body>
+</html>
+

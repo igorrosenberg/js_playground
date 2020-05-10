@@ -130,3 +130,12 @@ Ask and answer questions.
 
 <a href="https://igorrosenberg.github.io/js_playground/oracle.html">oracle.html</a>.
 
+
+#### Micro audio demo
+
+Demo of the _audio_ element.
+
+<a href="https://igorrosenberg.github.io/js_playground/audio.html">audio.html</a>.
+
+
+
