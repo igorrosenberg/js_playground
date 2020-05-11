@@ -75,15 +75,7 @@
 
 <script>
 
-    var timer = new easytimer.Timer();
-    var $timerDiv = document.getElementById('timerDiv');
-
-    var initialTime = 4;
-
-    update({minutes: initialTime, seconds: 0});
-
-    function update(currentTime) {
-
+    function getColor(currentTime) {
         var color = undefined;
         if (currentTime.minutes > 0) {
             color = 'white';
@@ -101,8 +93,20 @@
                 }
             }
         }
+        return color;
+    }
 
-        $timerDiv.style.backgroundColor = color;
+    var timer = new easytimer.Timer();
+    var $timerDiv = document.getElementById('timerDiv');
+
+    var initialTime = 4;
+
+    update({minutes: initialTime, seconds: 0});
+
+
+    function update(currentTime) {
+
+        document.body.style.backgroundColor = getColor(currentTime);
         var currentTimeString = "";
         if (currentTime.minutes < 10)
             currentTimeString += "0";
