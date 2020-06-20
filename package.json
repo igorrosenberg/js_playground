@@ -1,0 +1,28 @@
+{
+  "name": "js_playground",
+  "version": "1.0.0",
+  "description": "Experiments in JS - code should be seen as sandbox futilities.",
+  "main": "index.js",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "cheerio": "^1.0.0-rc.3"
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igorrosenberg/js_playground.git"
+  },
+  "keywords": [
+    "sandbox"
+  ],
+  "author": "Igor Rosenberg",
+  "bugs": {
+    "url": "https://github.com/igorrosenberg/js_playground/issues"
+  },
+  "homepage": "https://github.com/igorrosenberg/js_playground"
+}

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>JS playground</title>
 <style>
   textarea { width: 100%; margin: 0; padding: 0; border-width: 2; border-color: grey; height: 200px; }
   .error { color: red ; }
@@ -24,9 +25,10 @@ window.addEventListener("load", function() {
 <span id="forkongithub"><a href="https://github.com/igorrosenberg/js_playground">Fork me on GitHub</a></span>
 <div>
 
-<div id="help">
-<p> 
-The Javascript code below is executed when a key is pressed in the text area. The result is added to the output area. 
+<div id="description">
+<p>
+Immediate feedback while coding in javascript : enter javascript code in the textarea,
+and the result of the execution is displayed below, whenever a key is pressed.
 </p>
 <p>
 This is similar to the <a href="http://www.w3schools.com/html/tryit.asp?filename=tryhtml_script">w3schools tryit editor</a> or <a href="http://jsfiddle.net/">jsfiddle</a> or any modern browser's developper "console". 
@@ -39,7 +41,7 @@ function me () {
   return 0<a ? "hello" : "hi";
 }
 me();
-</textarea> 
+</textarea>
 
 <div class="buttons">
 	<span>Author: <a href="http://igor.rosenberg.free.fr/">Igor Rosenberg</a>

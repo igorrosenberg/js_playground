@@ -1,4 +1,6 @@
-var compare = function (x,y) { 
+// As a futile exercice, rewrite a well-known sort algorithm.
+
+var compare = function (x,y) {
   if  (x[1] === undefined) 
       return false;
   if (y[1] === undefined)
