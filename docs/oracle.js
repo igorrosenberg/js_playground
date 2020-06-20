@@ -20,7 +20,7 @@ function responseListener(answer, responseElem, next) {
 
 function start() {
     deleteChild(document.body);
-    var title = document.createElement('h1')
+    var title = document.createElement('h1');
     title.innerHTML = "Test d'arithmétique";
     document.body.append(title);
 }

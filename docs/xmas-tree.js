@@ -1,4 +1,6 @@
-var fibo = function (x) { 
+// Via a long-running process, populate an array. It's a very naive basis for concurrent thinking in JS.
+
+var fibo = function (x) {
   if  (x === 0) 
       return 0;
   if (x === 1)

@@ -1,3 +1,4 @@
+// Add nice functions to standard DOM elements: toggleDisplay, hasClass, addJavascript.
 // authors unknown, credits go to them
 
 var element_extensions = (function(){ 
