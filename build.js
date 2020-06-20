@@ -1,5 +1,5 @@
 // https://www.sitepoint.com/beginners-guide-node-package-manager/
-// node build.js
+// npm install && node build.js
 
 const fs = require('fs');
 const cheerio = require('cheerio');

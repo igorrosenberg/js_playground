@@ -49,6 +49,13 @@ Can you make 3 continuous paths: red, blue, yellow ?
 Because I couldn't do it in my head, I wrote a JavaScript solver. Current version works nicely, but a complete rewrite is needed.
 <a href="https://igorrosenberg.github.io/js_playground/claudes-hex-game.html">Live Version</a>
 
+#### Clock
+
+Just two clocks, possibly for lovers far apart.
+The target time zone can be set in the parameters adding ?clock1=America/New_York&clock2=Europe/Moscow
+The target city name can be set in the parameters adding ?city1=SpringField&city2=Moskva
+<a href="https://igorrosenberg.github.io/js_playground/clock.html">Live Version</a>
+
 #### Dice run
 
 A wooden brain-teaser: within a tower, four dice are inserted. They bear one of four colors on each side. The dice can be rotated in any direction. The objective is have each side of the column showing four different colors.

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Clock</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta about="Just two clocks, possibly for lovers far apart"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <style>
+        #description {
+            display: none;
+        }
+
+        div {
+            text-align: center;
+        }
+
+        .city {
+            font-size: 1rem;
+        }
+
+        .day {
+            font-size: 2rem;
+        }
+
+        .hm {
+            font-size: 3rem;
+        }
+
+        .col-sm-6 {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+<p id="description">
+Just two clocks, possibly for lovers far apart.
+The target time zone can be set in the parameters adding ?clock1=America/New_York&clock2=Europe/Moscow
+The target city name can be set in the parameters adding ?city1=SpringField&city2=Moskva
+</p>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6" id="clock1">
+        </div>
+        <div class="col-sm-6" id="clock2">
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.31/moment-timezone-with-data-10-year-range.min.js"></script>
+
+<script>
+    window.addEventListener("load", pageFullyLoaded, false);
+
+    function pageFullyLoaded() {
+
+        function buildDiv(clazz, string) {
+            return '<div class="' + clazz + '">' + string + '</div>'
+        }
+
+        function time(aMoment, timeZone, where) {
+            const day = aMoment.clone().tz(timeZone).format('yyyy-MM-DD')
+            const hm = aMoment.clone().tz(timeZone).format('HH:mm:ss')
+            return (
+                buildDiv('city', where) +
+                buildDiv('day', day) +
+                buildDiv('hm', hm)
+            )
+        }
+
+        function setClock(aMoment, elementId, timeZone, where) {
+            document.getElementById(elementId).innerHTML = time(aMoment, timeZone, where)
+        }
+
+        function displayTime() {
+            const aMoment = moment();
+            setClock(aMoment, 'clock1', TZ1, CITY1)
+            setClock(aMoment, 'clock2', TZ2, CITY2)
+            setTimeout(displayTime, 1000)
+        }
+
+        const urlParams = new URLSearchParams(window.location.search)
+        const TZ1 = urlParams.get('clock1') || "Europe/Paris";
+        const TZ2 = urlParams.get('clock2') || "Asia/Kolkata";
+        const CITY1 = urlParams.get('city1') || TZ1.split('/')[1];
+        const CITY2 = urlParams.get('city2') || TZ2.split('/')[1];
+
+        displayTime()
+
+    }
+</script>
+</body>
+</html>
