@@ -111,6 +111,9 @@
     var timer = new easytimer.Timer();
     var $timerDiv = document.getElementById('timerDiv');
 
+    var $startButton = document.getElementById('startButton');
+    var $pauseButton = document.getElementById('pauseButton');
+
     var initialTime = 4;
 
     update({minutes: initialTime, seconds: 0});
@@ -135,16 +138,43 @@
     });
     // timer.addEventListener('targetAchieved', function (e) {});
 
-    document.getElementById('startButton').addEventListener('click', function (e) {
+    function toggleE($elem) {
+        if ($elem.classList.contains('hide'))
+            $elem.classList.remove('hide')
+        else {
+            $elem.classList.add('hide')
+        }
+    }
+    function toggle() {
+        toggleE($startButton)
+        toggleE($pauseButton)
+    }
+
+    $startButton.addEventListener('click', function (e) {
+        toggle();
+        timer.start(
+            {countdown: true, startValues: {seconds: 60 * initialTime}}
+        )
+        return false;
+    });
+
+    $pauseButton.addEventListener('click', function (e) {
+        toggle();
+        timer.pause();
+        return false;
+    });
+
+    function stop() {
         timer.stop();
         timer.start(
             {countdown: true, startValues: {seconds: 60 * initialTime}}
         );
-        return false;
-    });
-
+        update({minutes: initialTime, seconds: 0});
+        timer.pause();
+        if ($startButton.classList.contains('hide')) toggle()
+    }
     document.getElementById('stopButton').addEventListener('click', function (e) {
-        timer.stop();
+        stop()
         return false;
     });
 
@@ -157,10 +187,9 @@
 
     var form = document.getElementsByTagName("form")[0];
     form.addEventListener('submit', function (e) {
-        timer.stop();
         $setTimeWrapper.style.display = 'none';     // "modal" hide
         initialTime = parseInt(form[0].value, 10);
-        update({minutes: initialTime, seconds: 0});
+        stop();
         e.preventDefault();                         // no form bubbling
     });
 
