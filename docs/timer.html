@@ -35,10 +35,19 @@
             top: 15vh;
             right: 15vw;
             font-size: 10vw;
+            z-index: 10;
         }
 
         input, button {
             font-size: 10vw;
+        }
+
+        .hide {
+            display: none;
+        }
+        #buttonWrapper a {
+            margin-left: 50px;
+            margin-right: 50px;
         }
 
     </style>
@@ -64,14 +73,16 @@
 
 </div>
 <div id="buttonWrapper">
-    <a href="#" id="setTimerButton">Set timer</a>
-    <a href="#" id="startButton">Start</a>
-    <a href="#" id="stopButton">Stop</a>
+    <a href="#" id="setTimerButton" title="Set timer"><img src="images/icons8-timer.png"></a>
+    <a href="#" id="startButton" title="Start"><img src="images/icons8-play.png"></a>
+    <a href="#" id="pauseButton" title="Pause" class="hide"><img src="images/icons8-pause.png"></a>
+    <a href="#" id="stopButton" title="Stop">  <img src="images/icons8-stop.png"></a>
 </div>
 
 <div id="references">
-    <a href="https://albert-gonzalez.github.io/easytimer.js/">Timer library</a>
-    <a href="https://github.com/igorrosenberg/js_playground">Dev home</a>
+    <a target="_blank" href="https://albert-gonzalez.github.io/easytimer.js/">Timer library</a>
+    <a target="_blank" href="https://github.com/igorrosenberg/js_playground">Dev home</a>
+    <a target="_blank" href="https://icones8.fr">Icons8</a>
 </div>
 
 <script>
