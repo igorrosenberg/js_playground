@@ -76,7 +76,7 @@
     <a href="#" id="setTimerButton" title="Set timer"><img src="images/icons8-timer.png"></a>
     <a href="#" id="startButton" title="Start"><img src="images/icons8-play.png"></a>
     <a href="#" id="pauseButton" title="Pause" class="hide"><img src="images/icons8-pause.png"></a>
-    <a href="#" id="stopButton" title="Stop">  <img src="images/icons8-stop.png"></a>
+    <a href="#" id="stopButton" title="Stop">  <img src="images/icons8-annuler.png"></a>
 </div>
 
 <div id="references">
@@ -88,6 +88,8 @@
 <script>
 
     function getColor(currentTime) {
+        if (timer.isPaused())
+            return 'grey';
         var color = undefined;
         if (currentTime.minutes > 0) {
             color = 'white';
@@ -155,12 +157,14 @@
         timer.start(
             {countdown: true, startValues: {seconds: 60 * initialTime}}
         )
+        update(timer.getTimeValues());
         return false;
     });
 
     $pauseButton.addEventListener('click', function (e) {
         toggle();
         timer.pause();
+        update(timer.getTimeValues());
         return false;
     });
 
