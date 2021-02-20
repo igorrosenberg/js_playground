@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=2">
+    <title>Liste des courses</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+<style>
+    p {
+        padding-left : 30px;
+    }
+    .strike {
+        text-decoration: line-through;
+    }
+    div.hidden p {
+        display: none;
+    }
+    div.hidden p.extra {
+        display: block;
+    }
+    div p.extra {
+        display: none;
+    }
+    button, h4,p  {
+        cursor: pointer;
+    }
+
+</style>
+<body>
+
+<button id="clearAll">Clear all</button>
+<button id="expandAll">Expand all</button>
+
+<form autocomplete="off">
+
+    <div>
+        <h4>Produit hygiène</h4>
+
+        <p><input type="checkbox"><span>Papier toilette</span></p>
+        <p><input type="checkbox"><span>Dentifrice</span></p>
+        <p><input type="checkbox"><span>Brosses à dents</span></p>
+        <p><input type="checkbox"><span>shampoing</span></p>
+        <p><input type="checkbox"><span>Savon</span></p>
+        <p><input type="checkbox"><span>éponges</span></p>
+        <p><input type="checkbox"><span>vaisselle</span></p>
+        <p><input type="checkbox"><span>laver par terre</span></p>
+        <p><input type="checkbox"><span>produit WC</span></p>
+
+        <p class="extra" >&nbsp;&nbsp;&nbsp;&nbsp;(...)</p>
+    </div>
+    <div>
+
+        <h4>Pâtes</h4>
+
+        <p><input type="checkbox"><span>spaghettis </span></p>
+        <p><input type="checkbox"><span>tortelini de couleur</span></p>
+        <p><input type="checkbox"><span>coquilletes</span></p>
+        <p><input type="checkbox"><span>Riz basmatti</span></p>
+
+        <p class="extra" >&nbsp;&nbsp;&nbsp;&nbsp;(...)</p>
+    </div>
+    <div>
+
+        <h4>Conserves</h4>
+
+        <p><input type="checkbox"><span>cornichons</span></p>
+        <p><input type="checkbox"><span>tomates</span></p>
+        <p><input type="checkbox"><span>haricots rouges</span></p>
+        <p><input type="checkbox"><span>haricots verts</span></p>
+        <p><input type="checkbox"><span>sauté de proc aux lentilles</span></p>
+        <p><input type="checkbox"><span>thon</span></p>
+        <p><input type="checkbox"><span>maïs</span></p>
+        <p><input type="checkbox"><span>ptits pois carottes</span></p>
+
+        <p class="extra" >&nbsp;&nbsp;&nbsp;&nbsp;(...)</p>
+    </div>
+    <div>
+
+        <h4>Epices</h4>
+
+        <p><input type="checkbox"><span>poivre, sel</span></p>
+        <p><input type="checkbox"><span>persil, herbes provence</span></p>
+        <p><input type="checkbox"><span>ail</span></p>
+        <p><input type="checkbox"><span>Curry</span></p>
+        <p><input type="checkbox"><span>Chapelure</span></p>
+        <p><input type="checkbox"><span>Huille d'olive</span></p>
+        <p><input type="checkbox"><span>huile d'arachide</span></p>
+
+        <p class="extra" >&nbsp;&nbsp;&nbsp;&nbsp;(...)</p>
+    </div>
+    <div>
+
+        <h4>Ptit-dej</h4>
+
+        <p><input type="checkbox"><span>Biscuits chocolat (prince, petit ecoliers, pims)</span></p>
+        <p><input type="checkbox"><span>Autres biscuits</span></p>
+        <p><input type="checkbox"><span>Tablettes de chocolat</span></p>
+        <p><input type="checkbox"><span>Pain de mie</span></p>
+        <p><input type="checkbox"><span>Céréales ptit dej pour Dani</span></p>
+        <p><input type="checkbox"><span>Tortillas pour fajitas</span></p>
+        <p><input type="checkbox"><span>Brioche et pétites chocolat</span></p>
+        <p><input type="checkbox"><span>Chocolat en poudre</span></p>
+
+        <p class="extra" >&nbsp;&nbsp;&nbsp;&nbsp;(...)</p>
+    </div>
+    <div>
+
+        <h4>Œufs/Laitiers</h4>
+
+        <p><input type="checkbox"><span>Lait</span></p>
+        <p><input type="checkbox"><span>Œufs</span></p>
+        <p><input type="checkbox"><span>Crème fraiche</span></p>
+
+        <p class="extra" >&nbsp;&nbsp;&nbsp;&nbsp;(...)</p>
+    </div>
+    <div>
+
+        <h4>Fromage</h4>
+
+        <p><input type="checkbox"><span>Cheddar pour Daniel</span></p>
+        <p><input type="checkbox"><span>Chorizo</span></p>
+        <p><input type="checkbox"><span>Emmental (râpé ou non)</span></p>
+        <p><input type="checkbox"><span>Fromage de chèvre</span></p>
+        <p><input type="checkbox"><span>Gnochis</span></p>
+        <p><input type="checkbox"><span>Raviolis</span></p>
+        <p><input type="checkbox"><span>yaourts</span></p>
+        <p><input type="checkbox"><span>Pâte brisée pour quiche lorraine</span></p>
+
+        <p class="extra" >&nbsp;&nbsp;&nbsp;&nbsp;(...)</p>
+    </div>
+    <div>
+
+        <h4>Viandes</h4>
+
+        <p><input type="checkbox"><span>jambon</span></p>
+        <p><input type="checkbox"><span>lardons</span></p>
+        <p><input type="checkbox"><span>escalopes de poulet</span></p>
+        <p><input type="checkbox"><span>steack</span></p>
+        <p><input type="checkbox"><span>steack haché</span></p>
+        <p><input type="checkbox"><span>cuisses de poulet</span></p>
+        <p><input type="checkbox"><span>côtes de porc</span></p>
+
+        <p class="extra" >&nbsp;&nbsp;&nbsp;&nbsp;(...)</p>
+    </div>
+    <div>
+
+        <h4>Légumes</h4>
+
+        <p><input type="checkbox"><span>poivrons</span></p>
+        <p><input type="checkbox"><span>tomates,</span></p>
+        <p><input type="checkbox"><span>poireaux</span></p>
+        <p><input type="checkbox"><span>oignons</span></p>
+
+        <p class="extra" >&nbsp;&nbsp;&nbsp;&nbsp;(...)</p>
+    </div>
+    <div>
+
+        <h4>Fruits</h4>
+
+        <p><input type="checkbox"><span>bananes</span></p>
+        <p><input type="checkbox"><span>oranges</span></p>
+        <p><input type="checkbox"><span>mandarines</span></p>
+        <p><input type="checkbox"><span>pommes</span></p>
+        <p><input type="checkbox"><span>poires</span></p>
+
+        <p class="extra" >&nbsp;&nbsp;&nbsp;&nbsp;(...)</p>
+    </div>
+    <div>
+
+        <h4>Liquides</h4>
+
+        <p><input type="checkbox"><span>Cannettes de schweppes</span></p>
+        <p><input type="checkbox"><span>Pack d'eau</span></p>
+
+        <p class="extra" >&nbsp;&nbsp;&nbsp;&nbsp;(...)</p>
+    </div>
+
+</form>
+
+
+<script>
+    function checkBoxClick(event) {
+        var checkBox = event.target
+        var span = checkBox.parentElement.getElementsByTagName('span')[0]
+        if (checkBox.checked) {
+            span.classList.add('strike')
+        } else {
+            span.classList.remove('strike')
+        }
+
+    }
+
+    var inputs = document.getElementsByTagName('input');
+    for (var z = 0; z < inputs.length; z++) {
+        var checkBox = inputs[z];
+        checkBox.addEventListener('click', checkBoxClick, false);
+    }
+
+    function triggerBoxClick(event) {
+        var span = event.target
+        var checkBox = span.parentElement.getElementsByTagName('input')[0]
+        checkBox.click()
+    }
+
+    var spans = document.getElementsByTagName('span');
+    for (var z = 0; z < spans.length; z++) {
+        var element = spans[z];
+        element.addEventListener('click', triggerBoxClick, false);
+    }
+
+    function clearAllClick(event) {
+        for (var z = 0; z < inputs.length; z++) {
+            var checkBox = inputs[z];
+            if (checkBox.checked) {
+                checkBox.click()
+            }
+        }
+    }
+
+    function expandAllClick(event) {
+        var inputs = document.getElementsByTagName('div');
+        for (var z = 0; z < inputs.length; z++) {
+            var div = inputs[z];
+            div.classList.remove ('hidden')
+        }
+    }
+
+    var clearAllButton = document.getElementById('clearAll')
+    clearAllButton.addEventListener('click', clearAllClick, false);
+
+    var expandAllButton = document.getElementById('expandAll')
+    expandAllButton.addEventListener('click', expandAllClick, false);
+
+    function zoneToggle() {
+        var h4 = event.target
+        h4.parentElement.classList.toggle('hidden')
+    }
+
+    var h4s = document.getElementsByTagName('h4');
+    for (var z = 0; z < h4s.length; z++) {
+        var element = h4s[z];
+        element.addEventListener('click', zoneToggle, false);
+    }
+
+</script>
+
+</body>
+
+</html>
