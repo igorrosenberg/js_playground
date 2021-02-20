@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Liste des courses</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js"></script>
+</head>
+<style>
+.strike {text-decoration: line-through;}
+</style>
+<body>
+
+<h4>Ptit-dej</h4>
+
+<form autocomplete="off">
+<p><input type="checkbox"><span>Biscuits chocolat (prince, petit ecoliers, pims)</span></p>
+<p><input type="checkbox"><span>Autres biscuits</span></p>
+<p><input type="checkbox"><span>Tablettes de chocolat</span></p>
+<p><input type="checkbox"><span>Pain de mie</span></p>
+<p><input type="checkbox"><span>Céréales ptit dej pour Dani</span></p>
+<p><input type="checkbox"><span>Tortillas pour fajitas</span></p>
+<p><input type="checkbox"><span>Brioche et pétites chocolat</span></p>
+<p><input type="checkbox"><span>Chocolat en poudre</span></p>
+
+<h4>Fromage</h4>
+
+<p><input type="checkbox"><span>Cheddar pour Daniel</span></p>
+<p><input type="checkbox"><span>Chorizo</span></p>
+<p><input type="checkbox"><span>Emmental (râpé ou non)</span></p>
+<p><input type="checkbox"><span>Fromage de chèvre</span></p>
+<p><input type="checkbox"><span>Gnochis</span></p>
+<p><input type="checkbox"><span>Raviolis</span></p>
+<p><input type="checkbox"><span>yaourts</span></p>
+
+<h4>Œufs/Laitiers</h4>
+
+<p><input type="checkbox"><span>Lait</span></p>
+<p><input type="checkbox"><span>œufs</span></p>
+<p><input type="checkbox"><span>Crème fraiche</span></p>
+
+<h4>Liquides</h4>
+
+<p><input type="checkbox"><span>Cannettes de schweppes</span></p>
+<p><input type="checkbox"><span>Pack d'eau</span></p>
+
+<h4>Epices</h4>
+
+<p><input type="checkbox"><span>poivre, sel, </span></p>
+<p><input type="checkbox"><span>persil, herbes provence</span></p>
+<p><input type="checkbox"><span>ail, </span></p>
+<p><input type="checkbox"><span>Curry</span></p>
+<p><input type="checkbox"><span>Chapelure</span></p>
+<p><input type="checkbox"><span>Huille d'olive</span></p>
+<p><input type="checkbox"><span>huile d'arachide</span></p>
+
+<h4>Viandes</h4>
+
+<p><input type="checkbox"><span>jambon</span></p>
+<p><input type="checkbox"><span>lardons</span></p>
+<p><input type="checkbox"><span>escaloppes de poulet</span></p>
+<p><input type="checkbox"><span>steack</span></p>
+<p><input type="checkbox"><span>steack haché</span></p>
+<p><input type="checkbox"><span>cuisses de poulet</span></p>
+<p><input type="checkbox"><span>côtes de porc</span></p>
+<p><input type="checkbox"><span>Pâte brisée pour quiche lorraine</span></p>
+
+<h4>Légumes</h4>
+
+<p><input type="checkbox"><span>poivrons</span></p>
+<p><input type="checkbox"><span>tomates,</span></p>
+<p><input type="checkbox"><span>poireaux</span></p>
+<p><input type="checkbox"><span>oignons</span></p>
+
+<h4>Produit hygiène</h4>
+
+<p><input type="checkbox"><span>shampoing</span></p>
+<p><input type="checkbox"><span>vaisselle, </span></p>
+<p><input type="checkbox"><span>laver par terre</span></p>
+<p><input type="checkbox"><span>produit WC</span></p>
+<p><input type="checkbox"><span>Dentifrice</span></p>
+<p><input type="checkbox"><span>Brosses à dents</span></p>
+<p><input type="checkbox"><span>éponges</span></p>
+<p><input type="checkbox"><span>Savon</span></p>
+
+<h4>Fruits</h4>
+
+<p><input type="checkbox"><span>bananes, </span></p>
+<p><input type="checkbox"><span>oranges, </span></p>
+<p><input type="checkbox"><span>mandarines, </span></p>
+<p><input type="checkbox"><span>pommes, </span></p>
+<p><input type="checkbox"><span>poires</span></p>
+
+<h4>Conserves</h4>
+
+<p><input type="checkbox"><span>cornichons</span></p>
+<p><input type="checkbox"><span>tomates</span></p>
+<p><input type="checkbox"><span>haricots rouges</span></p>
+<p><input type="checkbox"><span>haricots verts</span></p>
+<p><input type="checkbox"><span>sauté de proc aux lentilles</span></p>
+<p><input type="checkbox"><span>thon</span></p>
+<p><input type="checkbox"><span>maïs</span></p>
+<p><input type="checkbox"><span>ptits pois carottes</span></p>
+
+<h4>Pâtes</h4>
+
+<p><input type="checkbox"><span>spaghettis </span></p>
+<p><input type="checkbox"><span>tortelini de couleur</span></p>
+<p><input type="checkbox"><span>coquilletes</span></p>
+<p><input type="checkbox"><span>Riz basmatti</span></p>
+</form>
+
+
+
+<script>
+function checkBoxClick(event) {
+ var checkBox = event.target
+ var span = checkBox.parentElement.getElementsByTagName('span')[0]
+ if (checkBox.checked) {
+	span.classList.add('strike')
+ } else {
+ 	span.classList.remove('strike')
+ }
+ 
+}
+var anchors = document.getElementsByTagName('input');
+for(var z = 0; z < anchors.length; z++) {
+    var element = anchors[z];   
+    element.addEventListener('click', checkBoxClick, false);
+}
+</script>
+</body>
+
+
+</html>
