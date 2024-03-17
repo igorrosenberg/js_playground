@@ -98,6 +98,11 @@ and the result of the execution is displayed below, whenever a key is pressed.
 This is similar to the w3schools tryit editor or jsfiddle or any modern browser's developper "console".
 <a href="https://igorrosenberg.github.io/js_playground/js_playground.html">Live Version</a>
 
+#### Mandelbrot
+
+An afternoon's activity: display the <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot</a>.
+<a href="https://igorrosenberg.github.io/js_playground/mandelbrot.html">Live Version</a>
+
 #### Oracle
 
 Ask and answer questions.
