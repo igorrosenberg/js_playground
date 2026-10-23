@@ -1,0 +1,53 @@
+name: Vendor libraries
+
+# Dependabot only bumps package.json and package-lock.json. This copies the
+# new library files into docs/lib and commits them to the Dependabot PR.
+on:
+    pull_request:
+        paths: [package.json, package-lock.json]
+
+permissions:
+    contents: write
+    statuses: write
+
+jobs:
+    vendor:
+        if: github.actor == 'dependabot[bot]'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v7
+              with:
+                  ref: ${{ github.head_ref }}
+            - uses: actions/setup-node@v7
+              with:
+                  node-version-file: .nvmrc
+                  cache: npm
+            - run: npm ci
+            - run: npm run vendor
+            - name: Commit docs/lib
+              id: commit
+              run: |
+                  git add docs/lib
+                  if git diff --cached --quiet; then exit 0; fi
+                  git config user.name 'github-actions[bot]'
+                  git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+                  git commit -m 'Refresh docs/lib from node_modules'
+                  git push
+                  echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+            # A push made with GITHUB_TOKEN does not start the CI workflow again,
+            # so the new commit is tested here and the result reported on it.
+            - name: Install headless Chromium
+              if: steps.commit.outputs.sha
+              run: npx playwright install --with-deps chromium
+            - name: Test the refreshed libraries
+              if: steps.commit.outputs.sha
+              run: npm run build && npm test
+            - name: Report the result on the new commit
+              if: always() && steps.commit.outputs.sha
+              env:
+                  GH_TOKEN: ${{ github.token }}
+                  STATE: ${{ job.status == 'success' && 'success' || 'failure' }}
+              run: >
+                  gh api repos/${{ github.repository }}/statuses/${{ steps.commit.outputs.sha }}
+                  -f state="$STATE" -f context='CI (vendored libraries)'
+                  -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
