@@ -5,7 +5,7 @@ const path = require('path');
 const cheerio = require('cheerio');
 
 const docs = path.join(__dirname, '..', 'docs');
-const pages = fs.readdirSync(docs).filter(file => file.endsWith('.html'));
+const pages = fs.readdirSync(docs).filter((file) => file.endsWith('.html'));
 
 for (const page of pages) {
     test(`${page} has a title and its local files exist`, () => {
@@ -15,7 +15,7 @@ for (const page of pages) {
         const refs = $('script[src], link[href], img[src]')
             .map((i, el) => $(el).attr('src') || $(el).attr('href'))
             .get()
-            .filter(ref => !/^([a-z]+:)?\/\//i.test(ref) && !/^(data|mailto):/.test(ref));
+            .filter((ref) => !/^([a-z]+:)?\/\//i.test(ref) && !/^(data|mailto):/.test(ref));
         for (const ref of refs) {
             const file = path.join(docs, ref.split(/[?#]/)[0]);
             assert.ok(fs.existsSync(file), `${ref} not found`);
@@ -38,11 +38,15 @@ for (const page of pages) {
         const external = /^([a-z]+:)?\/\//i;
         const tags = html.match(/<(script|link|img)\b[^>]*>/gi) || [];
         const urls = tags
-            .filter(tag => /^<(script|img)/i.test(tag) || /rel=["']?stylesheet/i.test(tag))
-            .map(tag => (tag.match(/\b(?:src|href)=["']?([^"'\s>]+)/i) || [])[1])
+            .filter((tag) => /^<(script|img)/i.test(tag) || /rel=["']?stylesheet/i.test(tag))
+            .map((tag) => (tag.match(/\b(?:src|href)=["']?([^"'\s>]+)/i) || [])[1])
             .filter(Boolean);
-        const imports = [...html.matchAll(/@import\s+(?:url\()?["']?([^"')\s;]+)|url\(["']?([^"')]+)/gi)]
-            .map(m => m[1] || m[2]);
-        assert.deepStrictEqual([...urls, ...imports].filter(url => external.test(url)), []);
+        const imports = [...html.matchAll(/@import\s+(?:url\()?["']?([^"')\s;]+)|url\(["']?([^"')]+)/gi)].map(
+            (m) => m[1] || m[2],
+        );
+        assert.deepStrictEqual(
+            [...urls, ...imports].filter((url) => external.test(url)),
+            [],
+        );
     });
 }

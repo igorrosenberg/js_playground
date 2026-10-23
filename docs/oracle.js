@@ -10,12 +10,12 @@ function responseListener(answer, responseElem, next) {
     return function () {
         if (responseElem.value == answer) {
             responseElem.className = 'good';
-            responseElem.setAttribute("readonly", "true");
+            responseElem.setAttribute('readonly', 'true');
             next();
         } else {
             responseElem.className = 'bad';
         }
-    }
+    };
 }
 
 function start() {
@@ -54,46 +54,37 @@ function getQuestion(operator) {
 }
 
 const startDate = new Date();
-const MAX = 1
+const MAX = 1;
 let questionNb = 0;
 let operator;
 
 function setOperator() {
-    if (questionNb++ < 1 * MAX)
-        operator = '+';
-    else if (questionNb < 2 * MAX)
-        operator = '-';
-    else if (questionNb < 3 * MAX)
-        operator = '*';
-    else if (questionNb < 4 * MAX)
-        operator = '/';
+    if (questionNb++ < 1 * MAX) operator = '+';
+    else if (questionNb < 2 * MAX) operator = '-';
+    else if (questionNb < 3 * MAX) operator = '*';
+    else if (questionNb < 4 * MAX) operator = '/';
 }
 
 function victoire() {
-    const block = document.createElement('p')
+    const block = document.createElement('p');
     const delta = Math.floor((new Date().getTime() - startDate.getTime()) / 1000);
-    block.innerHTML = "Tu as gagné! Ton temps: " + delta + " secondes";
+    block.innerHTML = 'Tu as gagné! Ton temps: ' + delta + ' secondes';
     document.body.append(block);
 }
 
 function ask() {
-
-    if (questionNb >= 4 * MAX)
-        return victoire();
+    if (questionNb >= 4 * MAX) return victoire();
     setOperator();
     const data = getQuestion(operator);
 
-    const block = document.createElement('div')
+    const block = document.createElement('div');
     const questionElem = document.createElement('span');
     questionElem.innerHTML = data[0] + ' ' + operator + ' ' + data[1] + ' =';
     block.append(questionElem);
 
     const answerElem = document.createElement('input');
     block.append(answerElem);
-    answerElem.addEventListener(
-        'input',
-        responseListener(data[2], answerElem, ask)
-    );
+    answerElem.addEventListener('input', responseListener(data[2], answerElem, ask));
 
     document.body.append(block);
     answerElem.focus();
