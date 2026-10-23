@@ -123,8 +123,8 @@
             document.getElementById('zoomOut').addEventListener('click', zoomOut);
 
             document.getElementById('top').addEventListener('click', moveTop);
-            document.getElementById('left').addEventListener('click', moveRight);
-            document.getElementById('right').addEventListener('click', moveLeft);
+            document.getElementById('left').addEventListener('click', moveLeft);
+            document.getElementById('right').addEventListener('click', moveRight);
             document.getElementById('bottom').addEventListener('click', moveBottom);
 
             function resetBound() {
@@ -138,12 +138,12 @@
                 imaginStart = imaginStart - delta;
                 resetBound();
             }
-            function moveRight() {
+            function moveLeft() {
                 let delta = realWidth / 4;
                 realStart = realStart - delta;
                 resetBound();
             }
-            function moveLeft() {
+            function moveRight() {
                 let delta = realWidth / 4;
                 realStart = realStart + delta;
                 resetBound();
@@ -188,7 +188,7 @@
                 // $destination.style.color = 'yellow';
 
                 const U = Number(transX(x).toFixed(2));
-                const V = Number(transX(y).toFixed(2));
+                const V = Number(transY(y).toFixed(2));
                 const array = [
                     'x,y= ' + x + ', ' + y,
                     rgba,
