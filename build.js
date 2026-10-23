@@ -6,7 +6,6 @@ const cheerio = require('cheerio');
 
 const root = "docs";
 const homeUrl = "https://igorrosenberg.github.io/js_playground";
-const readme = "README.md";
 
 const exclusions = [
     'index.html',
@@ -17,32 +16,7 @@ const exclusions = [
     'node-server.js'
 ];
 
-let stream = ''; // fs.createWriteStream("output.txt");
-
-function write(s) {
-    stream += s + "\n"; // stream.write(s + "\n");
-}
-
-write(`## Igor Rosenberg's JS demos
-
-This repo saves *experiments* in JS. The code below should be seen as sandbox futilities.
-
-#### node server
-
-\`node-server.js\`, a quick HTTP file server, from <a href="https://stackoverflow.com/questions/16333790">stackoverflow-16333790</a>.
-
-\`\`\`
-npm install finalhandler serve-static
-cat > node-server.js
-node node-server.js
-firefox http://localhost:8000/
-\`\`\`
-<a href="https://igorrosenberg.github.io/js_playground/node-server.js">Javascript source</a>.
-The same shell steps are kept in [docs/history.txt](docs/history.txt).
-`);
-
-
-
+const pages = [];
 
 fs.readdirSync(root).forEach(file => {
     for (let i=0; i<exclusions.length; i++)
@@ -60,16 +34,7 @@ fs.readdirSync(root).forEach(file => {
     } else {
         return;
     }
-    let liveLink = `<a href="${homeUrl}/${file}">Live Version</a>`;
-    write(`#### ${title}`);
-    write("");
-    write(description);
-    write(liveLink);
-    write("");
-
+    pages.push({ file, title, description, url: `${homeUrl}/${file}` });
 });
 
-// stream.end();
-// stream.close();
-
-console.log(fs.readFileSync(readme).toString() == stream.toString());
+console.log(`${pages.length} pages found in ${root}/`);
