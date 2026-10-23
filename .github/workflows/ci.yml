@@ -14,7 +14,9 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - name: Install headless Chromium
+        run: npx playwright install --with-deps chromium
       - name: README generator runs
         run: npm run build
-      - name: Unit tests and page checks
+      - name: Unit tests, page checks and browser console checks
         run: npm test
