@@ -1,14 +1,15 @@
 name: Format
 
-# Runs Prettier on every push to master and commits the result back, so nobody has to format by hand.
-# Each format commit is then listed in .git-blame-ignore-revs (in a second commit, since a commit
-# cannot contain its own hash), so `git blame` skips it.
+# On every push to master, runs Prettier and folds the result into the commit that was pushed:
+# the commit is amended (same author, author date and message) and master is force-pushed.
+# Nobody has to format by hand, and no separate formatting commit appears in the history.
+# The lease makes the force push fail rather than overwrite anything pushed meanwhile;
+# the run for that newer push formats it instead.
 # Pushes made with GITHUB_TOKEN do not trigger workflows, so this cannot loop.
 
 on:
   push:
     branches: [master]
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -22,15 +23,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-        with:
-          ref: master
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
       - run: npm run format
-      - name: Commit and push
+      - name: Amend the pushed commit and force push
         run: |
           if git diff --quiet; then
             echo "Everything is already formatted"
@@ -38,9 +37,5 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -am "Format with Prettier"
-          printf '\n# Format with Prettier (%s)\n%s\n' "$(date -u +%F)" "$(git rev-parse HEAD)" >> .git-blame-ignore-revs
-          git commit -am "Ignore the Prettier commit in git blame"
-          # No rebase: it would change the hash just written. If master moved meanwhile,
-          # the run for that newer push formats it instead.
-          git push origin HEAD:master || echo "master moved during the run; the next run will format it"
+          git commit -a --amend --no-edit
+          git push --force-with-lease=master:${{ github.sha }} origin HEAD:master
