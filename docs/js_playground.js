@@ -48,9 +48,7 @@ const js_playground = (function () {
         let lastCount;
 
         let noHelp = function () {
-            if (helpElmt) {
-                helpElmt.parentNode.removeChild(helpElmt);
-            }
+            helpElmt.parentNode.removeChild(helpElmt);
             noHelp = function () {};
         };
 
