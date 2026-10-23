@@ -3,7 +3,6 @@
 This repo saves *experiments* in JS. The code below should be seen as sandbox futilities.
 
 **Browse the demos: [igorrosenberg.github.io/js_playground](https://igorrosenberg.github.io/js_playground/)**
-(the GitHub Pages site, served from [docs/index.html](docs/index.html)).
 
 #### node server
 
