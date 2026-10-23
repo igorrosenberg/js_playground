@@ -33,4 +33,4 @@
 // Note: browsers refuse to load modules from file:// URLs. Serve docs/ over
 // HTTP (for example with node-server.js) or use the GitHub Pages site.
 
-console.log( "some extra js" );
+console.log('some extra js');

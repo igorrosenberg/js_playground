@@ -1,73 +1,80 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <meta name="description" content="" />
+        <meta name="author" content="" />
 
-    <title>JQuery disable button</title>
+        <title>JQuery disable button</title>
 
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="lib/bootstrap.min.css">
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="lib/bootstrap.min.css" />
 
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="lib/html5shiv.min.js"></script>
+            <script src="lib/respond.min.js"></script>
+        <![endif]-->
+        <style>
+            div {
+                border: 1px solid grey;
+                margin-bottom: 10px;
+            }
+        </style>
+    </head>
 
+    <body role="document">
+        <p id="description">Simple demo of the 'disabled' attribute on a button.</p>
+        <div id="test">
+            <button id="b" disabled="disabled">Click 1</button>
+            <button id="c" disabled="disabled" onclick="my_log()">Click 2</button>
+        </div>
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="lib/html5shiv.min.js"></script>
-      <script src="lib/respond.min.js"></script>
-    <![endif]-->
-<style>  
-  div { border: 1px solid grey; margin-bottom:10px;}
-</style>  
-</head>
+        <div id="control">
+            <button id="enableButton">Enable</button>
+            <button id="disableButton">Disable</button>
+        </div>
 
-<body role="document">
+        <div id="output">
+            <p id="data_zone"></p>
+        </div>
 
-<p id="description">Simple demo of the 'disabled' attribute on a button.</p>
-<div id="test">
-	<button id="b" disabled="disabled">Click 1</button>
-	<button id="c" disabled="disabled" onclick="my_log();">Click 2</button>
-</div>
-
-<div id="control">
-	<button id="enableButton">Enable</button>
-	<button id="disableButton">Disable</button>
-</div>
-
-<div id="output">
-	<p id="data_zone"></p>
-</div> 
-
-
-    <!-- Bootstrap core JavaScript
+        <!-- Bootstrap core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="lib/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<div>No Jquery<\/div>')</script>
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="lib/jquery.min.js"></script>
+        <script>
+            window.jQuery || document.write('<div>No Jquery<\/div>');
+        </script>
 
-    <script>
-function my_log() {
-  const f = new Date();
-  $("#data_zone").text( $("#data_zone").text() + "\n clicked again ("+f.getMinutes() + ":" + f.getSeconds()+")");
-   return false;
-}
+        <script>
+            function my_log() {
+                const f = new Date();
+                $('#data_zone').text(
+                    $('#data_zone').text() + '\n clicked again (' + f.getMinutes() + ':' + f.getSeconds() + ')',
+                );
+                return false;
+            }
 
-function attach() {
-   const  enable = function(event) { $("#test button").removeAttr("disabled");}
-   const disable = function(event) { $("#test button").attr("disabled","disabled");}
-   $("#enableButton").on("click", enable);
-   $("#disableButton").on("click", disable);
-   disable();
-   return false;
-}
+            function attach() {
+                const enable = function (event) {
+                    $('#test button').removeAttr('disabled');
+                };
+                const disable = function (event) {
+                    $('#test button').attr('disabled', 'disabled');
+                };
+                $('#enableButton').on('click', enable);
+                $('#disableButton').on('click', disable);
+                disable();
+                return false;
+            }
 
-attach();
-    </script>
+            attach();
+        </script>
 
-    <script src="lib/bootstrap.min.js"></script>
-  </body>
+        <script src="lib/bootstrap.min.js"></script>
+    </body>
 </html>

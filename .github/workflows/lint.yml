@@ -17,3 +17,5 @@ jobs:
       - run: npm ci
       - name: ESLint (docs/*.js, inline scripts in docs/*.html, build and tests)
         run: npm run lint
+      - name: Prettier (fails if any file is not formatted; fix with npm run format)
+        run: npm run format:check
