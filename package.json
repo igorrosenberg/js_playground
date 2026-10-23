@@ -29,7 +29,7 @@
     "jquery": "3.3.1",
     "konva": "2.1.6",
     "moment": "2.27.0",
-    "moment-timezone": "0.5.31",
+    "moment-timezone": "0.5.35",
     "playwright": "^1.56.1",
     "prettier": "^3.9.10",
     "respond.js": "1.4.2"
