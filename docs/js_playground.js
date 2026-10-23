@@ -17,8 +17,11 @@ const js_playground = (function(){
 	  const clearErrors = domReferences.clearErrors || document.getElementById('clearErrors');
 
 	  resultList.addEventListener('click', function(event) {
-		if (event.target.hasClass('codeToggle')) {
-			event.target.toggleDisplayToSiblingIfClass('codeBlock');
+		if (event.target.classList.contains('codeToggle')) {
+			const codeBlocks = event.target.parentNode.getElementsByClassName('codeBlock');
+			for (let i = 0; i < codeBlocks.length; i++) {
+				codeBlocks[i].hidden = !codeBlocks[i].hidden;
+			}
 			return false;		
 			}
 		return true;		
@@ -64,7 +67,9 @@ const js_playground = (function(){
 					 /*jshint evil:false */
 		             const addToScripts = document.getElementById('headInjectInput').checked;
 		             if (addToScripts) {
-		               document.head.addJavascript(inputElement.value);
+		               const script = document.createElement('script');
+		               script.text = inputElement.value;
+		               document.head.appendChild(script);
 		             }
 		         } catch (e) { 
 		            result = e.name + ': ' + e.message; 
@@ -81,7 +86,7 @@ const js_playground = (function(){
 		         newdiv.innerHTML = 
 		              result +  // strings containing HTML tags are  interpreted ! 
 		              " <a href='#' class='codeToggle'>code</a>" +  
-		              '<div class="codeBlock"><pre>' + htmlEntities(inputElement.value) + '</pre></div>';
+		              '<div class="codeBlock" hidden><pre>' + htmlEntities(inputElement.value) + '</pre></div>';
 		         resultList.insertBefore(
 		                 newdiv, resultList.firstChild);
 		         },

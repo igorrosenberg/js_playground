@@ -64,11 +64,6 @@ A wooden brain-teaser: within a tower, four dice are inserted. They bear one of 
 Because I couldn't do it in my head, I wrote a JavaScript solver. Optimizing the first naive version was fun.
 <a href="https://igorrosenberg.github.io/js_playground/dice.html">Live Version</a>
 
-#### element_extensions.js
-
-Add nice functions to standard DOM elements: toggleDisplay, hasClass, addJavascript.
-<a href="https://igorrosenberg.github.io/js_playground/element_extensions.js">Live Version</a>
-
 #### Image I/O
 
 Using `canvas` and `<input type="file">`, extract a region from an image. Still work in progress!
