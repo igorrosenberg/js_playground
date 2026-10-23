@@ -183,9 +183,9 @@
         // $destination.style.background = rgba;
         // $destination.style.color = 'yellow';
 
-        var U = Number(transX(x).toFixed(2))
-        var V = Number(transX(y).toFixed(2))
-        var array = [
+        const U = Number(transX(x).toFixed(2))
+        const V = Number(transX(y).toFixed(2))
+        const array = [
             "x,y= " + x + ", " + y,
             rgba,
             "trans=" + U + ", " + V,
@@ -229,8 +229,8 @@
         data[n + 2] = grey;
         data[n + 3] = 255;
          */
-        var r, g, b
-        var z = val * 255
+        let r, g, b
+        const z = val * 255
         if (z < 1) {
             r = g = b = 0
         } else {
@@ -284,7 +284,7 @@
     function c_mandel1(a, b) {
         // z1 = z0*z0 + (x,y)
         const TOP = 20
-        var x = 0, y = 0
+        let x = 0, y = 0
         for (let i = 0; i < TOP; i += 1) {
             // console.log("(" + i + ")" + " x,y=", x, y)
             let xt = x * x - y * y + a

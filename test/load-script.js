@@ -46,7 +46,14 @@ function loadScript(file) {
     };
     vm.createContext(context);
     vm.runInContext(source(file), context, { filename: file });
-    return context;
+    // Top-level let/const are not properties of the global object, so look up
+    // any name the context lacks by evaluating it inside the context.
+    return new Proxy(context, {
+        get(target, key) {
+            if (key in target || typeof key !== 'string') return target[key];
+            return vm.runInContext(`typeof ${key} === 'undefined' ? undefined : ${key}`, target);
+        },
+    });
 }
 
 module.exports = { loadScript };
