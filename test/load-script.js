@@ -20,9 +20,15 @@ function stub() {
             if (typeof key === 'string' && /Child$/.test(key)) return null;
             return proxy;
         },
-        set() { return true; },
-        apply() { return proxy; },
-        construct() { return proxy; },
+        set() {
+            return true;
+        },
+        apply() {
+            return proxy;
+        },
+        construct() {
+            return proxy;
+        },
     });
     return proxy;
 }
@@ -32,7 +38,7 @@ function source(file) {
     const text = fs.readFileSync(path.join(docs, file), 'utf8');
     if (!file.endsWith('.html')) return text;
     const blocks = [...text.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)];
-    return blocks.map(m => m[1]).join('\n');
+    return blocks.map((m) => m[1]).join('\n');
 }
 
 function loadScript(file) {

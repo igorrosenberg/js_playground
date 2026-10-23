@@ -20,36 +20,42 @@ const exclusions = [
     'jquery-rewire-fragment.html',
     'js_playground.js',
     'oracle.js',
-    'node-server.js'
+    'node-server.js',
 ];
 
 function escape(s) {
-    return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+    return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 }
 
 function readDemos() {
-    return fs.readdirSync(root).filter(file => /\.(html|js)$/.test(file) && !exclusions.includes(file)).map(file => {
-        const source = fs.readFileSync(path.join(root, file));
-        let title, description;
-        if (file.endsWith('.html')) {
-            const $ = cheerio.load(source);
-            title = $('head title').text().trim();
-            description = $('#description').text().trim() || $('meta[name=description]').attr('content') || '';
-        } else {
-            title = file;
-            description = source.toString().split(/\n/)[0].replace(/^\/\/\s*/, '');
-        }
-        const hash = crypto.createHash('sha256').update(source).digest('hex');
-        const shot = `screenshots/${file.replace(/\.[^.]+$/, '')}.jpg`;
-        return { file, title, description: description.replace(/\s+/g, ' '), hash, shot };
-    });
+    return fs
+        .readdirSync(root)
+        .filter((file) => /\.(html|js)$/.test(file) && !exclusions.includes(file))
+        .map((file) => {
+            const source = fs.readFileSync(path.join(root, file));
+            let title, description;
+            if (file.endsWith('.html')) {
+                const $ = cheerio.load(source);
+                title = $('head title').text().trim();
+                description = $('#description').text().trim() || $('meta[name=description]').attr('content') || '';
+            } else {
+                title = file;
+                description = source
+                    .toString()
+                    .split(/\n/)[0]
+                    .replace(/^\/\/\s*/, '');
+            }
+            const hash = crypto.createHash('sha256').update(source).digest('hex');
+            const shot = `screenshots/${file.replace(/\.[^.]+$/, '')}.jpg`;
+            return { file, title, description: description.replace(/\s+/g, ' '), hash, shot };
+        });
 }
 
 async function takeScreenshots(demos) {
     const hashes = fs.existsSync(hashesFile) ? JSON.parse(fs.readFileSync(hashesFile)) : {};
-    const stale = demos.filter(d => hashes[d.file] !== d.hash || !fs.existsSync(path.join(root, d.shot)));
+    const stale = demos.filter((d) => hashes[d.file] !== d.hash || !fs.existsSync(path.join(root, d.shot)));
     for (const file of Object.keys(hashes)) {
-        if (!demos.some(d => d.file === file)) delete hashes[file];
+        if (!demos.some((d) => d.file === file)) delete hashes[file];
     }
     if (stale.length) {
         fs.mkdirSync(shots, { recursive: true });
@@ -141,7 +147,7 @@ async function main() {
     console.log(`docs/index.html: ${demos.length} demos`);
 }
 
-main().catch(err => {
+main().catch((err) => {
     console.error(err);
     process.exit(1);
 });

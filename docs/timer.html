@@ -1,207 +1,183 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <title>Timer</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="lib/easytimer.min.js"></script>
-    <style>
-        #references {
-            position: fixed;
-            bottom: 0;
-            right: 0;
-        }
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Timer</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="lib/easytimer.min.js"></script>
+        <style>
+            #references {
+                position: fixed;
+                bottom: 0;
+                right: 0;
+            }
 
-        #timerWrapper {
-            text-align: center;
-            font-size: 25vw;
-        }
+            #timerWrapper {
+                text-align: center;
+                font-size: 25vw;
+            }
 
-        #buttonWrapper {
-            width: 100%;
-            position: fixed;
-            bottom: 0;
-            text-align: center;
-            font-size: 400%;
-        }
+            #buttonWrapper {
+                width: 100%;
+                position: fixed;
+                bottom: 0;
+                text-align: center;
+                font-size: 400%;
+            }
 
-        #setTimeWrapper {
-            display: none;
-            text-align: center;
-            vertical-align: center;
-            background-color: lightblue;
-            position: fixed;
-            left: 15vw;
-            bottom: 15vw;
-            top: 15vh;
-            right: 15vw;
-            font-size: 10vw;
-            z-index: 10;
-        }
+            #setTimeWrapper {
+                display: none;
+                text-align: center;
+                vertical-align: center;
+                background-color: lightblue;
+                position: fixed;
+                left: 15vw;
+                bottom: 15vw;
+                top: 15vh;
+                right: 15vw;
+                font-size: 10vw;
+                z-index: 10;
+            }
 
-        input, button {
-            font-size: 10vw;
-        }
+            input,
+            button {
+                font-size: 10vw;
+            }
 
-        .hide {
-            display: none;
-        }
-        #buttonWrapper a {
-            margin-left: 50px;
-            margin-right: 50px;
-        }
+            .hide {
+                display: none;
+            }
+            #buttonWrapper a {
+                margin-left: 50px;
+                margin-right: 50px;
+            }
+        </style>
+    </head>
+    <body id="body">
+        <p id="description" style="display: none">Simple Countdown Timer.</p>
 
-    </style>
+        <div id="timerWrapper">
+            <div id="timerDiv"></div>
+        </div>
 
-</head>
-<body id='body'>
+        <div id="setTimeWrapper">
+            <form id="setTime">
+                <input type="tel" min="1" max="60" size="3" pattern="[0-9]{1,2}" value="4" required />
+                <button value="Set timer">Set timer</button>
+            </form>
+        </div>
+        <div id="buttonWrapper">
+            <a href="#" id="setTimerButton" title="Set timer"><img src="images/icons8-timer.png" /></a>
+            <a href="#" id="startButton" title="Start"><img src="images/icons8-play.png" /></a>
+            <a href="#" id="pauseButton" title="Pause" class="hide"><img src="images/icons8-pause.png" /></a>
+            <a href="#" id="stopButton" title="Stop"> <img src="images/icons8-annuler.png" /></a>
+        </div>
 
-<p id="description" style="display:none;">Simple Countdown Timer.</p>
+        <div id="references">
+            <a target="_blank" href="https://albert-gonzalez.github.io/easytimer.js/">Timer library</a>
+            <a target="_blank" href="https://github.com/igorrosenberg/js_playground">Dev home</a>
+            <a target="_blank" href="https://icones8.fr">Icons8</a>
+        </div>
 
-<div id="timerWrapper">
-    <div id="timerDiv"></div>
-</div>
-
-<div id="setTimeWrapper">
-    <form id="setTime">
-        <input type="tel" min="1" max="60" size="3"
-               pattern="[0-9]{1,2}"
-               value="4"
-               required
-        >
-        <button value="Set timer">Set timer</button>
-    </form>
-
-</div>
-<div id="buttonWrapper">
-    <a href="#" id="setTimerButton" title="Set timer"><img src="images/icons8-timer.png"></a>
-    <a href="#" id="startButton" title="Start"><img src="images/icons8-play.png"></a>
-    <a href="#" id="pauseButton" title="Pause" class="hide"><img src="images/icons8-pause.png"></a>
-    <a href="#" id="stopButton" title="Stop">  <img src="images/icons8-annuler.png"></a>
-</div>
-
-<div id="references">
-    <a target="_blank" href="https://albert-gonzalez.github.io/easytimer.js/">Timer library</a>
-    <a target="_blank" href="https://github.com/igorrosenberg/js_playground">Dev home</a>
-    <a target="_blank" href="https://icones8.fr">Icons8</a>
-</div>
-
-<script>
-
-    function getColor(currentTime) {
-        if (timer.isPaused())
-            return 'grey';
-        let color = undefined;
-        if (currentTime.minutes > 0) {
-            color = 'white';
-        } else {
-            if (currentTime.seconds > 30) {
-                color = 'lightgreen';
-            } else {
-                if (currentTime.seconds > 10) {
-                    color = 'yellow';
+        <script>
+            function getColor(currentTime) {
+                if (timer.isPaused()) return 'grey';
+                let color = undefined;
+                if (currentTime.minutes > 0) {
+                    color = 'white';
                 } else {
-                    if (currentTime.seconds > 0) {
-                        color = 'orange';
-                    } else
-                        color = 'red';
+                    if (currentTime.seconds > 30) {
+                        color = 'lightgreen';
+                    } else {
+                        if (currentTime.seconds > 10) {
+                            color = 'yellow';
+                        } else {
+                            if (currentTime.seconds > 0) {
+                                color = 'orange';
+                            } else color = 'red';
+                        }
+                    }
+                }
+                return color;
+            }
+
+            const timer = new easytimer.Timer();
+            const $timerDiv = document.getElementById('timerDiv');
+
+            const $startButton = document.getElementById('startButton');
+            const $pauseButton = document.getElementById('pauseButton');
+
+            let initialTime = 4;
+
+            update({ minutes: initialTime, seconds: 0 });
+
+            function update(currentTime) {
+                document.body.style.backgroundColor = getColor(currentTime);
+                let currentTimeString = '';
+                if (currentTime.minutes < 10) currentTimeString += '0';
+                currentTimeString += currentTime.minutes;
+                currentTimeString += ':';
+                if (currentTime.seconds < 10) currentTimeString += '0';
+                currentTimeString += currentTime.seconds;
+                $timerDiv.innerText = currentTimeString;
+            }
+
+            timer.addEventListener('secondsUpdated', function (e) {
+                update(timer.getTimeValues());
+            });
+            // timer.addEventListener('targetAchieved', function (e) {});
+
+            function toggleE($elem) {
+                if ($elem.classList.contains('hide')) $elem.classList.remove('hide');
+                else {
+                    $elem.classList.add('hide');
                 }
             }
-        }
-        return color;
-    }
+            function toggle() {
+                toggleE($startButton);
+                toggleE($pauseButton);
+            }
 
-    const timer = new easytimer.Timer();
-    const $timerDiv = document.getElementById('timerDiv');
+            $startButton.addEventListener('click', function (e) {
+                toggle();
+                timer.start({ countdown: true, startValues: { seconds: 60 * initialTime } });
+                update(timer.getTimeValues());
+                return false;
+            });
 
-    const $startButton = document.getElementById('startButton');
-    const $pauseButton = document.getElementById('pauseButton');
+            $pauseButton.addEventListener('click', function (e) {
+                toggle();
+                timer.pause();
+                update(timer.getTimeValues());
+                return false;
+            });
 
-    let initialTime = 4;
+            function stop() {
+                timer.stop();
+                timer.start({ countdown: true, startValues: { seconds: 60 * initialTime } });
+                update({ minutes: initialTime, seconds: 0 });
+                timer.pause();
+                if ($startButton.classList.contains('hide')) toggle();
+            }
+            document.getElementById('stopButton').addEventListener('click', function (e) {
+                stop();
+                return false;
+            });
 
-    update({minutes: initialTime, seconds: 0});
+            const $setTimeWrapper = document.getElementById('setTimeWrapper');
 
+            document.getElementById('setTimerButton').addEventListener('click', function (e) {
+                $setTimeWrapper.style.display = 'block'; // "modal" appears
+                return false;
+            });
 
-    function update(currentTime) {
-
-        document.body.style.backgroundColor = getColor(currentTime);
-        let currentTimeString = "";
-        if (currentTime.minutes < 10)
-            currentTimeString += "0";
-        currentTimeString += currentTime.minutes;
-        currentTimeString += ":";
-        if (currentTime.seconds < 10)
-            currentTimeString += "0";
-        currentTimeString += currentTime.seconds;
-        $timerDiv.innerText = currentTimeString;
-    }
-
-    timer.addEventListener('secondsUpdated', function (e) {
-        update(timer.getTimeValues());
-    });
-    // timer.addEventListener('targetAchieved', function (e) {});
-
-    function toggleE($elem) {
-        if ($elem.classList.contains('hide'))
-            $elem.classList.remove('hide')
-        else {
-            $elem.classList.add('hide')
-        }
-    }
-    function toggle() {
-        toggleE($startButton)
-        toggleE($pauseButton)
-    }
-
-    $startButton.addEventListener('click', function (e) {
-        toggle();
-        timer.start(
-            {countdown: true, startValues: {seconds: 60 * initialTime}}
-        )
-        update(timer.getTimeValues());
-        return false;
-    });
-
-    $pauseButton.addEventListener('click', function (e) {
-        toggle();
-        timer.pause();
-        update(timer.getTimeValues());
-        return false;
-    });
-
-    function stop() {
-        timer.stop();
-        timer.start(
-            {countdown: true, startValues: {seconds: 60 * initialTime}}
-        );
-        update({minutes: initialTime, seconds: 0});
-        timer.pause();
-        if ($startButton.classList.contains('hide')) toggle()
-    }
-    document.getElementById('stopButton').addEventListener('click', function (e) {
-        stop()
-        return false;
-    });
-
-    const $setTimeWrapper = document.getElementById('setTimeWrapper');
-
-    document.getElementById('setTimerButton').addEventListener('click', function (e) {
-        $setTimeWrapper.style.display = 'block';    // "modal" appears
-        return false;
-    });
-
-    const form = document.getElementsByTagName("form")[0];
-    form.addEventListener('submit', function (e) {
-        $setTimeWrapper.style.display = 'none';     // "modal" hide
-        initialTime = parseInt(form[0].value, 10);
-        stop();
-        e.preventDefault();                         // no form bubbling
-    });
-
-
-</script>
-
-
-</body>
+            const form = document.getElementsByTagName('form')[0];
+            form.addEventListener('submit', function (e) {
+                $setTimeWrapper.style.display = 'none'; // "modal" hide
+                initialTime = parseInt(form[0].value, 10);
+                stop();
+                e.preventDefault(); // no form bubbling
+            });
+        </script>
+    </body>
 </html>
-

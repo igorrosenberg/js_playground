@@ -40,16 +40,20 @@ test('mandelbrot c_mandel1 is 0 inside the set and > 0 outside', () => {
 test('dice shift and yaw are permutations, and count scores columns', () => {
     const page = loadScript('dice.html');
     const before = page.diceArray[1].slice();
-    const faces = dice => dice.map(face => face.x).sort();
+    const faces = (dice) => dice.map((face) => face.x).sort();
 
     page.shift(1);
     assert.deepStrictEqual(faces(page.diceArray[1]), faces(before));
-    page.shift(1); page.shift(1); page.shift(1);
+    page.shift(1);
+    page.shift(1);
+    page.shift(1);
     assert.deepStrictEqual(page.diceArray[1], before, 'four shifts go back to the start');
 
     page.yaw(1);
     assert.deepStrictEqual(faces(page.diceArray[1]), faces(before));
-    page.yaw(1); page.yaw(1); page.yaw(1);
+    page.yaw(1);
+    page.yaw(1);
+    page.yaw(1);
     assert.deepStrictEqual(page.diceArray[1], before, 'four yaws go back to the start');
 
     const score = page.count();
