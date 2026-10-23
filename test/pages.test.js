@@ -30,3 +30,19 @@ for (const page of pages) {
         assert.strictEqual($('meta[name=viewport]').attr('content'), 'width=device-width, initial-scale=1');
     });
 }
+
+for (const page of pages) {
+    test(`${page} loads no script or stylesheet from another site`, () => {
+        // Raw source, so tags inside <!--[if IE]> comments are checked too.
+        const html = fs.readFileSync(path.join(docs, page), 'utf8');
+        const external = /^([a-z]+:)?\/\//i;
+        const tags = html.match(/<(script|link)\b[^>]*>/gi) || [];
+        const urls = tags
+            .filter(tag => /^<script/i.test(tag) || /rel=["']?stylesheet/i.test(tag))
+            .map(tag => (tag.match(/\b(?:src|href)=["']?([^"'\s>]+)/i) || [])[1])
+            .filter(Boolean);
+        const imports = [...html.matchAll(/@import\s+(?:url\()?["']?([^"')\s;]+)|url\(["']?([^"')]+)/gi)]
+            .map(m => m[1] || m[2]);
+        assert.deepStrictEqual([...urls, ...imports].filter(url => external.test(url)), []);
+    });
+}
