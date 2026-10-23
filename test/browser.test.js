@@ -35,3 +35,22 @@ for (const page of pages) {
         assert.deepStrictEqual(errors, []);
     });
 }
+
+test('js_playground.html evaluates typed code', async () => {
+    const tab = await browser.newPage();
+    const errors = [];
+    tab.on('console', (msg) => msg.type() === 'error' && errors.push(msg.text()));
+    tab.on('pageerror', (err) => errors.push(err.message));
+    let results;
+    try {
+        await tab.goto(base + 'js_playground.html', { waitUntil: 'load' });
+        await tab.fill('#input', '6 * 7');
+        await tab.press('#input', 'End');
+        await tab.waitForTimeout(500);
+        results = await tab.locator('#here li').allTextContents();
+    } finally {
+        await tab.close();
+    }
+    assert.deepStrictEqual(errors, []);
+    assert.match(results[0] ?? '', /^42 /);
+});
