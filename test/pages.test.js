@@ -22,3 +22,11 @@ for (const page of pages) {
         }
     });
 }
+
+for (const page of pages) {
+    test(`${page} declares a language and a phone viewport`, () => {
+        const $ = cheerio.load(fs.readFileSync(path.join(docs, page)));
+        assert.ok($('html').attr('lang'), 'missing <html lang>');
+        assert.strictEqual($('meta[name=viewport]').attr('content'), 'width=device-width, initial-scale=1');
+    });
+}
