@@ -55,26 +55,26 @@
 
 $( document ).ready(function() {
 
-  var counter = 1; 
+  let counter = 1; 
 
-  var my_log = function(s){
+  const my_log = function(s){
     $("#data_zone").append('<p>['+(	counter++)+'] ' + s+'</p>');
   }
 
-  var done = function (data, textStatus, jqXHR){
+  const done = function (data, textStatus, jqXHR){
     my_log('done: ' + data.length);
     $('div.icon').removeClass('ko').addClass('ok');
   };
-  var fail = function(jqXHR, textStatus, errorThrown){
+  const fail = function(jqXHR, textStatus, errorThrown){
     my_log('fail: ' + textStatus + '/' + errorThrown);
     $('div.icon').removeClass('ok').addClass('ko');
   };
-  var check = function(){
-    var url = $('#url').val();
+  const check = function(){
+    const url = $('#url').val();
     my_log("url: " + url);
     $.get({url:url, cache:false, timeout: 1000}).done(done).fail(fail);
     };
-  var autoCheck = function(){
+  const autoCheck = function(){
    if ($('input[name=auto]:checked').val() === 'Y')
       check();
    else 

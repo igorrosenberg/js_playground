@@ -97,31 +97,31 @@ img.micro {
 
 <script>
 
-// var URL = window.webkitURL || window.URL;
+// const URL = window.webkitURL || window.URL;
 
 window.onload = function() {
-    var input_file = document.getElementById('input_file');
+    const input_file = document.getElementById('input_file');
     input_file.addEventListener('change', handleInputFiles, false);
 
-    var existing_image = document.getElementById('existing_image');
+    const existing_image = document.getElementById('existing_image');
     existing_image.addEventListener('click', handleExistingFile, false);
 }
 
 function handleExistingFile(e) {
    my_log(e.target.src);  //    was expecting e.target.children[0].src ?!
-   var ctx = document.getElementById('canvas').getContext('2d');
+   const ctx = document.getElementById('canvas').getContext('2d');
    ctx.drawImage(e.target, 0, 0
             , ctx.canvas.width, ctx.canvas.height
         );
 }
 
 function handleInputFiles(e) {
-    var file = e.target.files[0];
+    const file = e.target.files[0];
     my_log(file.name);
 
-    var img = new Image();
+    const img = new Image();
     img.onload = function() {
-        var ctx = document.getElementById('canvas').getContext('2d');
+        const ctx = document.getElementById('canvas').getContext('2d');
         // scale canvas to image
         // ctx.canvas.width = img.width;
         // ctx.canvas.height = img.height;
@@ -130,17 +130,17 @@ function handleInputFiles(e) {
             , ctx.canvas.width, ctx.canvas.height
         );
     }
-    var reader  = new FileReader();
+    const reader  = new FileReader();
     reader.onloadend = function () {
         img.src = reader.result;
     }
     reader.readAsDataURL(file);
 }
 
-var my_log = (function(){
-    var logElem = document.getElementById('log');
+const my_log = (function(){
+    const logElem = document.getElementById('log');
     return function(s){
-      var newElem = document.createElement('p');
+      const newElem = document.createElement('p');
       newElem.innerHTML = s;
       logElem.appendChild(newElem);
     };

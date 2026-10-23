@@ -1,7 +1,7 @@
 // Add nice functions to standard DOM elements: toggleDisplay, hasClass, addJavascript.
 // authors unknown, credits go to them
 
-var element_extensions = (function(){ 
+const element_extensions = (function(){ 
     return { 
 		// Adding methods to all DOM Elements
 		init: function() {
@@ -11,8 +11,8 @@ var element_extensions = (function(){
 
 			// Toggle the display of all the {siblings of the considered DOM Element which have the specified class}  
 			Element.prototype.toggleDisplayToSiblingIfClass = Element.prototype.toggleDisplayToSiblingIfClass || function (className) {
-			  var elements = this.parentNode.getElementsByClassName(className);
-			  for (var i=0; i < elements.length ; i++) {
+			  const elements = this.parentNode.getElementsByClassName(className);
+			  for (let i=0; i < elements.length ; i++) {
 				   elements[i].toggleDisplay();
 			  }
 			};
@@ -24,7 +24,7 @@ var element_extensions = (function(){
 
 			// ex : document.head.addJavascript("function f() { alert(); }") ;
 			Element.prototype.addJavascript = Element.prototype.addJavascript || function (scriptString) {
-			  var s = document.createElement('script');
+			  const s = document.createElement('script');
 			  s.setAttribute('type','text/javascript');
 			  s.text = scriptString;
 			  this.appendChild(s);

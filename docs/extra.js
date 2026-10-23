@@ -18,7 +18,7 @@
 // finds this file next to it in docs/.
 //
 // Turning js_playground.js into a module (<script type="module">) would allow
-// a static `import './extra.js';`, but its top-level `var js_playground` would
+// a static `import './extra.js';`, but its top-level `const js_playground` would
 // then no longer be a global, so the inline script in js_playground.html would
 // need `window.js_playground = js_playground;` or to import it as well.
 //

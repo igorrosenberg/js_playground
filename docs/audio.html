@@ -30,14 +30,14 @@
 
     function play_from_start(id) {
         console.log('Play', id);
-        var win = document.getElementById(id);
+        const win = document.getElementById(id);
         win.currentTime = 0;
         win.play();
     }
 
     function pause(id) {
         console.log('Pause', id);
-        var win = document.getElementById(id);
+        const win = document.getElementById(id);
         win.pause();
     }
 

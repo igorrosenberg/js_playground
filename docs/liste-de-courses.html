@@ -181,8 +181,8 @@
 
 <script>
     function checkBoxClick(event) {
-        var checkBox = event.target
-        var span = checkBox.parentElement.getElementsByTagName('span')[0]
+        const checkBox = event.target
+        const span = checkBox.parentElement.getElementsByTagName('span')[0]
         if (checkBox.checked) {
             span.classList.add('strike')
         } else {
@@ -191,27 +191,27 @@
 
     }
 
-    var inputs = document.getElementsByTagName('input');
-    for (var z = 0; z < inputs.length; z++) {
-        var checkBox = inputs[z];
+    const inputs = document.getElementsByTagName('input');
+    for (let z = 0; z < inputs.length; z++) {
+        const checkBox = inputs[z];
         checkBox.addEventListener('click', checkBoxClick, false);
     }
 
     function triggerBoxClick(event) {
-        var span = event.target
-        var checkBox = span.parentElement.getElementsByTagName('input')[0]
+        const span = event.target
+        const checkBox = span.parentElement.getElementsByTagName('input')[0]
         checkBox.click()
     }
 
-    var spans = document.getElementsByTagName('span');
-    for (var z = 0; z < spans.length; z++) {
-        var element = spans[z];
+    const spans = document.getElementsByTagName('span');
+    for (let z = 0; z < spans.length; z++) {
+        const element = spans[z];
         element.addEventListener('click', triggerBoxClick, false);
     }
 
     function clearAllClick(event) {
-        for (var z = 0; z < inputs.length; z++) {
-            var checkBox = inputs[z];
+        for (let z = 0; z < inputs.length; z++) {
+            const checkBox = inputs[z];
             if (checkBox.checked) {
                 checkBox.click()
             }
@@ -219,27 +219,27 @@
     }
 
     function expandAllClick(event) {
-        var inputs = document.getElementsByTagName('div');
-        for (var z = 0; z < inputs.length; z++) {
-            var div = inputs[z];
+        const inputs = document.getElementsByTagName('div');
+        for (let z = 0; z < inputs.length; z++) {
+            const div = inputs[z];
             div.classList.remove ('hidden')
         }
     }
 
-    var clearAllButton = document.getElementById('clearAll')
+    const clearAllButton = document.getElementById('clearAll')
     clearAllButton.addEventListener('click', clearAllClick, false);
 
-    var expandAllButton = document.getElementById('expandAll')
+    const expandAllButton = document.getElementById('expandAll')
     expandAllButton.addEventListener('click', expandAllClick, false);
 
     function zoneToggle() {
-        var h4 = event.target
+        const h4 = event.target
         h4.parentElement.classList.toggle('hidden')
     }
 
-    var h4s = document.getElementsByTagName('h4');
-    for (var z = 0; z < h4s.length; z++) {
-        var element = h4s[z];
+    const h4s = document.getElementsByTagName('h4');
+    for (let z = 0; z < h4s.length; z++) {
+        const element = h4s[z];
         element.addEventListener('click', zoneToggle, false);
     }
 

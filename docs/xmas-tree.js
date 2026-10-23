@@ -1,6 +1,6 @@
 // Via a long-running process, populate an array. It's a very naive basis for concurrent thinking in JS.
 
-var fibo = function (x) {
+const fibo = function (x) {
   if  (x === 0) 
       return 0;
   if (x === 1)
@@ -10,12 +10,12 @@ var fibo = function (x) {
 
 console.log (fibo (11));
 
-var results = {};
+const results = {};
 results.length = 5;
 results.finished = 0;
 
-for (var i=0; i< results.length; i++){
- var time = (results.length - i) % 4;
+for (let i=0; i< results.length; i++){
+ const time = (results.length - i) % 4;
  my_apply(i, results, time) ;
 }
 
