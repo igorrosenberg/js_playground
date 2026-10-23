@@ -100,7 +100,6 @@ So I coded some math illustrations.
         document.getElementById('by').value = by;
 
 
-        const inversion = -1; // inversion du repère
         drawVector('A', '#ffff00', ax, ay); // A jaune
         drawVector('B', '#00ff00', bx, by); // B vert
         drawVector('Ortho', '#ff0000', ay, -ax); // A_orthogonal rouge
@@ -268,7 +267,6 @@ So I coded some math illustrations.
             document.getElementById('cy2').value = cy;
 
 
-            const inversion = -1; // inversion du repère
             drawLine('#ffff00', bx, by, cx, cy); // BC jaune/bleu
             drawPoint('A', '#00ff00', ax, ay); // A vert
             drawPoint('B', '#0000ff', bx, by); // B bleu
@@ -385,16 +383,6 @@ So I coded some math illustrations.
                 ctx.fillText(name, w2 + x * scale * 1.1, h2 + inversion * y * scale * 1.1);
             }
 
-            function projecte(xa, ya, xb, yb, xc, yc) {
-                const xv = cx - bx;
-                const yv = cy - by;
-                const N = xv * xv + yv * yv;
-
-                const hx = xb + ((xa - xb) * xv + (ya - yb) * yv) * xv / N;
-                const hy = yb + ((xa - xb) * xv + (ya - yb) * yv) * yv / N;
-                return [hx, hy];
-            }
-
             /**
              * angle between P2 --> P1 --> P3
              */
@@ -418,7 +406,6 @@ So I coded some math illustrations.
             document.getElementById('cy2').value = cy;
 
 
-            const inversion = -1; // inversion du repère
             drawLine('green', ax, ay, bx, by); // AB green
             drawLine('#ffff00', bx, by, cx, cy); // BC jaune
             drawPoint('A', '#00ff00', ax, ay); // A vert

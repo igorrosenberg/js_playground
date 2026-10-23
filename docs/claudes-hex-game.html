@@ -425,7 +425,7 @@ Because I couldn't do it in my head, I wrote a JavaScript solver. Current versio
         return function (newMax) {
             if (newMax > maxAttained) {
                 maxAttained = newMax;
-                maxAttainedDisplay.innerHTML = maxAttained;
+                document.getElementById('maxAttainedDisplay').innerHTML = maxAttained;
             }
         };
     })();
@@ -434,7 +434,7 @@ Because I couldn't do it in my head, I wrote a JavaScript solver. Current versio
         let testCounter = 0;
         return function () {
             testCounter++;
-            testCounterDisplay.innerHTML = testCounter;
+            document.getElementById('testCounterDisplay').innerHTML = testCounter;
         }
     })();
 

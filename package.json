@@ -8,14 +8,22 @@
   },
   "scripts": {
     "build": "node build.js",
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "engines": {
     "node": ">=22"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "cheerio": "^1.2.0",
-    "playwright": "^1.56.1"
+    "eslint": "^9.39.5",
+    "eslint-plugin-html": "^8.2.1",
+    "globals": "^17.13.0",
+    "playwright": "^1.56.1",
+    "prettier": "^3.9.10"
   },
   "repository": {
     "type": "git",
