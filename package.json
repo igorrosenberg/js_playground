@@ -22,7 +22,7 @@
     "bootstrap": "4.5.0",
     "cheerio": "^1.2.0",
     "easytimer.js": "4.1.1",
-    "eslint": "^9.39.5",
+    "eslint": "^10.13.0",
     "eslint-plugin-html": "^8.2.1",
     "globals": "^17.13.0",
     "html5shiv": "3.7.3",
