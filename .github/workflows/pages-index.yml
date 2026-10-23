@@ -1,11 +1,14 @@
 name: Pages index
 
-# Rebuilds docs/index.html and its screenshots on every push to master, and commits them back.
+# Rebuilds docs/index.html and its screenshots after the Format workflow finishes on master
+# (so it sees the formatted pages), and commits them back.
 # The commit is pushed with GITHUB_TOKEN, which does not trigger workflows, so it cannot loop.
 
 on:
-  push:
+  workflow_run:
+    workflows: [Format]
     branches: [master]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
@@ -20,6 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: master
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
