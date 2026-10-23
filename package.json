@@ -27,7 +27,7 @@
     "globals": "^17.13.0",
     "html5shiv": "3.7.3",
     "jquery": "3.3.1",
-    "konva": "2.1.6",
+    "konva": "10.9.0",
     "moment": "2.27.0",
     "moment-timezone": "0.5.31",
     "playwright": "^1.56.1",
