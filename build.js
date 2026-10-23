@@ -38,6 +38,7 @@ node node-server.js
 firefox http://localhost:8000/
 \`\`\`
 <a href="https://igorrosenberg.github.io/js_playground/node-server.js">Javascript source</a>.
+The same shell steps are kept in [docs/history.txt](docs/history.txt).
 `);
 
 
