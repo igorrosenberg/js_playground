@@ -16,7 +16,7 @@ jobs:
       - run: npm ci
       - name: Install headless Chromium
         run: npx playwright install --with-deps chromium
-      - name: Build script runs
+      - name: Build docs/index.html and screenshots
         run: npm run build
       - name: Unit tests, page checks and browser console checks
         run: npm test

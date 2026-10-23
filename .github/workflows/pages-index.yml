@@ -1,0 +1,43 @@
+name: Pages index
+
+# Rebuilds docs/index.html and its screenshots on every push to master, and commits them back.
+# The commit is pushed with GITHUB_TOKEN, which does not trigger workflows, so it cannot loop.
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages-index
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Install headless Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Build docs/index.html and screenshots
+        run: npm run build
+      - name: Commit changes
+        run: |
+          git add docs/index.html docs/screenshots
+          if git diff --cached --quiet; then
+            echo "docs/index.html is up to date"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update docs/index.html"
+          git pull --rebase origin master
+          git push origin HEAD:master
