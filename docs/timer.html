@@ -3,6 +3,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <title>Timer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="lib/easytimer-4.1.1.js"></script>
     <style>
         #references {
@@ -90,7 +91,7 @@
     function getColor(currentTime) {
         if (timer.isPaused())
             return 'grey';
-        var color = undefined;
+        let color = undefined;
         if (currentTime.minutes > 0) {
             color = 'white';
         } else {
@@ -110,13 +111,13 @@
         return color;
     }
 
-    var timer = new easytimer.Timer();
-    var $timerDiv = document.getElementById('timerDiv');
+    const timer = new easytimer.Timer();
+    const $timerDiv = document.getElementById('timerDiv');
 
-    var $startButton = document.getElementById('startButton');
-    var $pauseButton = document.getElementById('pauseButton');
+    const $startButton = document.getElementById('startButton');
+    const $pauseButton = document.getElementById('pauseButton');
 
-    var initialTime = 4;
+    let initialTime = 4;
 
     update({minutes: initialTime, seconds: 0});
 
@@ -124,7 +125,7 @@
     function update(currentTime) {
 
         document.body.style.backgroundColor = getColor(currentTime);
-        var currentTimeString = "";
+        let currentTimeString = "";
         if (currentTime.minutes < 10)
             currentTimeString += "0";
         currentTimeString += currentTime.minutes;
@@ -182,14 +183,14 @@
         return false;
     });
 
-    var $setTimeWrapper = document.getElementById('setTimeWrapper');
+    const $setTimeWrapper = document.getElementById('setTimeWrapper');
 
     document.getElementById('setTimerButton').addEventListener('click', function (e) {
         $setTimeWrapper.style.display = 'block';    // "modal" appears
         return false;
     });
 
-    var form = document.getElementsByTagName("form")[0];
+    const form = document.getElementsByTagName("form")[0];
     form.addEventListener('submit', function (e) {
         $setTimeWrapper.style.display = 'none';     // "modal" hide
         initialTime = parseInt(form[0].value, 10);

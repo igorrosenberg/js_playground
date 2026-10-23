@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Using mobile camera</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         body {
             margin: 0;
@@ -62,16 +63,16 @@
 <div id="logs"></div>
 
 <script>
-    var log = (function () {
-        var logs = document.getElementById('logs');
+    const log = (function () {
+        const logs = document.getElementById('logs');
         return function (s) {
             logs.innerHTML += s + '<br>';
         }
     })();
 
-    var photoInput = document.getElementById('photoShoot');
+    const photoInput = document.getElementById('photoShoot');
     photoInput.onchange = function () {
-        var file = photoInput.files[0];
+        const file = photoInput.files[0];
         upload(file);
         drawOnCanvas(file);
         displayAsImage(file);
@@ -79,10 +80,10 @@
 
     function upload(file) {
         log("uploading to remote");
-        var form = new FormData();
+        const form = new FormData();
         form.append('image', file);
 
-        var xhr = new XMLHttpRequest();
+        const xhr = new XMLHttpRequest();
         xhr.open('post', 'server.cgi', true);
         xhr.send(form);
 
@@ -94,28 +95,28 @@
 
     function drawOnCanvas(file) {
         log("drawing on canvas (cropped)");
-        var reader = new FileReader();
+        const reader = new FileReader();
 
         reader.onload = function (e) {
-            var dataURL = e.target.result;
-            var img = new Image();
+            const dataURL = e.target.result;
+            const img = new Image();
 
             img.onload = function () {
-                var c = document.createElement('canvas');
+                const c = document.createElement('canvas');
                 /*
                  // copy-paste input's image into canvas
                  c.width = img.width;
                  c.height = img.height;
-                 var ctx = c.getContext('2d');
+                 const ctx = c.getContext('2d');
                  ctx.drawImage(img, 0, 0);
                  */
 
                 // or shave 20% off each side
-                var w = img.width / 5;
-                var h = img.height / 5;
+                const w = img.width / 5;
+                const h = img.height / 5;
                 c.width = 3 * w;
                 c.height = 3 * h;
-                var ctx = c.getContext('2d');
+                const ctx = c.getContext('2d');
                 ctx.drawImage(img, w, h, 3 * w, 3 * h, 0, 0, 3 * w, 3 * h);
 
                 replaceContent("canvasArea", c);
@@ -129,8 +130,8 @@
 
     function displayAsImage(file) {
         log("display as image");
-        var imgURL = URL.createObjectURL(file);
-        var img = document.createElement('img');
+        const imgURL = URL.createObjectURL(file);
+        const img = document.createElement('img');
 
         img.onload = function () {
             URL.revokeObjectURL(imgURL);
@@ -141,7 +142,7 @@
     }
 
     function replaceContent(elementId, img) {
-        var imageContainer = document.getElementById(elementId);
+        const imageContainer = document.getElementById(elementId);
         while (imageContainer.firstChild) {
             imageContainer.removeChild(imageContainer.firstChild);
         }

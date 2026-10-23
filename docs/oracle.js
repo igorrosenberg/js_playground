@@ -1,5 +1,5 @@
 function deleteChild(e) {
-    var child = e.lastElementChild;
+    let child = e.lastElementChild;
     while (child) {
         e.removeChild(child);
         child = e.lastElementChild;
@@ -20,7 +20,7 @@ function responseListener(answer, responseElem, next) {
 
 function start() {
     deleteChild(document.body);
-    var title = document.createElement('h1');
+    const title = document.createElement('h1');
     title.innerHTML = "Test d'arithmétique";
     document.body.append(title);
 }
@@ -30,7 +30,7 @@ function rand() {
 }
 
 function getQuestion(operator) {
-    var a, b, c;
+    let a, b, c;
     if (operator == '*') {
         a = rand();
         b = rand();
@@ -53,10 +53,10 @@ function getQuestion(operator) {
     return [a, b, c];
 }
 
-var startDate = new Date();
-var MAX = 1
-var questionNb = 0;
-var operator;
+const startDate = new Date();
+const MAX = 1
+let questionNb = 0;
+let operator;
 
 function setOperator() {
     if (questionNb++ < 1 * MAX)
@@ -70,8 +70,8 @@ function setOperator() {
 }
 
 function victoire() {
-    var block = document.createElement('p')
-    var delta = Math.floor((new Date().getTime() - startDate.getTime()) / 1000);
+    const block = document.createElement('p')
+    const delta = Math.floor((new Date().getTime() - startDate.getTime()) / 1000);
     block.innerHTML = "Tu as gagné! Ton temps: " + delta + " secondes";
     document.body.append(block);
 }
@@ -81,14 +81,14 @@ function ask() {
     if (questionNb >= 4 * MAX)
         return victoire();
     setOperator();
-    var data = getQuestion(operator);
+    const data = getQuestion(operator);
 
-    var block = document.createElement('div')
-    var questionElem = document.createElement('span');
+    const block = document.createElement('div')
+    const questionElem = document.createElement('span');
     questionElem.innerHTML = data[0] + ' ' + operator + ' ' + data[1] + ' =';
     block.append(questionElem);
 
-    var answerElem = document.createElement('input');
+    const answerElem = document.createElement('input');
     block.append(answerElem);
     answerElem.addEventListener(
         'input',
