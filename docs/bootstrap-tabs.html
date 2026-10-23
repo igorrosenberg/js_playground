@@ -4,9 +4,9 @@
     <title>Dynamic tabs</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="lib/bootstrap-4.5.0.min.css">
+    <script src="lib/jquery-3.3.1.min.js"></script>
+    <script src="lib/bootstrap-4.5.0.min.js"></script>
     <style>
         .x_output a:link {
             text-decoration: none;
@@ -30,12 +30,12 @@
 
 
     <ul class="nav nav-tabs" id="tab_list">
-        <li class="active"><a data-toggle="tab" href="#home">List</a></li>
-        <li><a data-toggle="tab" href="#gen_id_0">Previous results</a></li>
+        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#home">List</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#gen_id_0">Previous results</a></li>
     </ul>
 
     <div class="tab-content" id="tab_content">
-        <div id="home" class="tab-pane fade in active">
+        <div id="home" class="tab-pane fade show active">
 
             <table class="table table-hover table-striped switch-to-tab">
                 <thead>
@@ -71,9 +71,9 @@
             </table>
         </div>
 
-        <div id="gen_id_0" class="tab-pane fade in">
+        <div id="gen_id_0" class="tab-pane fade">
             <div class="data" data-refresh-url="fake_ajax/bootstrap-tabs.previous.html"></div>
-            <div class="pull-right">
+            <div class="float-right">
                 <a id="refresh" href="#refresh" class="btn btn-primary">Refresh</a>
             </div>
         </div>
@@ -97,7 +97,7 @@
             let $liParent = $tab.parent();
             $liParent.remove(); //remove li of tab
             $($tab.attr("href")).remove(); //remove tab content
-            if ($liParent.hasClass('active')) {
+            if ($tab.hasClass('active')) {
                 $tab_list.find('li a').first().click(); // return home if needed
             }
             return false;
@@ -111,7 +111,7 @@
                 $tab_with_link.click();
             } else {
                 let name = e.target.textContent;
-                let $new_tab = $(`<li ><a data-toggle="tab" href="${link_id}">${name}&nbsp;<span class="close">×</span></a></li>`);
+                let $new_tab = $(`<li class="nav-item"><a class="nav-link" data-toggle="tab" href="${link_id}">${name}&nbsp;<span class="close">×</span></a></li>`);
                 $tab_list.append($new_tab);
                 let $specific_tab_content = fetch_params_form(link_id.substring(1), ajax_url);
                 $("#tab_content").append($specific_tab_content);
