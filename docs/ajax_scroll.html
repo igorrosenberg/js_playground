@@ -24,7 +24,7 @@ pre { margin : 0.5em 0; }
     
       function ajax() {
         var user_text = $('input[type=text]').val();
-        var command = '<pre class="command">' + user_text + '</pre>';
+        var command = $('<pre class="command">').text(user_text);
         var data= {};
         
         $.ajax({
@@ -44,8 +44,8 @@ pre { margin : 0.5em 0; }
             console.log(jqXHR);
           },
           complete: function(jqXHR, textStatus){
-              var output = '<pre class="result '+data.status+'">' + data.content + '</pre>';
-              $('.output').append('<div>' + command + output + '</div>');
+              var output = $('<pre class="result">').addClass(data.status).text(data.content);
+              $('.output').append($('<div>').append(command, output));
               $('html, body').scrollTop( $(document).height() - $(window).height() );
           }
         });
