@@ -2,16 +2,19 @@
   "name": "js_playground",
   "version": "1.0.0",
   "description": "Experiments in JS - code should be seen as sandbox futilities.",
-  "main": "index.js",
-  "dependencies": {
-    "fs": "^0.0.1-security",
-    "cheerio": "^1.0.0-rc.3"
-  },
+  "private": true,
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "test": "exit 1"
+    "build": "node build.js",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "cheerio": "^1.2.0"
   },
   "repository": {
     "type": "git",
