@@ -8,7 +8,7 @@ const { chromium } = require('playwright');
 const docs = path.join(__dirname, '..', 'docs');
 const pages = fs.readdirSync(docs).filter(file => file.endsWith('.html'));
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json',
-    '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.gif': 'image/gif' };
+    '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.gif': 'image/gif', '.mp3': 'audio/mpeg' };
 
 let server, browser, base;
 
