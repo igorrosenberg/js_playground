@@ -40,7 +40,7 @@ module.exports = [
     rules: { 'no-useless-escape': 'off' },
   },
   {
-    files: ['docs/node-server.js', 'build.js', 'vendor.js', 'eslint.config.js', 'test/**/*.js'],
+    files: ['docs/node-server.js', 'build.js', 'static-server.js', 'vendor.js', 'eslint.config.js', 'test/**/*.js'],
     languageOptions: { sourceType: 'commonjs', globals: globals.node },
   },
 ];
