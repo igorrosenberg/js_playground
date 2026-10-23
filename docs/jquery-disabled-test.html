@@ -55,14 +55,14 @@
 
     <script>
 function my_log() {
-  var f = new Date();
+  const f = new Date();
   $("#data_zone").text( $("#data_zone").text() + "\n clicked again ("+f.getMinutes() + ":" + f.getSeconds()+")");
    return false;
 }
 
 function attach() {
-   var  enable = function(event) { $("#test button").removeAttr("disabled");}
-   var disable = function(event) { $("#test button").attr("disabled","disabled");}
+   const  enable = function(event) { $("#test button").removeAttr("disabled");}
+   const disable = function(event) { $("#test button").attr("disabled","disabled");}
    $("#enableButton").on("click", enable);
    $("#disableButton").on("click", disable);
    disable();

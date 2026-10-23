@@ -3,6 +3,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <title>Micro audio demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body id='body'>
 
@@ -30,14 +31,14 @@
 
     function play_from_start(id) {
         console.log('Play', id);
-        var win = document.getElementById(id);
+        const win = document.getElementById(id);
         win.currentTime = 0;
         win.play();
     }
 
     function pause(id) {
         console.log('Pause', id);
-        var win = document.getElementById(id);
+        const win = document.getElementById(id);
         win.pause();
     }
 

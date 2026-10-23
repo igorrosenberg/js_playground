@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Basic trigonometry</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         body {
             margin: 0;
@@ -53,9 +54,9 @@ So I coded some math illustrations.
 
     function reload() {
 
-        var W = 300, H = 300;
-        var canvas = document.getElementsByClassName('scalaire')[0].getElementsByTagName("canvas")[0];
-        var ctx = canvas.getContext("2d");
+        const W = 300, H = 300;
+        const canvas = document.getElementsByClassName('scalaire')[0].getElementsByTagName("canvas")[0];
+        const ctx = canvas.getContext("2d");
 
         canvas.width = W;
         canvas.height = H;
@@ -69,12 +70,12 @@ So I coded some math illustrations.
         // origin
         ctx.strokeStyle = "#FF00FF";
         ctx.lineWidth = 1;
-        var w2 = W / 2, h2 = H / 2;
+        const w2 = W / 2, h2 = H / 2;
         ctx.strokeRect(w2 - 10, h2 - 1, 21, 3);
         ctx.strokeRect(w2 - 1, h2 - 10, 3, 21);
 
         function drawVector(name, color, x, y, scale) {
-            var inversion = -1;
+            const inversion = -1;
             scale = scale || 10;
             ctx.lineWidth = 1;
             ctx.strokeStyle = color;
@@ -89,17 +90,17 @@ So I coded some math illustrations.
             ctx.fillText(name, w2 + x * scale * 1.1, h2 + inversion * y * scale * 1.1);
         }
 
-        var ax = parseFloat(document.getElementById('ax').value);
+        const ax = parseFloat(document.getElementById('ax').value);
         document.getElementById('ax').value = ax;
-        var bx = parseFloat(document.getElementById('bx').value);
+        const bx = parseFloat(document.getElementById('bx').value);
         document.getElementById('bx').value = bx;
-        var ay = parseFloat(document.getElementById('ay').value);
+        const ay = parseFloat(document.getElementById('ay').value);
         document.getElementById('ay').value = ay;
-        var by = parseFloat(document.getElementById('by').value);
+        const by = parseFloat(document.getElementById('by').value);
         document.getElementById('by').value = by;
 
 
-        var inversion = -1; // inversion du repère
+        const inversion = -1; // inversion du repère
         drawVector('A', '#ffff00', ax, ay); // A jaune
         drawVector('B', '#00ff00', bx, by); // B vert
         drawVector('Ortho', '#ff0000', ay, -ax); // A_orthogonal rouge
@@ -110,18 +111,18 @@ So I coded some math illustrations.
             ctx.fillText(s, 10, H - 16 * line);
         }
 
-        var scalaire = ax * bx + ay * by;
+        const scalaire = ax * bx + ay * by;
         bottomNote("Produit Scalaire: " + scalaire.toFixed(4), 2);
 
-        var scalaireOrtho = ay * bx - ax * by;
+        const scalaireOrtho = ay * bx - ax * by;
         bottomNote("Produit Scalaire orthogonal: " + scalaireOrtho.toFixed(4), 1);
 
     }
 
-    var l = document.getElementsByClassName('scalaire')[0].getElementsByTagName('input');
-    for (i = 0; i < l.length; i++) {
-        l[i].addEventListener("keyup", reload);
-        l[i].addEventListener("change", reload);
+    const scalaireInputs = document.getElementsByClassName('scalaire')[0].getElementsByTagName('input');
+    for (let i = 0; i < scalaireInputs.length; i++) {
+        scalaireInputs[i].addEventListener("keyup", reload);
+        scalaireInputs[i].addEventListener("change", reload);
     }
     reload();
 
@@ -173,9 +174,9 @@ So I coded some math illustrations.
 
         function reload2() {
 
-            var W = 300, H = 300;
-            var canvas = document.getElementsByClassName('projection_orthogonale')[0].getElementsByTagName("canvas")[0];
-            var ctx = canvas.getContext("2d");
+            const W = 300, H = 300;
+            const canvas = document.getElementsByClassName('projection_orthogonale')[0].getElementsByTagName("canvas")[0];
+            const ctx = canvas.getContext("2d");
 
             canvas.width = W;
             canvas.height = H;
@@ -189,16 +190,16 @@ So I coded some math illustrations.
             // origin
             ctx.strokeStyle = "#FF00FF";
             ctx.lineWidth = 1;
-            var w2 = W / 2, h2 = H / 2;
+            const w2 = W / 2, h2 = H / 2;
             ctx.strokeRect(w2 - 10, h2 - 1, 21, 3);
             ctx.strokeRect(w2 - 1, h2 - 10, 3, 21);
 
             function halfLine(ux, uy, vx, vy, scale, inversion) {
-                var Dx = vx - ux;
-                var Dy = vy - uy;
+                let Dx = vx - ux;
+                let Dy = vy - uy;
 
-                var Nx = w2 + vx * scale;
-                var Ny = h2 + inversion * vy * scale;
+                let Nx = w2 + vx * scale;
+                let Ny = h2 + inversion * vy * scale;
                 while (true) {
                     Nx += Dx;
                     Ny += inversion * Dy;
@@ -216,7 +217,7 @@ So I coded some math illustrations.
 
             function drawLine(color, ux, uy, vx, vy, scale) {
                 if (ux == vx && uy == vy) return; // not a line if points are the same
-                var inversion = -1;
+                const inversion = -1;
                 scale = scale || 10;
 
                 ctx.lineWidth = 1;
@@ -235,7 +236,7 @@ So I coded some math illustrations.
             }
 
             function drawPoint(name, color, x, y, scale) {
-                var inversion = -1;
+                const inversion = -1;
                 scale = scale || 10;
 
                 ctx.fillStyle = color;
@@ -244,30 +245,30 @@ So I coded some math illustrations.
             }
 
             function projecte(xa, ya, xb, yb, xc, yc) {
-                var xv = cx - bx;
-                var yv = cy - by;
-                var N = xv * xv + yv * yv;
+                const xv = cx - bx;
+                const yv = cy - by;
+                const N = xv * xv + yv * yv;
 
-                var hx = xb + ((xa - xb) * xv + (ya - yb) * yv) * xv / N;
-                var hy = yb + ((xa - xb) * xv + (ya - yb) * yv) * yv / N;
+                const hx = xb + ((xa - xb) * xv + (ya - yb) * yv) * xv / N;
+                const hy = yb + ((xa - xb) * xv + (ya - yb) * yv) * yv / N;
                 return [hx, hy];
             }
 
-            var ax = parseFloat(document.getElementById('ax2').value);
+            const ax = parseFloat(document.getElementById('ax2').value);
             document.getElementById('ax2').value = ax;
-            var bx = parseFloat(document.getElementById('bx2').value);
+            const bx = parseFloat(document.getElementById('bx2').value);
             document.getElementById('bx2').value = bx;
-            var cx = parseFloat(document.getElementById('cx2').value);
+            const cx = parseFloat(document.getElementById('cx2').value);
             document.getElementById('cx2').value = cx;
-            var ay = parseFloat(document.getElementById('ay2').value);
+            const ay = parseFloat(document.getElementById('ay2').value);
             document.getElementById('ay2').value = ay;
-            var by = parseFloat(document.getElementById('by2').value);
+            const by = parseFloat(document.getElementById('by2').value);
             document.getElementById('by2').value = by;
-            var cy = parseFloat(document.getElementById('cy2').value);
+            const cy = parseFloat(document.getElementById('cy2').value);
             document.getElementById('cy2').value = cy;
 
 
-            var inversion = -1; // inversion du repère
+            const inversion = -1; // inversion du repère
             drawLine('#ffff00', bx, by, cx, cy); // BC jaune/bleu
             drawPoint('A', '#00ff00', ax, ay); // A vert
             drawPoint('B', '#0000ff', bx, by); // B bleu
@@ -279,16 +280,16 @@ So I coded some math illustrations.
                 ctx.fillText(s, 10, H - 16 * line);
             }
 
-            var projete = projecte(ax, ay, bx, by, cx, cy);
+            const projete = projecte(ax, ay, bx, by, cx, cy);
             drawLine('#ff0000', ax, ay, projete[0], projete[1]); // AH rouge/xx
             drawPoint('H', '#ff0000', projete[0], projete[1]); // H rouge
             bottomNote("Projete: " + projete[0].toFixed(4) + ', ' + projete[1].toFixed(4), 1);
         }
 
-        var l = document.getElementsByClassName('projection_orthogonale')[0].getElementsByTagName('input');
-        for (i = 0; i < l.length; i++) {
-            l[i].addEventListener("keyup", reload2);
-            l[i].addEventListener("change", reload2);
+        const projectionInputs = document.getElementsByClassName('projection_orthogonale')[0].getElementsByTagName('input');
+        for (let i = 0; i < projectionInputs.length; i++) {
+            projectionInputs[i].addEventListener("keyup", reload2);
+            projectionInputs[i].addEventListener("change", reload2);
         }
         reload2();
 
@@ -340,9 +341,9 @@ So I coded some math illustrations.
 
         function reload3() {
 
-            var W = 300, H = 300;
-            var canvas = document.getElementsByClassName('angle_vecteur')[0].getElementsByTagName("canvas")[0];
-            var ctx = canvas.getContext("2d");
+            const W = 300, H = 300;
+            const canvas = document.getElementsByClassName('angle_vecteur')[0].getElementsByTagName("canvas")[0];
+            const ctx = canvas.getContext("2d");
 
             canvas.width = W;
             canvas.height = H;
@@ -356,13 +357,13 @@ So I coded some math illustrations.
             // origin
             ctx.strokeStyle = "#FF00FF";
             ctx.lineWidth = 1;
-            var w2 = W / 2, h2 = H / 2;
+            const w2 = W / 2, h2 = H / 2;
             ctx.strokeRect(w2 - 10, h2 - 1, 21, 3);
             ctx.strokeRect(w2 - 1, h2 - 10, 3, 21);
 
             function drawLine(color, ux, uy, vx, vy, scale) {
                 if (ux == vx && uy == vy) return; // not a line if points are the same
-                var inversion = -1;
+                const inversion = -1;
                 scale = scale || 10;
 
                 ctx.lineWidth = 2;
@@ -376,7 +377,7 @@ So I coded some math illustrations.
             }
 
             function drawPoint(name, color, x, y, scale) {
-                var inversion = -1;
+                const inversion = -1;
                 scale = scale || 10;
 
                 ctx.fillStyle = color;
@@ -385,12 +386,12 @@ So I coded some math illustrations.
             }
 
             function projecte(xa, ya, xb, yb, xc, yc) {
-                var xv = cx - bx;
-                var yv = cy - by;
-                var N = xv * xv + yv * yv;
+                const xv = cx - bx;
+                const yv = cy - by;
+                const N = xv * xv + yv * yv;
 
-                var hx = xb + ((xa - xb) * xv + (ya - yb) * yv) * xv / N;
-                var hy = yb + ((xa - xb) * xv + (ya - yb) * yv) * yv / N;
+                const hx = xb + ((xa - xb) * xv + (ya - yb) * yv) * xv / N;
+                const hy = yb + ((xa - xb) * xv + (ya - yb) * yv) * yv / N;
                 return [hx, hy];
             }
 
@@ -398,26 +399,26 @@ So I coded some math illustrations.
              * angle between P2 --> P1 --> P3
              */
             function angle(p2x, p2y, p1x, p1y, p3x, p3y) {
-                var result = Math.atan2(p3y - p1y, p3x - p1x) - Math.atan2(p2y - p1y, p2x - p1x);
+                const result = Math.atan2(p3y - p1y, p3x - p1x) - Math.atan2(p2y - p1y, p2x - p1x);
                 console.log("source: " + [p2x, p2y] + '/' + [p1x, p1y] + '/' + [p3x, p3y] + " angle: " + result);
                 return result
             }
 
-            var ax = parseFloat(document.getElementById('ax3').value);
+            const ax = parseFloat(document.getElementById('ax3').value);
             document.getElementById('ax2').value = ax;
-            var bx = parseFloat(document.getElementById('bx3').value);
+            const bx = parseFloat(document.getElementById('bx3').value);
             document.getElementById('bx2').value = bx;
-            var cx = parseFloat(document.getElementById('cx3').value);
+            const cx = parseFloat(document.getElementById('cx3').value);
             document.getElementById('cx2').value = cx;
-            var ay = parseFloat(document.getElementById('ay3').value);
+            const ay = parseFloat(document.getElementById('ay3').value);
             document.getElementById('ay2').value = ay;
-            var by = parseFloat(document.getElementById('by3').value);
+            const by = parseFloat(document.getElementById('by3').value);
             document.getElementById('by2').value = by;
-            var cy = parseFloat(document.getElementById('cy3').value);
+            const cy = parseFloat(document.getElementById('cy3').value);
             document.getElementById('cy2').value = cy;
 
 
-            var inversion = -1; // inversion du repère
+            const inversion = -1; // inversion du repère
             drawLine('green', ax, ay, bx, by); // AB green
             drawLine('#ffff00', bx, by, cx, cy); // BC jaune
             drawPoint('A', '#00ff00', ax, ay); // A vert
@@ -430,14 +431,14 @@ So I coded some math illustrations.
                 ctx.fillText(s, 10, H - 16 * line);
             }
 
-            var angle = angle(ax,ay,bx,by,cx,cy)
-            bottomNote("Angle: " + angle);
+            const angleValue = angle(ax,ay,bx,by,cx,cy)
+            bottomNote("Angle: " + angleValue);
         }
 
-        var l = document.getElementsByClassName('angle_vecteur')[0].getElementsByTagName('input');
-        for (i = 0; i < l.length; i++) {
-            l[i].addEventListener("keyup", reload3);
-            l[i].addEventListener("change", reload3);
+        const angleInputs = document.getElementsByClassName('angle_vecteur')[0].getElementsByTagName('input');
+        for (let i = 0; i < angleInputs.length; i++) {
+            angleInputs[i].addEventListener("keyup", reload3);
+            angleInputs[i].addEventListener("change", reload3);
         }
         reload3();
 
