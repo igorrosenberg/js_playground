@@ -3,7 +3,7 @@ const assert = require('node:assert');
 const fs = require('fs');
 const path = require('path');
 const { chromium } = require('playwright');
-const { serve } = require('../static-server');
+const { serve } = require('../test-server');
 
 const docs = path.join(__dirname, '..', 'docs');
 const pages = fs.readdirSync(docs).filter((file) => file.endsWith('.html'));

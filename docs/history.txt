@@ -1,13 +1,13 @@
-Shell instructions: how to run node-server.js locally.
+Shell instructions: how to run dev-server.js locally.
 This is a shell history (with line numbers) of the commands a shell user types
 to install the dependencies, create the server file, start it and open it.
 It is kept as notes for humans; nothing in the build or the site reads it.
 
 From https://stackoverflow.com/questions/16333790
 
-    8  cat > node-server.js
+    8  cat > dev-server.js
     9  npm install finalhandler serve-static
    10  ls
-   11  node node-server.js 
+   11  node dev-server.js 
    12  firefox http://localhost:8000/
 
