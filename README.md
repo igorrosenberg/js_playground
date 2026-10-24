@@ -7,11 +7,11 @@ This repo saves _experiments_ in JS. The code below should be seen as sandbox fu
 #### node server
 
 `node-server.js`, a quick HTTP file server, from <a href="https://stackoverflow.com/questions/16333790">stackoverflow-16333790</a>.
+To browse the demos locally:
 
 ```
-npm install finalhandler serve-static
-cat > node-server.js
-node node-server.js
+npm install
+npm run serve
 firefox http://localhost:8000/
 ```
 
