@@ -23,7 +23,6 @@ module.exports = [
                 ...globals.jquery,
                 // Loaded from a <script> tag on the pages that use them.
                 Konva: 'readonly',
-                moment: 'readonly',
                 easytimer: 'readonly',
                 // Defined in docs/js_playground.js, used by js_playground.html.
                 js_playground: 'readonly',

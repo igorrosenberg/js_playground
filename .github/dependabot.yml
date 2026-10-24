@@ -17,8 +17,6 @@ updates:
           - html5shiv
           - jquery
           - konva
-          - moment
-          - moment-timezone
           - respond.js
         update-types: [minor, patch]
       dev-dependencies:
