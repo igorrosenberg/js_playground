@@ -205,10 +205,10 @@
                 }
             }
 
-            function expandAllClick(event) {
-                const inputs = document.getElementsByTagName('div');
-                for (let z = 0; z < inputs.length; z++) {
-                    const div = inputs[z];
+            function expandAllClick() {
+                const divs = document.getElementsByTagName('div');
+                for (let z = 0; z < divs.length; z++) {
+                    const div = divs[z];
                     div.classList.remove('hidden');
                 }
             }
@@ -219,8 +219,8 @@
             const expandAllButton = document.getElementById('expandAll');
             expandAllButton.addEventListener('click', expandAllClick, false);
 
-            function zoneToggle() {
-                const h4 = event.target;
+            function zoneToggle(event) {
+                const h4 = event.currentTarget;
                 h4.parentElement.classList.toggle('hidden');
             }
 
