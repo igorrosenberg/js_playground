@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Image I/O</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="lib/konva.min.js"></script>
+        <style>
+            body {
+                margin: 10px;
+                padding: 0;
+                background-color: #f0f0f0;
+                text-align: left;
+            }
+
+            .header {
+                text-align: center;
+            }
+
+            canvas {
+                border: 1px solid black;
+            }
+            .col {
+                float: left;
+                width: 49%;
+                margin: 0;
+            }
+
+            label {
+                margin-bottom: 10px;
+            }
+
+            .xref {
+                font-size: 70%;
+            }
+
+            img.micro {
+                display: block;
+                max-width: 230px;
+                max-height: 230px;
+                width: auto;
+                height: auto;
+            }
+        </style>
+    </head>
+    <body id="body">
+        <div class="header">
+            <h1>Image I/O</h1>
+            <p id="description">
+                Using `canvas` and `&lt;input type="file"&gt;`, extract a region from an image. Still work in progress!
+            </p>
+        </div>
+
+        <div class="col">
+            <div>
+                <h4>Instructions</h4>
+                <ul>
+                    <li>Select an image.</li>
+                    <li>Border detection is applied. (not yet!)</li>
+                    <li>Then the greatest enclosing polygon (rectangle?) is extracted. (not yet!)</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Data</h4>
+
+                <label>
+                    <span class="col">Upload your own:</span>
+                    <input autocomplete="off" class="col" type="file" id="input_file" />
+                </label>
+
+                <label>
+                    <span class="col">Or use this sample receipt:</span>
+                    <div class="col">
+                        <a href="#" id="existing_image">
+                            <img class="micro" src="images/receipt.jpg" alt="Sample receipt on a wooden table" />
+                        </a>
+                    </div>
+                </label>
+
+                <label>
+                    <span class="col">Check this out:</span>
+                    <div class="col">
+                        <a href="https://codepen.io/taylorcoffelt/pen/EsCcr">
+                            Javascript Edge Detection, A Pen By Taylor Coffelt
+                        </a>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div class="col">
+            <h4>Results</h4>
+            <div>
+                <canvas width="400" height="300" id="canvas" />
+            </div>
+            <div>
+                <h4>Log</h4>
+                <div id="log"></div>
+            </div>
+        </div>
+
+        <script>
+            // const URL = window.webkitURL || window.URL;
+
+            window.onload = function () {
+                const input_file = document.getElementById('input_file');
+                input_file.addEventListener('change', handleInputFiles, false);
+
+                const existing_image = document.getElementById('existing_image');
+                existing_image.addEventListener('click', handleExistingFile, false);
+            };
+
+            function handleExistingFile(e) {
+                my_log(e.target.src); //    was expecting e.target.children[0].src ?!
+                const ctx = document.getElementById('canvas').getContext('2d');
+                ctx.drawImage(e.target, 0, 0, ctx.canvas.width, ctx.canvas.height);
+            }
+
+            function handleInputFiles(e) {
+                const file = e.target.files[0];
+                my_log(file.name);
+
+                const img = new Image();
+                img.onload = function () {
+                    const ctx = document.getElementById('canvas').getContext('2d');
+                    // scale canvas to image
+                    // ctx.canvas.width = img.width;
+                    // ctx.canvas.height = img.height;
+                    // draw image
+                    ctx.drawImage(img, 0, 0, ctx.canvas.width, ctx.canvas.height);
+                };
+                const reader = new FileReader();
+                reader.onloadend = function () {
+                    img.src = reader.result;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            const my_log = (function () {
+                const logElem = document.getElementById('log');
+                return function (s) {
+                    const newElem = document.createElement('p');
+                    newElem.innerHTML = s;
+                    logElem.appendChild(newElem);
+                };
+            })();
+        </script>
+    </body>
+</html>

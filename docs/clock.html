@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Clock</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta about="Just two clocks, possibly for lovers far apart" />
+        <link rel="stylesheet" href="lib/bootstrap.min.css" />
+        <style>
+            #description {
+                display: none;
+            }
+
+            div {
+                text-align: center;
+            }
+
+            .city {
+                font-size: 1rem;
+            }
+
+            .day {
+                font-size: 2rem;
+            }
+
+            .hm {
+                font-size: 3rem;
+            }
+
+            .col-sm-6 {
+                border: 2px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <p id="description">
+            Just two clocks, possibly for lovers far apart. The target time zone can be set in the parameters adding
+            ?clock1=America/New_York&clock2=Europe/Moscow The target city name can be set in the parameters adding
+            ?city1=SpringField&city2=Moskva
+        </p>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6" id="clock1"></div>
+                <div class="col-sm-6" id="clock2"></div>
+            </div>
+        </div>
+
+        <script>
+            window.addEventListener('load', pageFullyLoaded, false);
+
+            function pageFullyLoaded() {
+                function buildDiv(clazz, string) {
+                    const div = document.createElement('div');
+                    div.className = clazz;
+                    div.textContent = string;
+                    return div;
+                }
+
+                // Reads the date and time parts of now in the given time zone.
+                function formatter(timeZone) {
+                    const format = new Intl.DateTimeFormat('en-US', {
+                        timeZone: timeZone,
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hourCycle: 'h23',
+                    });
+                    return function (date) {
+                        const part = {};
+                        for (const { type, value } of format.formatToParts(date)) part[type] = value;
+                        return {
+                            day: part.year + '-' + part.month + '-' + part.day,
+                            hm: part.hour + ':' + part.minute + ':' + part.second,
+                        };
+                    };
+                }
+
+                function setClock(date, elementId, format, where) {
+                    const { day, hm } = format(date);
+                    document
+                        .getElementById(elementId)
+                        .replaceChildren(buildDiv('city', where), buildDiv('day', day), buildDiv('hm', hm));
+                }
+
+                function displayTime() {
+                    const now = new Date();
+                    setClock(now, 'clock1', FORMAT1, CITY1);
+                    setClock(now, 'clock2', FORMAT2, CITY2);
+                    setTimeout(displayTime, 1000);
+                }
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const TZ1 = urlParams.get('clock1') || 'Europe/Paris';
+                const TZ2 = urlParams.get('clock2') || 'Asia/Kolkata';
+                const CITY1 = urlParams.get('city1') || TZ1.split('/')[1];
+                const CITY2 = urlParams.get('city2') || TZ2.split('/')[1];
+                const FORMAT1 = formatter(TZ1);
+                const FORMAT2 = formatter(TZ2);
+
+                displayTime();
+            }
+        </script>
+    </body>
+</html>

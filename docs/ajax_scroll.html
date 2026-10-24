@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <script src="lib/jquery.min.js"></script>
+        <meta charset="utf-8" />
+        <title>AJAX scroll</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            .output {
+                padding-bottom: 40px;
+            }
+            .output div {
+                border: 1px solid orange;
+                margin: 2px 0;
+                padding: 4px;
+            }
+            .output .result {
+                color: red;
+                padding-left: 30px;
+            }
+            .output .result.ok {
+                color: blue;
+            }
+            .output .command {
+                color: grey;
+            }
+            input[type='text'] {
+                width: 80%;
+            }
+            .user_input {
+                text-align: center;
+            }
+            .footer {
+                width: 100%;
+                position: fixed;
+                bottom: 5px;
+            }
+            pre {
+                margin: 0.5em 0;
+            }
+        </style>
+
+        <script>
+            function ajax() {
+                const user_text = $('input[type=text]').val();
+                const command = $('<pre class="command">').text(user_text);
+                let data = {};
+
+                $.ajax({
+                    url: user_text,
+                    type: 'GET',
+                    dataType: 'jsonp',
+                    success: function (json) {
+                        console.log(json);
+                        data = json;
+                        data.content = json.date;
+                        data.content += '\n' + json.url;
+                        data.status = 'ok';
+                    },
+                    error: function (jqXHR, textStatus, error) {
+                        data.content = 'Error ' + jqXHR.status + ' (' + error + '/' + textStatus + ')';
+                        console.log(jqXHR);
+                    },
+                    complete: function (jqXHR, textStatus) {
+                        const output = $('<pre class="result">').addClass(data.status).text(data.content);
+                        $('.output').append($('<div>').append(command, output));
+                        $('html, body').scrollTop($(document).height() - $(window).height());
+                    },
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <h1 id="description">Test an HTTP service via GET requests.</h1>
+        <div class="output"></div>
+        <div class="footer">
+            <div class="user_input">
+                <div>
+                    <form>
+                        <input type="text" value="fake_ajax/random.json.html" />
+                        <input
+                            type="submit"
+                            onclick="
+                                ajax();
+                                return false;
+                            "
+                        />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

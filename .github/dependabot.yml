@@ -1,0 +1,40 @@
+# Weekly dependency updates, grouped into a few PRs.
+# The browser libraries in docs/lib are npm devDependencies copied by
+# vendor.js; the "Vendor libraries" workflow refreshes docs/lib on each PR.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      docs-lib:
+        patterns:
+          - bootstrap
+          - easytimer.js
+          - html5shiv
+          - jquery
+          - konva
+          - respond.js
+        update-types: [minor, patch]
+      dev-dependencies:
+        dependency-type: development
+        update-types: [minor, patch]
+    ignore:
+      # Bootstrap 5 drops jQuery and changes its markup, jQuery 4 drops old
+      # APIs: these upgrades need changes to the pages, not just a bump.
+      - dependency-name: bootstrap
+        update-types: [version-update:semver-major]
+      - dependency-name: jquery
+        update-types: [version-update:semver-major]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      github-actions:
+        patterns: ['*']

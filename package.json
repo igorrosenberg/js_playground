@@ -1,0 +1,47 @@
+{
+  "name": "js_playground",
+  "version": "1.0.0",
+  "description": "Experiments in JS - code should be seen as sandbox futilities.",
+  "private": true,
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build": "node build.js",
+    "vendor": "node vendor.js",
+    "test": "node --test test/*.test.js",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "bootstrap": "4.5.0",
+    "cheerio": "^1.2.0",
+    "easytimer.js": "4.1.1",
+    "eslint": "^9.39.5",
+    "eslint-plugin-html": "^8.2.1",
+    "globals": "^17.13.0",
+    "html5shiv": "3.7.3",
+    "jquery": "3.3.1",
+    "konva": "2.1.6",
+    "playwright": "^1.56.1",
+    "prettier": "^3.9.10",
+    "respond.js": "1.4.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igorrosenberg/js_playground.git"
+  },
+  "keywords": [
+    "sandbox"
+  ],
+  "author": "Igor Rosenberg",
+  "bugs": {
+    "url": "https://github.com/igorrosenberg/js_playground/issues"
+  },
+  "homepage": "https://github.com/igorrosenberg/js_playground"
+}

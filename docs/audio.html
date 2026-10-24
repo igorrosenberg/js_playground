@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Micro audio demo</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+    <body id="body">
+        <div>
+            <a href="https://github.com/igorrosenberg/js_playground">Home</a>
+        </div>
+
+        <p id="description">Demo of the <i>&lt;audio&gt;</i> html tag.</p>
+
+        <div>
+            <audio id="audiotag6" src="audio/melody.mp3" preload="auto"></audio>
+
+            <ul>
+                <li><a href="javascript:play_from_start('audiotag6');">Play</a></li>
+                <li><a href="javascript:pause('audiotag6');">Pause</a></li>
+            </ul>
+        </div>
+
+        <p>
+            <small
+                >For more on this tag, see
+                <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/audio"
+                    >MDN: the audio element</a
+                ></small
+            >
+        </p>
+
+        <p><small>The melody is a short generated tune stored in this repo.</small></p>
+
+        <script>
+            function play_from_start(id) {
+                console.log('Play', id);
+                const win = document.getElementById(id);
+                win.currentTime = 0;
+                win.play();
+            }
+
+            function pause(id) {
+                console.log('Pause', id);
+                const win = document.getElementById(id);
+                win.pause();
+            }
+        </script>
+    </body>
+</html>

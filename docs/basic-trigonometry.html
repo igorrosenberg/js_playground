@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Basic trigonometry</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Basic trigonometry</h1>
+
+        <p id="description">
+            I needed some trig refreshers, for some image analysis project. So I coded some math illustrations.
+        </p>
+
+        <div class="scalaire">
+            <h2>Produit scalaire</h2>
+            <div>
+                <label>
+                    Ax:
+                    <input type="number" id="ax" value="5" />
+                </label>
+                <label>
+                    Ay:
+                    <input type="number" id="ay" value="2" />
+                </label>
+            </div>
+
+            <div>
+                <label>
+                    Bx:
+                    <input type="number" id="bx" value="1.5" />
+                </label>
+                <label>
+                    By:
+                    <input type="number" id="by" value="-2.4" />
+                </label>
+            </div>
+
+            <div>
+                <canvas></canvas>
+            </div>
+        </div>
+
+        <script>
+            function reload() {
+                const W = 300,
+                    H = 300;
+                const canvas = document.getElementsByClassName('scalaire')[0].getElementsByTagName('canvas')[0];
+                const ctx = canvas.getContext('2d');
+
+                canvas.width = W;
+                canvas.height = H;
+
+                // clear and outer margin
+                ctx.clearRect(0, 0, W, H);
+                ctx.strokeStyle = '#FFFFF';
+                ctx.lineWidth = 5;
+                ctx.strokeRect(0, 0, W, H);
+
+                // origin
+                ctx.strokeStyle = '#FF00FF';
+                ctx.lineWidth = 1;
+                const w2 = W / 2,
+                    h2 = H / 2;
+                ctx.strokeRect(w2 - 10, h2 - 1, 21, 3);
+                ctx.strokeRect(w2 - 1, h2 - 10, 3, 21);
+
+                function drawVector(name, color, x, y, scale) {
+                    const inversion = -1;
+                    scale = scale || 10;
+                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = color;
+                    ctx.beginPath();
+                    ctx.moveTo(w2, h2);
+                    ctx.lineTo(w2 + x * scale, h2 + inversion * y * scale);
+                    ctx.closePath();
+                    ctx.stroke();
+
+                    ctx.fillStyle = color;
+                    ctx.font = '14px Verdana';
+                    ctx.fillText(name, w2 + x * scale * 1.1, h2 + inversion * y * scale * 1.1);
+                }
+
+                const ax = parseFloat(document.getElementById('ax').value);
+                document.getElementById('ax').value = ax;
+                const bx = parseFloat(document.getElementById('bx').value);
+                document.getElementById('bx').value = bx;
+                const ay = parseFloat(document.getElementById('ay').value);
+                document.getElementById('ay').value = ay;
+                const by = parseFloat(document.getElementById('by').value);
+                document.getElementById('by').value = by;
+
+                drawVector('A', '#ffff00', ax, ay); // A jaune
+                drawVector('B', '#00ff00', bx, by); // B vert
+                drawVector('Ortho', '#ff0000', ay, -ax); // A_orthogonal rouge
+
+                function bottomNote(s, line) {
+                    ctx.fillStyle = '#000';
+                    ctx.font = '14px Verdana';
+                    ctx.fillText(s, 10, H - 16 * line);
+                }
+
+                const scalaire = ax * bx + ay * by;
+                bottomNote('Produit Scalaire: ' + scalaire.toFixed(4), 2);
+
+                const scalaireOrtho = ay * bx - ax * by;
+                bottomNote('Produit Scalaire orthogonal: ' + scalaireOrtho.toFixed(4), 1);
+            }
+
+            const scalaireInputs = document.getElementsByClassName('scalaire')[0].getElementsByTagName('input');
+            for (let i = 0; i < scalaireInputs.length; i++) {
+                scalaireInputs[i].addEventListener('keyup', reload);
+                scalaireInputs[i].addEventListener('change', reload);
+            }
+            reload();
+        </script>
+
+        <div class="projection_orthogonale">
+            <h2>Projection orthogonale</h2>
+
+            <img src="images/projection-orthogonale.PNG" />
+
+            <div>
+                <label>
+                    Ax:
+                    <input type="number" id="ax2" value="0" />
+                </label>
+                <label>
+                    Ay:
+                    <input type="number" id="ay2" value="4" />
+                </label>
+            </div>
+
+            <div>
+                <label>
+                    Bx:
+                    <input type="number" id="bx2" value="-9" />
+                </label>
+                <label>
+                    By:
+                    <input type="number" id="by2" value="-2" />
+                </label>
+            </div>
+
+            <div>
+                <label>
+                    Cx:
+                    <input type="number" id="cx2" value="-3" />
+                </label>
+                <label>
+                    Cy:
+                    <input type="number" id="cy2" value="0" />
+                </label>
+            </div>
+
+            <div>
+                <canvas></canvas>
+            </div>
+
+            <script>
+                function reload2() {
+                    const W = 300,
+                        H = 300;
+                    const canvas = document
+                        .getElementsByClassName('projection_orthogonale')[0]
+                        .getElementsByTagName('canvas')[0];
+                    const ctx = canvas.getContext('2d');
+
+                    canvas.width = W;
+                    canvas.height = H;
+
+                    // clear and outer margin
+                    ctx.clearRect(0, 0, W, H);
+                    ctx.strokeStyle = '#FFFFF';
+                    ctx.lineWidth = 5;
+                    ctx.strokeRect(0, 0, W, H);
+
+                    // origin
+                    ctx.strokeStyle = '#FF00FF';
+                    ctx.lineWidth = 1;
+                    const w2 = W / 2,
+                        h2 = H / 2;
+                    ctx.strokeRect(w2 - 10, h2 - 1, 21, 3);
+                    ctx.strokeRect(w2 - 1, h2 - 10, 3, 21);
+
+                    function halfLine(ux, uy, vx, vy, scale, inversion) {
+                        let Dx = vx - ux;
+                        let Dy = vy - uy;
+
+                        let Nx = w2 + vx * scale;
+                        let Ny = h2 + inversion * vy * scale;
+                        while (true) {
+                            Nx += Dx;
+                            Ny += inversion * Dy;
+                            if (Nx < 0 || Nx > W || Ny < 0 || Ny > H) break;
+                            Dx += Dx; // increase exponentially
+                            Dy += Dy; // increase exponentially
+                        }
+                        ctx.beginPath();
+                        ctx.moveTo(w2 + ux * scale, h2 + inversion * uy * scale);
+                        ctx.lineTo(Nx, Ny);
+                        ctx.closePath();
+                        ctx.stroke();
+                    }
+
+                    function drawLine(color, ux, uy, vx, vy, scale) {
+                        if (ux == vx && uy == vy) return; // not a line if points are the same
+                        const inversion = -1;
+                        scale = scale || 10;
+
+                        ctx.lineWidth = 1;
+                        ctx.strokeStyle = 'black';
+                        halfLine(ux, uy, vx, vy, scale, inversion);
+                        halfLine(vx, vy, ux, uy, scale, inversion);
+
+                        ctx.lineWidth = 2;
+                        ctx.strokeStyle = color;
+                        ctx.beginPath();
+                        ctx.moveTo(w2 + ux * scale, h2 + inversion * uy * scale);
+                        ctx.lineTo(w2 + vx * scale, h2 + inversion * vy * scale);
+                        ctx.closePath();
+                        ctx.stroke();
+                    }
+
+                    function drawPoint(name, color, x, y, scale) {
+                        const inversion = -1;
+                        scale = scale || 10;
+
+                        ctx.fillStyle = color;
+                        ctx.font = '14px Verdana';
+                        ctx.fillText(name, w2 + x * scale * 1.1, h2 + inversion * y * scale * 1.1);
+                    }
+
+                    function projecte(xa, ya, xb, yb, xc, yc) {
+                        const xv = cx - bx;
+                        const yv = cy - by;
+                        const N = xv * xv + yv * yv;
+
+                        const hx = xb + (((xa - xb) * xv + (ya - yb) * yv) * xv) / N;
+                        const hy = yb + (((xa - xb) * xv + (ya - yb) * yv) * yv) / N;
+                        return [hx, hy];
+                    }
+
+                    const ax = parseFloat(document.getElementById('ax2').value);
+                    document.getElementById('ax2').value = ax;
+                    const bx = parseFloat(document.getElementById('bx2').value);
+                    document.getElementById('bx2').value = bx;
+                    const cx = parseFloat(document.getElementById('cx2').value);
+                    document.getElementById('cx2').value = cx;
+                    const ay = parseFloat(document.getElementById('ay2').value);
+                    document.getElementById('ay2').value = ay;
+                    const by = parseFloat(document.getElementById('by2').value);
+                    document.getElementById('by2').value = by;
+                    const cy = parseFloat(document.getElementById('cy2').value);
+                    document.getElementById('cy2').value = cy;
+
+                    drawLine('#ffff00', bx, by, cx, cy); // BC jaune/bleu
+                    drawPoint('A', '#00ff00', ax, ay); // A vert
+                    drawPoint('B', '#0000ff', bx, by); // B bleu
+                    drawPoint('C', '#0000ff', cx, cy); // C bleu
+
+                    function bottomNote(s, line) {
+                        ctx.fillStyle = '#000';
+                        ctx.font = '14px Verdana';
+                        ctx.fillText(s, 10, H - 16 * line);
+                    }
+
+                    const projete = projecte(ax, ay, bx, by, cx, cy);
+                    drawLine('#ff0000', ax, ay, projete[0], projete[1]); // AH rouge/xx
+                    drawPoint('H', '#ff0000', projete[0], projete[1]); // H rouge
+                    bottomNote('Projete: ' + projete[0].toFixed(4) + ', ' + projete[1].toFixed(4), 1);
+                }
+
+                const projectionInputs = document
+                    .getElementsByClassName('projection_orthogonale')[0]
+                    .getElementsByTagName('input');
+                for (let i = 0; i < projectionInputs.length; i++) {
+                    projectionInputs[i].addEventListener('keyup', reload2);
+                    projectionInputs[i].addEventListener('change', reload2);
+                }
+                reload2();
+            </script>
+        </div>
+
+        <div class="angle_vecteur">
+            <h2>Angle entre vecteurs</h2>
+
+            <div>
+                <label>
+                    Ax:
+                    <input type="number" id="ax3" value="1.0459645600989461" />
+                </label>
+                <label>
+                    Ay:
+                    <input type="number" id="ay3" value="10.343599997833371" />
+                </label>
+            </div>
+
+            <div>
+                <label>
+                    Bx:
+                    <input type="number" id="bx3" value="4.2631778439972095" />
+                </label>
+                <label>
+                    By:
+                    <input type="number" id="by3" value="9.425695445434394" />
+                </label>
+            </div>
+
+            <div>
+                <label>
+                    Cx:
+                    <input type="number" id="cx3" value="12.728393717466611" />
+                </label>
+                <label>
+                    Cy:
+                    <input type="number" id="cy3" value="7.974928677622665" />
+                </label>
+            </div>
+
+            <div>
+                <canvas></canvas>
+            </div>
+
+            <script>
+                function reload3() {
+                    const W = 300,
+                        H = 300;
+                    const canvas = document
+                        .getElementsByClassName('angle_vecteur')[0]
+                        .getElementsByTagName('canvas')[0];
+                    const ctx = canvas.getContext('2d');
+
+                    canvas.width = W;
+                    canvas.height = H;
+
+                    // clear and outer margin
+                    ctx.clearRect(0, 0, W, H);
+                    ctx.strokeStyle = '#FFFFF';
+                    ctx.lineWidth = 5;
+                    ctx.strokeRect(0, 0, W, H);
+
+                    // origin
+                    ctx.strokeStyle = '#FF00FF';
+                    ctx.lineWidth = 1;
+                    const w2 = W / 2,
+                        h2 = H / 2;
+                    ctx.strokeRect(w2 - 10, h2 - 1, 21, 3);
+                    ctx.strokeRect(w2 - 1, h2 - 10, 3, 21);
+
+                    function drawLine(color, ux, uy, vx, vy, scale) {
+                        if (ux == vx && uy == vy) return; // not a line if points are the same
+                        const inversion = -1;
+                        scale = scale || 10;
+
+                        ctx.lineWidth = 2;
+                        ctx.strokeStyle = color;
+                        ctx.beginPath();
+                        ctx.moveTo(w2 + ux * scale, h2 + inversion * uy * scale);
+                        ctx.lineTo(w2 + vx * scale, h2 + inversion * vy * scale);
+                        ctx.closePath();
+                        ctx.stroke();
+                    }
+
+                    function drawPoint(name, color, x, y, scale) {
+                        const inversion = -1;
+                        scale = scale || 10;
+
+                        ctx.fillStyle = color;
+                        ctx.font = '14px Verdana';
+                        ctx.fillText(name, w2 + x * scale * 1.1, h2 + inversion * y * scale * 1.1);
+                    }
+
+                    /**
+                     * angle between P2 --> P1 --> P3
+                     */
+                    function angle(p2x, p2y, p1x, p1y, p3x, p3y) {
+                        const result = Math.atan2(p3y - p1y, p3x - p1x) - Math.atan2(p2y - p1y, p2x - p1x);
+                        console.log(
+                            'source: ' + [p2x, p2y] + '/' + [p1x, p1y] + '/' + [p3x, p3y] + ' angle: ' + result,
+                        );
+                        return result;
+                    }
+
+                    const ax = parseFloat(document.getElementById('ax3').value);
+                    document.getElementById('ax2').value = ax;
+                    const bx = parseFloat(document.getElementById('bx3').value);
+                    document.getElementById('bx2').value = bx;
+                    const cx = parseFloat(document.getElementById('cx3').value);
+                    document.getElementById('cx2').value = cx;
+                    const ay = parseFloat(document.getElementById('ay3').value);
+                    document.getElementById('ay2').value = ay;
+                    const by = parseFloat(document.getElementById('by3').value);
+                    document.getElementById('by2').value = by;
+                    const cy = parseFloat(document.getElementById('cy3').value);
+                    document.getElementById('cy2').value = cy;
+
+                    drawLine('green', ax, ay, bx, by); // AB green
+                    drawLine('#ffff00', bx, by, cx, cy); // BC jaune
+                    drawPoint('A', '#00ff00', ax, ay); // A vert
+                    drawPoint('B', '#0000ff', bx, by); // B bleu
+                    drawPoint('C', '#0000ff', cx, cy); // C bleu
+
+                    function bottomNote(s, line) {
+                        ctx.fillStyle = '#000';
+                        ctx.font = '14px Verdana';
+                        ctx.fillText(s, 10, H - 16 * line);
+                    }
+
+                    const angleValue = angle(ax, ay, bx, by, cx, cy);
+                    bottomNote('Angle: ' + angleValue);
+                }
+
+                const angleInputs = document.getElementsByClassName('angle_vecteur')[0].getElementsByTagName('input');
+                for (let i = 0; i < angleInputs.length; i++) {
+                    angleInputs[i].addEventListener('keyup', reload3);
+                    angleInputs[i].addEventListener('change', reload3);
+                }
+                reload3();
+            </script>
+        </div>
+    </body>
+</html>
