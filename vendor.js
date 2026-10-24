@@ -16,8 +16,6 @@ const files = {
     'html5shiv.min.js': 'html5shiv/dist/html5shiv.min.js',
     'jquery.min.js': 'jquery/dist/jquery.min.js',
     'konva.min.js': 'konva/konva.min.js',
-    'moment.min.js': 'moment/min/moment.min.js',
-    'moment-timezone-10-year-range.min.js': 'moment-timezone/builds/moment-timezone-with-data-10-year-range.min.js',
     'respond.min.js': 'respond.js/dest/respond.min.js',
 };
 
