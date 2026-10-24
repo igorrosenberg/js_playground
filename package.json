@@ -9,7 +9,7 @@
   "scripts": {
     "build": "node build.js",
     "vendor": "node vendor.js",
-    "serve": "node docs/node-server.js docs",
+    "serve": "node docs/dev-server.js docs",
     "test": "node --test test/*.test.js",
     "lint": "eslint .",
     "format": "prettier --write .",

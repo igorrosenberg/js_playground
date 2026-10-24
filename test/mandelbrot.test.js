@@ -2,7 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert');
 const path = require('path');
 const { chromium } = require('playwright');
-const { serve } = require('../static-server');
+const { serve } = require('../test-server');
 
 let server, browser, base;
 

@@ -31,6 +31,6 @@
 // playground re-evaluates the code on every keystroke.
 //
 // Note: browsers refuse to load modules from file:// URLs. Serve docs/ over
-// HTTP (for example with node-server.js) or use the GitHub Pages site.
+// HTTP (for example with dev-server.js) or use the GitHub Pages site.
 
 console.log('some extra js');

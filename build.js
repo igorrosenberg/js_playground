@@ -8,7 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const cheerio = require('cheerio');
 const { chromium } = require('playwright');
-const { serve } = require('./static-server');
+const { serve } = require('./test-server');
 
 const root = path.join(__dirname, 'docs');
 const shots = path.join(root, 'screenshots');
@@ -20,7 +20,7 @@ const exclusions = [
     'jquery-rewire-fragment.html',
     'js_playground.js',
     'oracle.js',
-    'node-server.js',
+    'dev-server.js',
 ];
 
 function escape(s) {

@@ -1,5 +1,5 @@
 // HTTP Server on port 8000, args[0] being the folder to serve
-// node node-server.js [folder], or npm run serve from the repo root to serve docs/
+// node dev-server.js [folder], or npm run serve from the repo root to serve docs/
 
 const http = require('http');
 
