@@ -30,7 +30,7 @@
     "html5shiv": "3.7.3",
     "jquery": "3.3.1",
     "konva": "2.1.6",
-    "playwright": "^1.56.1",
+    "playwright": "^1.64.1",
     "prettier": "^3.9.10",
     "respond.js": "1.4.2",
     "serve-static": "^2.2.1"
