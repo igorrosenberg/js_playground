@@ -67,7 +67,10 @@ jobs:
           -f state="$STATE" -f context='CI (vendored libraries)' -f target_url="$RUN"
       - name: Merge
         id: merge
-        run: gh pr merge "$PR" --squash --delete-branch
+        # Not gh's --delete-branch: it also switches the shallow checkout to master, which fails.
+        run: |
+          gh pr merge "$PR" --squash
+          gh api -X DELETE "repos/${{ github.repository }}/git/refs/heads/${{ github.head_ref }}"
       - name: Rebuild the Pages index
         continue-on-error: true
         run: gh workflow run pages-index.yml --ref master
