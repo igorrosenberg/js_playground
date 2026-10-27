@@ -1,0 +1,82 @@
+name: Dependabot PR
+
+# Handles every Dependabot PR on its own, so the only email is about a broken upgrade:
+# 1. Dependabot only bumps package.json and package-lock.json. This copies the new
+#    library files into docs/lib and commits them to the PR.
+# 2. Lints, builds and tests the PR.
+# 3. Green: squash-merges the PR. Red: comments on the PR with an @mention of the owner.
+# Pushes and merges made with GITHUB_TOKEN do not start other workflows, so the
+# Pages index is started by hand after a merge.
+
+on:
+  pull_request:
+
+permissions:
+  actions: write
+  contents: write
+  pull-requests: write
+  statuses: write
+
+concurrency:
+  group: dependabot-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  check-and-merge:
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PR: ${{ github.event.pull_request.html_url }}
+      RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run vendor
+      - name: Commit docs/lib
+        id: commit
+        run: |
+          git add docs/lib
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Refresh docs/lib from node_modules'
+          git push
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - run: npm run lint
+      - name: Install headless Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Build docs/index.html and screenshots
+        run: npm run build
+      - name: Unit tests, page checks and browser console checks
+        run: npm test
+      # A push made with GITHUB_TOKEN does not start the CI workflow again,
+      # so the result for the new commit is reported here.
+      - name: Report the result on the new commit
+        if: always() && steps.commit.outputs.sha
+        env:
+          STATE: ${{ job.status == 'success' && 'success' || 'failure' }}
+        run: >
+          gh api repos/${{ github.repository }}/statuses/${{ steps.commit.outputs.sha }}
+          -f state="$STATE" -f context='CI (vendored libraries)' -f target_url="$RUN"
+      - name: Merge
+        id: merge
+        run: gh pr merge "$PR" --squash --delete-branch
+      - name: Rebuild the Pages index
+        continue-on-error: true
+        run: gh workflow run pages-index.yml --ref master
+      - name: Tell the owner the upgrade broke something
+        if: failure()
+        run: |
+          if [ '${{ steps.merge.outcome }}' = failure ]; then
+            what='passed the tests but could not be merged automatically'
+          else
+            what='breaks the lint, build or tests'
+          fi
+          gh pr comment "$PR" --body "@${{ github.repository_owner }} this upgrade $what: $RUN"
