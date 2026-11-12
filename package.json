@@ -26,10 +26,10 @@
     "eslint": "^9.39.5",
     "eslint-plugin-html": "^8.2.1",
     "finalhandler": "^2.1.1",
-    "globals": "^17.13.0",
+    "globals": "^17.14.0",
     "jquery": "3.3.1",
     "konva": "2.1.6",
-    "playwright": "^1.64.1",
+    "playwright": "^1.65.0",
     "prettier": "^3.9.10",
     "serve-static": "^2.2.1"
   },
