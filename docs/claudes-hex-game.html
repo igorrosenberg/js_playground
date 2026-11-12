@@ -75,10 +75,10 @@
                 <p>Iterations: <span id="testCounterDisplay"></span></p>
                 <p>State: <span id="stateDisplay"></span></p>
                 <p>Max: <span id="maxAttainedDisplay"></span></p>
-                <button onclick="start()">Start</button>
-                <button onclick="stop()">Stop</button>
+                <button type="button" id="startButton">Start</button>
+                <button type="button" id="stopButton">Stop</button>
                 <label><input name="speedRadioSlow" id="speedRadioSlow" type="radio" value="slow" />slow</label>
-                <label><input name="speedRadioSlow" type="radio" value="fast" checked="checked" />fast</label>
+                <label><input name="speedRadioSlow" type="radio" value="fast" checked />fast</label>
             </div>
 
             <div id="container"></div>
@@ -405,6 +405,9 @@
                 if (anim !== null) anim.stop();
             }
 
+            document.getElementById('startButton').addEventListener('click', start);
+            document.getElementById('stopButton').addEventListener('click', stop);
+
             // ============= GAME variables ============= //
 
             let anim;
@@ -416,10 +419,10 @@
             function setState(newState) {
                 state = newState;
                 if (state === 'setting') {
-                    stateDisplay.innerHTML = state + '(' + placed.length + ')';
+                    stateDisplay.textContent = state + '(' + placed.length + ')';
                     storeMaxAttained(placed.length);
                 } else {
-                    stateDisplay.innerHTML = state;
+                    stateDisplay.textContent = state;
                 }
             }
 
@@ -428,7 +431,7 @@
                 return function (newMax) {
                     if (newMax > maxAttained) {
                         maxAttained = newMax;
-                        document.getElementById('maxAttainedDisplay').innerHTML = maxAttained;
+                        document.getElementById('maxAttainedDisplay').textContent = maxAttained;
                     }
                 };
             })();
@@ -437,7 +440,7 @@
                 let testCounter = 0;
                 return function () {
                     testCounter++;
-                    document.getElementById('testCounterDisplay').innerHTML = testCounter;
+                    document.getElementById('testCounterDisplay').textContent = testCounter;
                 };
             })();
 
