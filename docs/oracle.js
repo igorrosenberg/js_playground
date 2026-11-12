@@ -21,7 +21,7 @@ function responseListener(answer, responseElem, next) {
 function start() {
     deleteChild(document.body);
     const title = document.createElement('h1');
-    title.innerHTML = "Test d'arithmétique";
+    title.textContent = "Test d'arithmétique";
     document.body.append(title);
 }
 
@@ -68,7 +68,7 @@ function setOperator() {
 function victoire() {
     const block = document.createElement('p');
     const delta = Math.floor((new Date().getTime() - startDate.getTime()) / 1000);
-    block.innerHTML = 'Tu as gagné! Ton temps: ' + delta + ' secondes';
+    block.textContent = 'Tu as gagné! Ton temps: ' + delta + ' secondes';
     document.body.append(block);
 }
 
@@ -79,7 +79,7 @@ function ask() {
 
     const block = document.createElement('div');
     const questionElem = document.createElement('span');
-    questionElem.innerHTML = data[0] + ' ' + operator + ' ' + data[1] + ' =';
+    questionElem.textContent = data[0] + ' ' + operator + ' ' + data[1] + ' =';
     block.append(questionElem);
 
     const answerElem = document.createElement('input');

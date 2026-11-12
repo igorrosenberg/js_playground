@@ -113,10 +113,10 @@
                 }
                 time = Math.floor(performance.now() - time);
                 count_draw(); // shows count data
-                $autocount.innerHTML = max;
-                $time.innerHTML = Math.round((times.reduce((a, b) => a + b, 0) / times.length) * 1000);
+                $autocount.textContent = max;
+                $time.textContent = Math.round((times.reduce((a, b) => a + b, 0) / times.length) * 1000);
                 dtimes.push(time);
-                $dtime.innerHTML = Math.round((dtimes.reduce((a, b) => a + b, 0) / dtimes.length) * 1000);
+                $dtime.textContent = Math.round((dtimes.reduce((a, b) => a + b, 0) / dtimes.length) * 1000);
             }
 
             function count_draw() {
@@ -128,7 +128,7 @@
                     const d = diceArray[4][col];
                     const score = a != b && a != c && a != d && b != c && b != d && c != d ? 1 : 0;
                     total += score;
-                    $s[col].innerHTML = score;
+                    $s[col].textContent = score;
                 }
                 return total;
             }

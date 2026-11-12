@@ -13,10 +13,8 @@ const files = {
     'bootstrap.min.css': 'bootstrap/dist/css/bootstrap.min.css',
     'bootstrap.min.js': 'bootstrap/dist/js/bootstrap.min.js',
     'easytimer.min.js': 'easytimer.js/dist/easytimer.min.js',
-    'html5shiv.min.js': 'html5shiv/dist/html5shiv.min.js',
     'jquery.min.js': 'jquery/dist/jquery.min.js',
     'konva.min.js': 'konva/konva.min.js',
-    'respond.min.js': 'respond.js/dest/respond.min.js',
 };
 
 // The .map files are not copied, so drop the comment that points to them.

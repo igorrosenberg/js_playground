@@ -14,10 +14,8 @@ updates:
         patterns:
           - bootstrap
           - easytimer.js
-          - html5shiv
           - jquery
           - konva
-          - respond.js
         update-types: [minor, patch]
       dev-dependencies:
         dependency-type: development

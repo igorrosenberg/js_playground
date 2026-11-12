@@ -27,12 +27,10 @@
     "eslint-plugin-html": "^8.2.1",
     "finalhandler": "^2.1.1",
     "globals": "^17.13.0",
-    "html5shiv": "3.7.3",
     "jquery": "3.3.1",
     "konva": "2.1.6",
     "playwright": "^1.64.1",
     "prettier": "^3.9.10",
-    "respond.js": "1.4.2",
     "serve-static": "^2.2.1"
   },
   "repository": {
