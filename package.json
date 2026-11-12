@@ -12,6 +12,7 @@
     "serve": "node docs/dev-server.js docs",
     "test": "node --test test/*.test.js",
     "lint": "eslint .",
+    "lint:html": "html-validate docs",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
@@ -27,6 +28,7 @@
     "eslint-plugin-html": "^8.2.1",
     "finalhandler": "^2.1.1",
     "globals": "^17.14.0",
+    "html-validate": "^11.21.1",
     "jquery": "3.7.1",
     "konva": "10.9.1",
     "playwright": "^1.65.0",
