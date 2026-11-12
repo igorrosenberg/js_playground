@@ -1,5 +1,9 @@
-# Monthly dependency updates, grouped into a few PRs. The "Dependabot PR"
-# workflow merges each PR that passes and @mentions the owner on one that fails.
+# Monthly dependency updates: one npm PR and one GitHub Actions PR, on the 1st.
+# Every update, major ones included, goes into its group, so a month brings at
+# most two PRs. Note that pushing a change to this file to master makes
+# Dependabot run straight away, outside the schedule.
+# The "Dependabot PR" workflow merges each PR that passes and @mentions the
+# owner on one that fails.
 # The browser libraries in docs/lib are npm devDependencies copied by
 # vendor.js; the "Dependabot PR" workflow refreshes docs/lib on each PR.
 version: 2
@@ -8,18 +12,9 @@ updates:
     directory: /
     schedule:
       interval: monthly
-    open-pull-requests-limit: 5
     groups:
-      docs-lib:
-        patterns:
-          - bootstrap
-          - easytimer.js
-          - jquery
-          - konva
-        update-types: [minor, patch]
-      dev-dependencies:
-        dependency-type: development
-        update-types: [minor, patch]
+      npm:
+        patterns: ['*']
     ignore:
       # Bootstrap 5 drops jQuery and changes its markup, jQuery 4 drops old
       # APIs: these upgrades need changes to the pages, not just a bump.
