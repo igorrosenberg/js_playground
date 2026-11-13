@@ -1,0 +1,4 @@
+# Vendored copies of npm packages, see vendor.js
+docs/lib/
+# HTML fragments served to the Ajax demos, not full pages
+docs/fake_ajax/

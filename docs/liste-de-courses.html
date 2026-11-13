@@ -29,9 +29,12 @@
         </style>
     </head>
     <body>
-        <button id="clearAll">Clear all</button>
-        <button id="expandAll">Expand all</button>
+        <button type="button" id="clearAll">Clear all</button>
+        <button type="button" id="expandAll">Expand all</button>
 
+        <!-- The form is only there for autocomplete="off": it stops the browser from restoring ticked
+             boxes on reload without their strike-through. Nothing is ever submitted. -->
+        <!-- html-validate-disable-next wcag/h32 -->
         <form autocomplete="off">
             <div>
                 <h4>Produit hygiène</h4>
